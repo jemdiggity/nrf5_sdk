@@ -79,6 +79,7 @@ static void wait_for_event()
     while(true)
     {
         // Can't be emptied like this because of lack of static variables
+        (void)sd_app_evt_wait();
         app_sched_execute();
     }
 }
@@ -87,6 +88,7 @@ static void wait_for_event()
 void nrf_dfu_wait()
 {
     app_sched_execute();
+    (void)sd_app_evt_wait();
 }
 
 
@@ -104,7 +106,7 @@ uint32_t nrf_dfu_init()
     ret_val = nrf_dfu_continue(&enter_bootloader_mode);
     if(ret_val != NRF_SUCCESS)
     {
-        NRF_LOG_INFO("Could not continue DFU operation: 0x%08x\r\n");
+        NRF_LOG_INFO("Could not continue DFU operation: 0x%08x\r\n", ret_val);
         enter_bootloader_mode = 1;
     }
 
@@ -125,7 +127,7 @@ uint32_t nrf_dfu_init()
         ret_val = nrf_dfu_transports_init();
         if (ret_val != NRF_SUCCESS)
         {
-            NRF_LOG_INFO("Could not initalize DFU transport: 0x%08x\r\n");
+            NRF_LOG_ERROR("Could not initalize DFU transport: 0x%08x\r\n", ret_val);
             return ret_val;
         }
 

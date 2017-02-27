@@ -59,8 +59,10 @@
 #define MAX_RESPONSE_LEN                    (15)                                                    /**< Maximum length (in bytes) of the response to a Control Point command. */
 
 
-#if (NRF_SD_BLE_API_VERSION == 3)
-#define NRF_BLE_MAX_MTU_SIZE            GATT_MTU_SIZE_DEFAULT                                       /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#if (NRF_SD_BLE_API_VERSION <= 3)
+    #define NRF_BLE_MAX_MTU_SIZE GATT_MTU_SIZE_DEFAULT                                              /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#else
+    #define NRF_BLE_MAX_MTU_SIZE BLE_GATT_MTU_SIZE_DEFAULT                                          /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
 #endif
 
 
@@ -117,7 +119,7 @@ static uint32_t conn_params_init(void)
 /**@brief     Function for the Advertising functionality initialization.
  *
  * @details   Encodes the required advertising data and passes it to the stack.
- *            The advertising data encoded here is specific for DFU. 
+ *            The advertising data encoded here is specific for DFU.
  *            Setting advertising data can by done by calling @ref ble_advdata_set.
  */
 static uint32_t advertising_init(uint8_t adv_flags)
@@ -128,12 +130,12 @@ static uint32_t advertising_init(uint8_t adv_flags)
     uint16_t    actual_device_name_length   = max_device_name_length;
 
     uint8_t     p_encoded_advdata[MAX_ADV_DATA_LENGTH];
-    
+
     // Encode flags.
     p_encoded_advdata[0]                    = 0x2;
     p_encoded_advdata[1]                    = BLE_GAP_AD_TYPE_FLAGS;
     p_encoded_advdata[2]                    = adv_flags;
-    
+
     // Encode 'more available' uuid list.
     p_encoded_advdata[3]                    = 0x3;
     p_encoded_advdata[4]                    = BLE_GAP_AD_TYPE_16BIT_SERVICE_UUID_MORE_AVAILABLE;
@@ -146,7 +148,7 @@ static uint32_t advertising_init(uint8_t adv_flags)
     {
         return err_code;
     }
-    
+
     // Set GAP device in advertising data.
     if (actual_device_name_length <= max_device_name_length)
     {
@@ -499,7 +501,7 @@ static bool on_rw_authorize_req(ble_dfu_t * p_dfu, ble_evt_t * p_ble_evt)
     ble_gatts_rw_authorize_reply_params_t   auth_reply = {0};
     ble_gatts_evt_rw_authorize_request_t  * p_authorize_request;
     ble_gatts_evt_write_t                 * p_ble_write_evt;
-    
+
     p_authorize_request = &(p_ble_evt->evt.gatts_evt.params.authorize_request);
     p_ble_write_evt = &(p_ble_evt->evt.gatts_evt.params.authorize_request.request.write);
 
@@ -519,7 +521,7 @@ static bool on_rw_authorize_req(ble_dfu_t * p_dfu, ble_evt_t * p_ble_evt)
         {
             // Send an error response to the peer indicating that the CCCD is improperly configured.
             auth_reply.params.write.gatt_status = BLE_GATT_STATUS_ATTERR_CPS_CCCD_CONFIG_ERROR;
- 
+
             // Ignore response of auth reply
             (void)sd_ble_gatts_rw_authorize_reply(m_conn_handle, &auth_reply);
             return false;
@@ -562,7 +564,7 @@ static void on_write(ble_dfu_t * p_dfu, ble_evt_t * p_ble_evt)
         res_code = nrf_dfu_req_handler_on_req(NULL, &dfu_req, &dfu_res);
         if(res_code != NRF_DFU_RES_CODE_SUCCESS)
         {
-            NRF_LOG_INFO("Failure to run packet write\r\n");
+            NRF_LOG_ERROR("Failure to run packet write\r\n");
         }
 
         // Check if a packet receipt notification is needed to be sent.
@@ -634,9 +636,9 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             {
                 if (on_rw_authorize_req(&m_dfu, p_ble_evt))
                 {
-                    err_code = on_ctrl_pt_write(&m_dfu, 
+                    err_code = on_ctrl_pt_write(&m_dfu,
                            &(p_ble_evt->evt.gatts_evt.params.authorize_request.request.write));
-#ifdef NRF_DFU_DEBUG_VERSION  
+#ifdef NRF_DFU_DEBUG_VERSION
                     if (err_code != NRF_SUCCESS)
                     {
                         NRF_LOG_ERROR("Could not handle on_ctrl_pt_write. err_code: 0x%04x\r\n", err_code);
@@ -658,19 +660,19 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             err_code = sd_ble_gatts_sys_attr_set(p_ble_evt->evt.gap_evt.conn_handle, NULL, 0, 0);
             APP_ERROR_CHECK(err_code);
             break;
-        
+
         case BLE_GATTS_EVT_WRITE:
             on_write(&m_dfu, p_ble_evt);
             break;
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
-            err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle, 
+            err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                        NRF_BLE_MAX_MTU_SIZE);
             APP_ERROR_CHECK(err_code);
             break; // BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST
 #endif
-        
+
         default:
             // No implementation needed.
             break;
@@ -710,12 +712,10 @@ static uint32_t gap_address_change(void)
     uint32_t            err_code;
     ble_gap_addr_t      addr;
 
-#ifdef NRF51
+#if (NRF_SD_BLE_API_VERSION < 3)
     err_code = sd_ble_gap_address_get(&addr);
-#elif NRF52
-    err_code = sd_ble_gap_addr_get(&addr);
 #else
-
+    err_code = sd_ble_gap_addr_get(&addr);
 #endif
 
     VERIFY_SUCCESS(err_code);
@@ -723,12 +723,10 @@ static uint32_t gap_address_change(void)
     // Increase the BLE address by one when advertising openly.
     addr.addr[0] += 1;
 
-#ifdef NRF51
+#if (NRF_SD_BLE_API_VERSION < 3)
     err_code = sd_ble_gap_address_set(BLE_GAP_ADDR_CYCLE_MODE_NONE, &addr);
-#elif NRF52
-    err_code = sd_ble_gap_addr_set(&addr);
 #else
-
+    err_code = sd_ble_gap_addr_set(&addr);
 #endif
 
     VERIFY_SUCCESS(err_code);
@@ -751,12 +749,15 @@ static uint32_t gap_params_init(void)
 
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
 
+    // This seems to not be implemented on Graviton
     err_code = gap_address_change();
     VERIFY_SUCCESS(err_code);
 
     err_code = sd_ble_gap_device_name_set(&sec_mode,
                                           (const uint8_t *)DEVICE_NAME,
                                           strlen(DEVICE_NAME));
+
+
     VERIFY_SUCCESS(err_code);
 
     gap_conn_params.min_conn_interval = MIN_CONN_INTERVAL;
@@ -783,20 +784,37 @@ static uint32_t ble_stack_init(bool init_softdevice)
     NRF_LOG_INFO("vector table: 0x%08x\r\n", BOOTLOADER_START_ADDR);
     err_code = sd_softdevice_vector_table_base_set(BOOTLOADER_START_ADDR);
     VERIFY_SUCCESS(err_code);
+    NRF_LOG_INFO("vector table: 0x%08x\r\n", BOOTLOADER_START_ADDR);
 
+    NRF_LOG_INFO("Error code - sd_softdevice_vector_table_base_set: 0x%08x\r\n", err_code);
+    //err_code = sd_softdevice_vector_table_base_set(BOOTLOADER_START_ADDR);
+
+    NRF_LOG_INFO("Before SOFTDEVICE_HANDLER_APPSH_INIT\r\n");
     SOFTDEVICE_HANDLER_APPSH_INIT(&clock_lf_cfg, true);
+    NRF_LOG_INFO("After SOFTDEVICE_HANDLER_APPSH_INIT\r\n");
 
     ble_enable_params_t ble_enable_params;
     // Only one connection as a central is used when performing dfu.
     err_code = softdevice_enable_get_default_config(1, 1, &ble_enable_params);
+    NRF_LOG_INFO("Error code - softdevice_enable_get_default_config: 0x%08x\r\n", err_code);
     VERIFY_SUCCESS(err_code);
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_MAX_MTU_SIZE;
-#endif    
-    
+#endif
+
+    NRF_LOG_INFO("Enabling softdevice.\r\n");
     // Enable BLE stack.
     err_code = softdevice_enable(&ble_enable_params);
+    if (err_code != NRF_SUCCESS)
+    {
+        NRF_LOG_ERROR("Failed softdevice_enable: 0x%08x\r\n", err_code);
+    }
+    else
+    {
+        NRF_LOG_INFO("Softdevice enabled\r\n");
+    }
+
     return err_code;
 }
 

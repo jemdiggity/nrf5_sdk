@@ -67,7 +67,11 @@ typedef struct {
     bool     is_pending;
     uint16_t handle;
     uint16_t len;
+#if (NRF_SD_BLE_API_VERSION <= 3)
     uint8_t  data[GATT_MTU_SIZE_DEFAULT];
+#else
+    uint8_t  data[BLE_GATT_MTU_SIZE_DEFAULT];
+#endif
 } notification_t;
 
 

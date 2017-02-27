@@ -24,6 +24,11 @@
 
 #include "sdk_config.h"
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /** @brief  Default module name prefix.
  *
  * The prefix can be defined in a module to override the default.
@@ -171,6 +176,10 @@ uint32_t nrf_log_push(char * const p_str);
 #define NRF_LOG_FLOAT(val) (int32_t)(val),                                     \
                            (int32_t)(((val > 0) ? (val) - (int32_t)(val)       \
                                                 : (int32_t)(val) - (val))*100)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // NRF_LOG_H_
 

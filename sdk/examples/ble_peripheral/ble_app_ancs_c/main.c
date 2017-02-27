@@ -14,14 +14,14 @@
  * @defgroup ble_sdk_apple_notification_main main.c
  * @{
  * @ingroup ble_sdk_app_apple_notification
- * @brief Apple Notification Client Sample Application main file. Disclaimer: 
- * This client implementation of the Apple Notification Center Service can and 
+ * @brief Apple Notification Client Sample Application main file. Disclaimer:
+ * This client implementation of the Apple Notification Center Service can and
  * will be changed at any time by Nordic Semiconductor ASA.
  *
- * Server implementations such as the ones found in iOS can be changed at any 
+ * Server implementations such as the ones found in iOS can be changed at any
  * time by Apple and may cause this client implementation to stop working.
  *
- * This file contains the source code for a sample application using the Apple 
+ * This file contains the source code for a sample application using the Apple
  * Notification Center Service Client.
  */
 
@@ -62,8 +62,10 @@
 #error "Not enough resources on board"
 #endif
 
-#if (NRF_SD_BLE_API_VERSION == 3)
-#define NRF_BLE_MAX_MTU_SIZE           GATT_MTU_SIZE_DEFAULT                       /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#if (NRF_SD_BLE_API_VERSION <= 3)
+    #define NRF_BLE_MAX_MTU_SIZE        GATT_MTU_SIZE_DEFAULT                   /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#else
+    #define NRF_BLE_MAX_MTU_SIZE        BLE_GATT_MTU_SIZE_DEFAULT               /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
 #endif
 
 #define CENTRAL_LINK_COUNT             0                                           /**< The number of central links used by the application. When changing this number remember to adjust the RAM settings. */
@@ -196,7 +198,7 @@ static uint8_t m_attr_disp_name[ATTR_DATA_SIZE];                       /**< Buff
  *
  * @details This function is called in case of an assert in the SoftDevice.
  *
- * @warning This handler is an example only and does not fit a final product. 
+ * @warning This handler is an example only and does not fit a final product.
  *          You must analyze how your product should react to asserts.
  * @warning On assert from the SoftDevice, the system can recover only on reset.
  *
@@ -304,6 +306,8 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
                     m_is_wl_changed = true;
                 }
             }
+            // Discover peer's services.
+            memset(&m_ble_db_discovery, 0x00, sizeof(m_ble_db_discovery));
             ret  = ble_db_discovery_start(&m_ble_db_discovery, p_evt->conn_handle);
             APP_ERROR_CHECK(ret);
         } break;
@@ -722,7 +726,7 @@ static void peer_manager_init(bool erase_bonds)
     sec_param.kdist_own.id   = 1;
     sec_param.kdist_peer.enc = 1;
     sec_param.kdist_peer.id  = 1;
-    
+
     ret = pm_sec_params_set(&sec_param);
     APP_ERROR_CHECK(ret);
 
@@ -874,7 +878,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             APP_ERROR_CHECK(ret);
             break; // BLE_GATTS_EVT_TIMEOUT
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
             ret = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                   NRF_BLE_MAX_MTU_SIZE);
@@ -1020,10 +1024,10 @@ static void ble_stack_init(void)
     ret_code_t ret;
 
     nrf_clock_lf_cfg_t clock_lf_cfg = NRF_CLOCK_LFCLKSRC;
-    
+
     // Initialize the SoftDevice handler module.
     SOFTDEVICE_HANDLER_INIT(&clock_lf_cfg, NULL);
-    
+
     ble_enable_params_t ble_enable_params;
     ret = softdevice_enable_get_default_config(CENTRAL_LINK_COUNT,
                                                PERIPHERAL_LINK_COUNT,
@@ -1034,9 +1038,9 @@ static void ble_stack_init(void)
 
     // Check the ram settings against the used number of links
     CHECK_RAM_START_ADDR(CENTRAL_LINK_COUNT, PERIPHERAL_LINK_COUNT);
-    
+
     // Enable BLE stack.
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_MAX_MTU_SIZE;
 #endif
     ret = softdevice_enable(&ble_enable_params);
@@ -1066,7 +1070,7 @@ static void services_init(void)
                                   m_attr_appid,
                                   ATTR_DATA_SIZE);
     APP_ERROR_CHECK(ret);
-    
+
     ret = nrf_ble_ancs_c_app_attr_add(&m_ancs_c,
                                       BLE_ANCS_APP_ATTR_ID_DISPLAY_NAME,
                                       m_attr_disp_name,

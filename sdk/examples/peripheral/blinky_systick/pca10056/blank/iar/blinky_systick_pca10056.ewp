@@ -973,12 +973,12 @@
       <data/>
     </settings>
   </configuration>  <group>
+  <name>Documentation</name>    <file>
+    <name>$PROJ_DIR$\..\..\..\license.txt</name>    </file>  </group>  <group>
   <name>nRF_Libraries</name>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\util\app_error.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\util\app_error_weak.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\util\nrf_assert.c</name>    </file>  </group>  <group>
-  <name>Documentation</name>    <file>
-    <name>$PROJ_DIR$\..\..\..\license.txt</name>    </file>  </group>  <group>
   <name>nRF_Drivers</name>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\drivers_nrf\systick\nrf_drv_systick.c</name>    </file>  </group>  <group>
   <name>Board Definition</name>    <file>

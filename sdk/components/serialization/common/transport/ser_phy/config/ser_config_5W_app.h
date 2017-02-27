@@ -22,4 +22,4 @@ extern "C" {
 }
 #endif
 
-#endif /* SER_CONFIG_APP_H__ */
+#endif // SER_CONFIG_5W_APP_H__

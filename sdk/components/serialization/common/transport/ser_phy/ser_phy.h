@@ -16,7 +16,7 @@
  * @{
  * @ingroup ble_sdk_lib_serialization
  *
- * @brief   @tagAPI52832 PHY layer for serialization.
+ * @brief PHY layer for serialization.
  *
  * @details Here you can find declarations of functions and definitions of data structures and
  *          identifiers (typedef enum) used as API of the serialization PHY layer.

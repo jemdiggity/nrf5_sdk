@@ -149,11 +149,11 @@ static void on_ctrl_pt_cccd_write(ble_lns_t * p_lns, ble_gatts_evt_write_t const
 
             if (ble_srv_is_indication_enabled(p_evt_write->data))
             {
-                evt.evt_type = BLE_LNS_CTRLPT_EVT_INDICATION_ENABLED;;
+                evt.evt_type = BLE_LNS_CTRLPT_EVT_INDICATION_ENABLED;
             }
             else
             {
-                evt.evt_type = BLE_LNS_CTRLPT_EVT_INDICATION_DISABLED;;
+                evt.evt_type = BLE_LNS_CTRLPT_EVT_INDICATION_DISABLED;
             }
 
             p_lns->evt_handler(p_lns, &evt);

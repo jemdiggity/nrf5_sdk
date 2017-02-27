@@ -93,6 +93,7 @@ enum BLE_GAP_SVCS
   SD_BLE_GAP_CONNECT,                           /**< Connect. */
   SD_BLE_GAP_CONNECT_CANCEL,                    /**< Cancel ongoing connection procedure. */
   SD_BLE_GAP_RSSI_GET,                          /**< Get the last RSSI sample. */
+  SD_BLE_GAP_PHY_REQUEST,                       /**< Initiate PHY Update procedure. */
 };
 
 /**@brief GAP Event IDs.
@@ -117,6 +118,7 @@ enum BLE_GAP_EVTS
   BLE_GAP_EVT_SEC_REQUEST,                      /**< Security Request.                               \n See @ref ble_gap_evt_sec_request_t.          */
   BLE_GAP_EVT_CONN_PARAM_UPDATE_REQUEST,        /**< Connection Parameter Update Request.            \n Reply with @ref sd_ble_gap_conn_param_update. \n See @ref ble_gap_evt_conn_param_update_request_t. */
   BLE_GAP_EVT_SCAN_REQ_REPORT,                  /**< Scan request report.                            \n See @ref ble_gap_evt_scan_req_report_t.      */
+  BLE_GAP_EVT_PHY_UPDATE,                       /**< PHY have been updated                           \n See @ref ble_gap_evt_phy_update_t.           */
 };
 
 /**@brief GAP Option IDs.
@@ -131,6 +133,7 @@ enum BLE_GAP_OPTS
   BLE_GAP_OPT_COMPAT_MODE,                      /**< Compatibility mode. @ref ble_gap_opt_compat_mode_t */
   BLE_GAP_OPT_AUTH_PAYLOAD_TIMEOUT,             /**< Set Authenticated payload timeout. @ref ble_gap_opt_auth_payload_timeout_t */
   BLE_GAP_OPT_EXT_LEN,                          /**< Extended length packets. @ref ble_gap_opt_ext_len_t */
+  BLE_GAP_OPT_PREFERRED_PHYS_SET,               /**< Set the preferred PHYs for all new connections. @ref ble_gap_opt_preferred_phys_t */
 };
 
 /** @} */
@@ -395,6 +398,11 @@ enum BLE_GAP_OPTS
 /**@brief Disable RSSI events for connections */
 #define BLE_GAP_RSSI_THRESHOLD_INVALID 0xFF
 
+/**@defgroup BLE_GAP_PHYS GAP PHYs
+ * @{ */
+#define BLE_GAP_PHY_1MBPS                        0x01    /**< 1 Mbps PHY. */
+#define BLE_GAP_PHY_2MBPS                        0x02    /**< 2 Mbps PHY. */
+/**@} */
 
 /**@defgroup BLE_GAP_CONN_SEC_MODE_SET_MACROS GAP attribute security requirement setters
  *
@@ -610,6 +618,20 @@ typedef struct
 } ble_gap_privacy_params_t;
 
 
+/**@brief Physical Layer configuration
+ * @note      tx_phys and rx_phys are bitfields, to indicate multiple preferred PHYs for each direction they can be ORed together.
+ * @code
+ * p_gap_phys->tx_phys = BLE_GAP_PHY_1MBPS | BLE_GAP_PHY_2MBPS;
+ * p_gap_phys->rx_phys = BLE_GAP_PHY_1MBPS | BLE_GAP_PHY_2MBPS;
+ * @endcode
+ *
+ */
+typedef struct
+{
+  uint8_t tx_phys;     /**< Preferred transmit PHYs, see @ref BLE_GAP_PHYS. */
+  uint8_t rx_phys;     /**< Preferred receive PHYs, see @ref BLE_GAP_PHYS. */
+} ble_gap_phys_t;
+
 /** @brief Keys that can be exchanged during a bonding procedure. */
 typedef struct
 {
@@ -628,7 +650,11 @@ typedef struct
   uint8_t               lesc      : 1;             /**< Enable LE Secure Connection pairing. */
   uint8_t               keypress  : 1;             /**< Enable generation of keypress notifications. */
   uint8_t               io_caps   : 3;             /**< IO capabilities, see @ref BLE_GAP_IO_CAPS. */
-  uint8_t               oob       : 1;             /**< Out Of Band data available. */
+  uint8_t               oob       : 1;             /**< The OOB data flag.
+                                                        - In LE legacy pairing, this flag is set if a device has out of band authentication data.
+                                                          The OOB method is used if both of the devices have out of band authentication data.
+                                                        - In LE Secure Connections pairing, this flag is set if a device has the peer device's out of band authentication data.
+                                                          The OOB method is used if at least one device has the peer device's OOB data available. */
   uint8_t               min_key_size;              /**< Minimum encryption key size in octets between 7 and 16. If 0 then not applicable in this instance. */
   uint8_t               max_key_size;              /**< Maximum encryption key size in octets between min_key_size and 16. */
   ble_gap_sec_kdist_t   kdist_own;                 /**< Key distribution bitmap: keys that the local device will distribute. */
@@ -707,6 +733,13 @@ typedef struct
   ble_gap_conn_params_t conn_params;            /**<  GAP Connection Parameters. */
 } ble_gap_evt_conn_param_update_t;
 
+/**@brief Event Structure for @ref BLE_GAP_EVT_PHY_UPDATE. */
+typedef struct
+{
+  uint8_t status;                               /**< Status of the procedure, see @ref BLE_HCI_STATUS_CODES */
+  uint8_t tx_phy;                               /**< TX PHY for this connection, see @ref BLE_GAP_PHYS. */
+  uint8_t rx_phy;                               /**< RX PHY for this connection, see @ref BLE_GAP_PHYS. */
+} ble_gap_evt_phy_update_t;
 
 /**@brief Event structure for @ref BLE_GAP_EVT_SEC_PARAMS_REQUEST. */
 typedef struct
@@ -897,11 +930,12 @@ typedef struct
     ble_gap_evt_auth_status_t                 auth_status;                  /**< Authentication Status Event Parameters. */
     ble_gap_evt_conn_sec_update_t             conn_sec_update;              /**< Connection Security Update Event Parameters. */
     ble_gap_evt_timeout_t                     timeout;                      /**< Timeout Event Parameters. */
-    ble_gap_evt_rssi_changed_t                rssi_changed;                 /**< RSSI Event parameters. */
+    ble_gap_evt_rssi_changed_t                rssi_changed;                 /**< RSSI Event Parameters. */
     ble_gap_evt_adv_report_t                  adv_report;                   /**< Advertising Report Event Parameters. */
     ble_gap_evt_sec_request_t                 sec_request;                  /**< Security Request Event Parameters. */
     ble_gap_evt_conn_param_update_request_t   conn_param_update_request;    /**< Connection Parameter Update Parameters. */
-    ble_gap_evt_scan_req_report_t             scan_req_report;              /**< Scan Request Report parameters. */
+    ble_gap_evt_scan_req_report_t             scan_req_report;              /**< Scan Request Report Parameters. */
+    ble_gap_evt_phy_update_t                  phy_update;                   /**< PHY Update Parameters. */
   } params;                                                                 /**< Event Parameters. */
 } ble_gap_evt_t;
 
@@ -1061,6 +1095,39 @@ typedef struct
   uint16_t   auth_payload_timeout;              /**< Requested timeout in 10 ms unit. Maximum is 48 000 (=480 000 ms =8 min). Minimum is 1 (=10ms). */
 } ble_gap_opt_auth_payload_timeout_t;
 
+/**@brief Preferred PHY option
+ *
+ * @details This can be used with @ref sd_ble_opt_set to change the preferred PHYs. Before this function is called the PHYs
+ * for peer initiated PHY Update procedure is @ref BLE_GAP_PHY_1MBPS. If @ref ble_gap_opt_preferred_phys_t::tx_phys or
+ * @ref ble_gap_opt_preferred_phys_t::rx_phys is 0, then the stack will select PHYs based on the peer requirements on that specific direction.
+ *
+ * @note The preferred PHYs are only valid for newly created connections after this option is called. If the PHYs should be
+ * changed for an existing link the @ref sd_ble_gap_phy_request would have to be called, and that would try to update the
+ * PHYs for the given link.
+ *
+ * @note tx_phys and rx_phys are bitfields, to indicate multiple preferred PHYs for each direction they can be ORed together.
+ * @code
+ * tx_phys = BLE_GAP_PHY_1MBPS | BLE_GAP_PHY_2MBPS;
+ * rx_phys = BLE_GAP_PHY_1MBPS | BLE_GAP_PHY_2MBPS;
+ * @endcode
+ *
+ * @events
+ * @event{@ref BLE_GAP_EVT_PHY_UPDATE, Result of the PHY Update if initiated by peer.}
+ * @endevents
+ *
+ * @mscs
+ * @mmsc{@ref BLE_GAP_CENTRAL_PHY_REQUEST}
+ * @mmsc{@ref BLE_GAP_PERIPHERAL_PHY_REQUEST}
+ * @endmscs
+ *
+ * @retval ::NRF_SUCCESS Set successfully.
+ * @retval ::NRF_ERROR_INVALID_PARAM Invalid parameter(s) supplied.
+ */
+typedef struct
+{
+  uint8_t  tx_phys;     /**< Preferred transmit PHYs, see @ref BLE_GAP_PHYS. */
+  uint8_t  rx_phys;     /**< Preferred receive PHYs, see @ref BLE_GAP_PHYS. */
+} ble_gap_opt_preferred_phys_t;
 
 /**@brief Option structure for GAP options. */
 typedef union
@@ -1072,6 +1139,7 @@ typedef union
   ble_gap_opt_compat_mode_t             compat_mode;               /**< Parameters for the compatibility mode option.*/
   ble_gap_opt_ext_len_t                 ext_len;                   /**< Parameters for the extended length option. */
   ble_gap_opt_auth_payload_timeout_t    auth_payload_timeout;      /**< Parameters for the authenticated payload timeout option.*/
+  ble_gap_opt_preferred_phys_t          preferred_phys;            /**< Parameters for the preferred PHYs option. */
 } ble_gap_opt_t;
 /**@} */
 
@@ -1665,7 +1733,6 @@ SVCALL(SD_BLE_GAP_LESC_OOB_DATA_GET, uint32_t, sd_ble_gap_lesc_oob_data_get(uint
 
 /**@brief Provide the OOB data sent/received out of band.
  *
- * @note At least one of the 2 pointers provided must be different from NULL.
  * @note An authentication procedure with OOB selected as an algorithm must be in progress when calling this function.
  * @note A @ref BLE_GAP_EVT_LESC_DHKEY_REQUEST event with the oobd_req set to 1 must have been received prior to calling this function.
  *
@@ -1679,8 +1746,11 @@ SVCALL(SD_BLE_GAP_LESC_OOB_DATA_GET, uint32_t, sd_ble_gap_lesc_oob_data_get(uint
  * @endmscs
  *
  * @param[in] conn_handle Connection handle.
- * @param[in] p_oobd_own The OOB data sent out of band to a peer or NULL if none sent.
+ * @param[in] p_oobd_own The OOB data sent out of band to a peer or NULL if the peer has not received OOB data.
+ *                       Must correspond to @ref ble_gap_sec_params_t::oob flag in @ref BLE_GAP_EVT_SEC_PARAMS_REQUEST.
  * @param[in] p_oobd_peer The OOB data received out of band from a peer or NULL if none received.
+ *                        Must correspond to @ref ble_gap_sec_params_t::oob flag in @ref sd_ble_gap_authenticate in the central role
+ *                        or @ref sd_ble_gap_sec_params_reply in the peripheral role.
  *
  * @retval ::NRF_SUCCESS OOB data accepted.
  * @retval ::NRF_ERROR_INVALID_ADDR Invalid pointer supplied.
@@ -1904,6 +1974,39 @@ SVCALL(SD_BLE_GAP_CONNECT, uint32_t, sd_ble_gap_connect(ble_gap_addr_t const *p_
  * @retval ::NRF_ERROR_INVALID_STATE Invalid state to perform operation.
  */
 SVCALL(SD_BLE_GAP_CONNECT_CANCEL, uint32_t, sd_ble_gap_connect_cancel(void));
+
+
+/**@brief PHY Update Request
+ *
+ * @details   This function is used to request a new PHY configuration for a central or a peripheral connection. It will always generate a
+ *            @ref BLE_GAP_EVT_PHY_UPDATE event if successfully executed. If @ref ble_gap_phys_t::tx_phys or @ref ble_gap_phys_t::rx_phys
+ *            is 0, then the stack will select PHYs based on the peer requirements on that specific direction. If the peer does not support
+ *            the PHY Update procedure, then the resulting @ref BLE_GAP_EVT_PHY_UPDATE event will have a status different from 
+ *            @ref BLE_HCI_STATUS_CODE_SUCCESS.
+ *
+ * @note      The requested PHYs does not have to be within the set of the preferred PHYs.
+ *
+ * @events
+ * @event{@ref BLE_GAP_EVT_PHY_UPDATE, Result of the PHY Update procedure procedure.}
+ * @endevents
+ *
+ * @mscs
+ * @mmsc{@ref BLE_GAP_CENTRAL_PHY_REQUEST}
+ * @mmsc{@ref BLE_GAP_PERIPHERAL_PHY_REQUEST}
+ * @endmscs
+ *
+ * @param[in] conn_handle   Connection handle to indicate the connection for which the PHY Update is requested.
+ * @param[in] p_gap_phys    Pointer to PHY structure.
+ *
+ * @retval ::NRF_SUCCESS Successfully requested a PHY Update.
+ * @retval ::NRF_ERROR_INVALID_ADDR Invalid pointer supplied.
+ * @retval ::BLE_ERROR_INVALID_CONN_HANDLE Invalid connection handle supplied.
+ * @retval ::NRF_ERROR_INVALID_PARAM Unsupported PHYs supplied to the call.
+ * @retval ::NRF_ERROR_INVALID_STATE Invalid state to perform operation.
+ * @retval ::NRF_ERROR_BUSY Procedure is already in progress or not allowed at this time. Process pending events and wait for the pending procedure to complete and retry.
+ *
+ */
+SVCALL(SD_BLE_GAP_PHY_REQUEST, uint32_t, sd_ble_gap_phy_request(uint16_t conn_handle, ble_gap_phys_t const *p_gap_phys));
 
 /** @} */
 

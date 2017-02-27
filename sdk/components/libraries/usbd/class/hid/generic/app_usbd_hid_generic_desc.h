@@ -27,27 +27,27 @@ extern "C" {
  */
 
 /**
- * @brief Initializer of interface descriptor for HID generic class
+ * @brief Initializer of interface descriptor for HID generic class.
  *
- * @param interface_number  Interface number
- * @param endpoints_num     Endpoint number
- * */
+ * @param interface_number  Interface number.
+ * @param endpoints_num     Endpoint number.
+ */
 #define APP_USBD_HID_GENERIC_INTERFACE_DSC(interface_number, endpoints_num)     \
         APP_USBD_HID_INTERFACE_DSC(interface_number, endpoints_num,             \
                                    APP_USBD_HID_SUBCLASS_NONE, APP_USBD_HID_PROTO_GENERIC)
 
 /**
- * @brief Initializer of HID descriptor for HID generic class
+ * @brief Initializer of HID descriptor for HID generic class.
  *
- * @param ...   Report descriptor item
- * */
+ * @param ...   Report descriptor item.
+ */
 #define APP_USBD_HID_GENERIC_HID_DSC(...)   \
         APP_USBD_HID_HID_DSC(__VA_ARGS__)
 /**
- * @brief Initializer of endpoint descriptor for HID generic class
+ * @brief Initializer of endpoint descriptor for HID generic class.
  *
- * @param endpoint  Endpoint number
- * */
+ * @param endpoint  Endpoint number.
+ */
 #define APP_USBD_HID_GENERIC_EP_DSC(endpoint) \
         APP_USBD_HID_EP_DSC(endpoint, NRF_DRV_USBD_EPSIZE, 1)
 

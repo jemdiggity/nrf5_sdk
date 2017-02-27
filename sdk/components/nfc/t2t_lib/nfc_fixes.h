@@ -15,6 +15,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** @file
  * @defgroup nfc_fixes NFC fixes and workarounds
  * @{
@@ -44,5 +48,10 @@
 #endif
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* NFC_FIXES_H__ */
 

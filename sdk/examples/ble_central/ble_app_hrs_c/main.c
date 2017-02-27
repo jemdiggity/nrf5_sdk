@@ -513,10 +513,10 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
                 // Stop scanning.
                 (void) sd_ble_gap_scan_stop();
 
-                #if (NRF_SD_BLE_API_VERSION == 2)
+                #if (NRF_SD_BLE_API_VERSION <= 2)
                     m_scan_param.selective = 0;
                 #endif
-                #if (NRF_SD_BLE_API_VERSION == 3)
+                #if (NRF_SD_BLE_API_VERSION >= 3)
                     m_scan_param.use_whitelist = 0;
                 #endif
 
@@ -678,7 +678,7 @@ static void ble_stack_init(void)
     CHECK_RAM_START_ADDR(NRF_BLE_CENTRAL_LINK_COUNT, NRF_BLE_PERIPHERAL_LINK_COUNT);
 
     // Enable BLE stack.
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_GATT_MAX_MTU_SIZE;
 #endif
 
@@ -989,7 +989,7 @@ static void scan_start(void)
     uint32_t addr_cnt = (sizeof(whitelist_addrs) / sizeof(ble_gap_addr_t));
     uint32_t irk_cnt  = (sizeof(whitelist_irks)  / sizeof(ble_gap_irk_t));
 
-    #if (NRF_SD_BLE_API_VERSION == 2)
+    #if (NRF_SD_BLE_API_VERSION <= 2)
 
         ble_gap_addr_t * p_whitelist_addrs[8];
         ble_gap_irk_t  * p_whitelist_irks[8];
@@ -1025,11 +1025,11 @@ static void scan_start(void)
         (m_whitelist_disabled))
     {
         // Don't use whitelist.
-        #if (NRF_SD_BLE_API_VERSION == 2)
+        #if (NRF_SD_BLE_API_VERSION <= 2)
             m_scan_param.selective   = 0;
             m_scan_param.p_whitelist = NULL;
         #endif
-        #if (NRF_SD_BLE_API_VERSION == 3)
+        #if (NRF_SD_BLE_API_VERSION >= 3)
             m_scan_param.use_whitelist  = 0;
             m_scan_param.adv_dir_report = 0;
         #endif
@@ -1038,13 +1038,13 @@ static void scan_start(void)
     else
     {
         // Use whitelist.
-        #if (NRF_SD_BLE_API_VERSION == 2)
+        #if (NRF_SD_BLE_API_VERSION <= 2)
             whitelist.addr_count     = addr_cnt;
             whitelist.irk_count      = irk_cnt;
             m_scan_param.selective   = 1;
             m_scan_param.p_whitelist = &whitelist;
         #endif
-        #if (NRF_SD_BLE_API_VERSION == 3)
+        #if (NRF_SD_BLE_API_VERSION >= 3)
             m_scan_param.use_whitelist  = 1;
             m_scan_param.adv_dir_report = 0;
         #endif

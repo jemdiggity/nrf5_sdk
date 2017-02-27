@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 Nordic Semiconductor. All Rights Reserved.
+/* Copyright (c) 2016 Nordic Semiconductor. All Rights Reserved.
  *
  * The information contained herein is property of Nordic Semiconductor ASA.
  * Terms and conditions of usage are described in detail in NORDIC
@@ -41,7 +41,7 @@ extern "C" {
 /**@brief Struct for RNG configuration. */
 typedef struct
 {
-    bool     error_correction;      /**< Error correction flag. */
+    bool     error_correction : 1;  /**< Error correction flag. */
     uint8_t  interrupt_priority;    /**< interrupt priority */
 } nrf_drv_rng_config_t;
 

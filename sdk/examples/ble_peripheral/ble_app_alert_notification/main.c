@@ -49,10 +49,11 @@
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 
-#if (NRF_SD_BLE_API_VERSION == 3)
-#define NRF_BLE_MAX_MTU_SIZE            GATT_MTU_SIZE_DEFAULT                       /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#if (NRF_SD_BLE_API_VERSION <= 3)
+    #define NRF_BLE_MAX_MTU_SIZE        GATT_MTU_SIZE_DEFAULT                   /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#else
+    #define NRF_BLE_MAX_MTU_SIZE        BLE_GATT_MTU_SIZE_DEFAULT               /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
 #endif
-
 #define IS_SRVC_CHANGED_CHARACT_PRESENT 0                                           /**< Include or not the service_changed characteristic. if not enabled, the server's database cannot be changed for the lifetime of the device*/
 
 #define CENTRAL_LINK_COUNT              0                                           /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
@@ -81,6 +82,8 @@
 
 #define MESSAGE_BUFFER_SIZE             18                                          /**< Size of buffer holding optional messages in notifications. */
 
+#define BLE_ANS_NB_OF_CATEGORY_ID       10                                          /**< Number of categories. */
+
 #define SEC_PARAM_BOND                  1                                           /**< Perform bonding. */
 #define SEC_PARAM_MITM                  0                                           /**< Man In The Middle protection not required. */
 #define SEC_PARAM_LESC                  0                                           /**< LE Secure Connections not enabled. */
@@ -107,6 +110,23 @@ static uint16_t           m_cur_conn_handle = BLE_CONN_HANDLE_INVALID;          
 static ble_ans_c_alert_state_t m_new_alert_state    = ALERT_NOTIFICATION_DISABLED; /**< State that holds the current state of New Alert Notifications, i.e. Enabled, Alert On, Disabled. */
 static ble_ans_c_alert_state_t m_unread_alert_state = ALERT_NOTIFICATION_DISABLED; /**< State that holds the current state of Unread Alert Notifications, i.e. Enabled, Alert On, Disabled. */
 APP_TIMER_DEF(m_sec_req_timer_id);                                                 /**< Security request timer. The timer lets us start pairing request if one does not arrive from the Central. */
+
+
+/**@brief String literals for the iOS notification categories. used then printing to UART. */
+static const char * lit_catid[BLE_ANS_NB_OF_CATEGORY_ID] =
+{
+    "Simple alert",
+    "Email",
+    "News",
+    "Incoming call",
+    "Missed call",
+    "SMS/MMS",
+    "Voice mail",
+    "Schedule",
+    "High prioritized alert",
+    "Instant message"
+};
+
 
 static void advertising_start(void);
 
@@ -248,7 +268,7 @@ static void sec_req_timeout_handler(void * p_context)
         // If the link is still not secured by the peer, initiate security procedure.
         if (!status.encrypted)
         {
-            NRF_LOG_INFO("Start encryption\r\n");
+            NRF_LOG_INFO("Start encryption.\r\n");
             err_code = pm_conn_secure(m_cur_conn_handle, false);
             APP_ERROR_CHECK(err_code);
         }
@@ -268,11 +288,15 @@ static void alert_notification_setup(void)
     APP_ERROR_CHECK(err_code);
 
     m_new_alert_state = ALERT_NOTIFICATION_ENABLED;
+    NRF_LOG_INFO("New Alert State: Enabled.\r\n");
 
     err_code = ble_ans_c_enable_notif_unread_alert(&m_ans_c);
     APP_ERROR_CHECK(err_code);
 
     m_unread_alert_state = ALERT_NOTIFICATION_ENABLED;
+    NRF_LOG_INFO("Unread Alert State: Enabled.\r\n");
+    
+    NRF_LOG_DEBUG("Notifications enabled.\r\n");
 }
 
 
@@ -294,11 +318,13 @@ static void control_point_setup(ble_ans_c_evt_t * p_evt)
         {
             setting.command  = ANS_ENABLE_UNREAD_CATEGORY_STATUS_NOTIFICATION;
             setting.category = ANS_TYPE_NOTIFICATION_CALL;
+            NRF_LOG_DEBUG("Unread Alert notification support for 'Incoming call' enabled.\r\n");
         }
         else if (p_evt->data.settings.ans_missed_call_support)
         {
             setting.command  = ANS_ENABLE_UNREAD_CATEGORY_STATUS_NOTIFICATION;
             setting.category = ANS_TYPE_MISSED_CALL;
+            NRF_LOG_DEBUG("Unread Alert notification support for 'Missed call' enabled.\r\n");
         }
         else
         {
@@ -312,11 +338,13 @@ static void control_point_setup(ble_ans_c_evt_t * p_evt)
         {
             setting.command  = ANS_ENABLE_NEW_INCOMING_ALERT_NOTIFICATION;
             setting.category = ANS_TYPE_NOTIFICATION_CALL;
+            NRF_LOG_DEBUG("New Alert notification support for 'Incoming call' enabled.\r\n");
         }
         else if (p_evt->data.settings.ans_missed_call_support)
         {
             setting.command  = ANS_ENABLE_NEW_INCOMING_ALERT_NOTIFICATION;
             setting.category = ANS_TYPE_MISSED_CALL;
+            NRF_LOG_DEBUG("New Alert notification support for 'Missed call' enabled.\r\n");
         }
         else
         {
@@ -340,6 +368,8 @@ static void control_point_setup(ble_ans_c_evt_t * p_evt)
  */
 static void supported_alert_notification_read(void)
 {
+    NRF_LOG_DEBUG("Read supported Alert Notification characteristics on the connected peer.\r\n");
+    
     uint32_t err_code;
 
     err_code = ble_ans_c_new_alert_read(&m_ans_c);
@@ -364,16 +394,19 @@ static void new_alert_state_toggle(void)
     {
         m_new_alert_state = ALERT_NOTIFICATION_ENABLED;
         err_code          = bsp_indication_set(BSP_INDICATE_ALERT_OFF);
+        NRF_LOG_INFO("New Alert State: Off.\r\n");
     }
     else if (m_new_alert_state == ALERT_NOTIFICATION_ENABLED)
     {
         m_new_alert_state = ALERT_NOTIFICATION_DISABLED;
         err_code          = ble_ans_c_disable_notif_new_alert(&m_ans_c);
+        NRF_LOG_INFO("New Alert State: Disabled.\r\n");
     }
     else
     {
         m_new_alert_state = ALERT_NOTIFICATION_ENABLED;
         err_code          = ble_ans_c_enable_notif_new_alert(&m_ans_c);
+        NRF_LOG_INFO("New Alert State: Enabled.\r\n");
     }
 
     // If the user presses the button while we are not connected,
@@ -398,16 +431,19 @@ static void unread_alert_state_toggle(void)
     {
         m_unread_alert_state = ALERT_NOTIFICATION_ENABLED;
         err_code             = bsp_indication_set(BSP_INDICATE_ALERT_OFF);
+        NRF_LOG_INFO("Unread Alert State: Off.\r\n");
     }
     else if (m_unread_alert_state == ALERT_NOTIFICATION_ENABLED)
     {
         m_unread_alert_state = ALERT_NOTIFICATION_DISABLED;
         err_code             = ble_ans_c_disable_notif_unread_alert(&m_ans_c);
+        NRF_LOG_INFO("Unread Alert State: Disabled.\r\n");
     }
     else
     {
         m_unread_alert_state = ALERT_NOTIFICATION_ENABLED;
         err_code             = ble_ans_c_enable_notif_unread_alert(&m_ans_c);
+        NRF_LOG_INFO("Unread Alert State: Enabled.\r\n");
     }
 
     // If the user presses the button while we are not connected,
@@ -438,6 +474,7 @@ static void all_alert_notify_request(void)
         {
             APP_ERROR_HANDLER(err_code);
         }
+        NRF_LOG_INFO("Notify the Unread Alert characteristic for all categories.\r\n");
     }
 
     if (m_new_alert_state == ALERT_NOTIFICATION_ON ||
@@ -450,6 +487,7 @@ static void all_alert_notify_request(void)
         {
             APP_ERROR_HANDLER(err_code);
         }
+        NRF_LOG_INFO("Notify the New Alert characteristic for all categories.\r\n");
     }
 }
 
@@ -469,6 +507,11 @@ static void handle_alert_notification(ble_ans_c_evt_t * p_evt)
             err_code = bsp_indication_set(BSP_INDICATE_ALERT_1);
             APP_ERROR_CHECK(err_code);
             m_unread_alert_state = ALERT_NOTIFICATION_ON;
+            NRF_LOG_INFO("Unread Alert state: On.\r\n");
+            NRF_LOG_INFO("  Category:                 %s\r\n", 
+                         (uint32_t)lit_catid[p_evt->data.alert.alert_category]);
+            NRF_LOG_INFO("  Number of unread alerts:  %d\r\n", 
+                         p_evt->data.alert.alert_category_count);
         }
     }
     else if (p_evt->uuid.uuid == BLE_UUID_NEW_ALERT_CHAR)
@@ -478,6 +521,13 @@ static void handle_alert_notification(ble_ans_c_evt_t * p_evt)
             err_code = bsp_indication_set(BSP_INDICATE_ALERT_0);
             APP_ERROR_CHECK(err_code);
             m_new_alert_state = ALERT_NOTIFICATION_ON;
+            NRF_LOG_INFO("New Alert state: On.\r\n");
+            NRF_LOG_INFO("  Category:                 %s\r\n", 
+                         (uint32_t)lit_catid[p_evt->data.alert.alert_category]);
+            NRF_LOG_INFO("  Number of new alerts:     %d\r\n", 
+                         p_evt->data.alert.alert_category_count);
+            NRF_LOG_INFO("  Text String Information:  %s\r\n", 
+                         (uint32_t)p_evt->data.alert.p_alert_msg_buf);
         }
     }
     else
@@ -519,9 +569,11 @@ static void on_ans_c_evt(ble_ans_c_evt_t * p_evt)
     {
         case BLE_ANS_C_EVT_NOTIFICATION:
             handle_alert_notification(p_evt);
+            NRF_LOG_DEBUG("Alert Notification received from server, UUID: %X.\r\n", p_evt->uuid.uuid);
             break; // BLE_ANS_C_EVT_NOTIFICATION
 
         case BLE_ANS_C_EVT_DISCOVERY_COMPLETE:
+            NRF_LOG_DEBUG("Alert Notification Service discovered on the server.\r\n");
             err_code = ble_ans_c_handles_assign(&m_ans_c,
                                                 p_evt->conn_handle,
                                                 &p_evt->data.service);
@@ -531,6 +583,7 @@ static void on_ans_c_evt(ble_ans_c_evt_t * p_evt)
             break; // BLE_ANS_C_EVT_DISCOVERY_COMPLETE
 
         case BLE_ANS_C_EVT_READ_RESP:
+            NRF_LOG_DEBUG("Alert Setup received from server, UUID: %X.\r\n", p_evt->uuid.uuid);
             control_point_setup(p_evt);
             break; // BLE_ANS_C_EVT_READ_RESP
 
@@ -737,16 +790,17 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_DISCONNECTED:
-            NRF_LOG_INFO("Disconnected\r\n");
+            NRF_LOG_INFO("Disconnected.\r\n");
             err_code = bsp_indication_set(BSP_INDICATE_IDLE);
             APP_ERROR_CHECK(err_code);
             break; // BLE_GAP_EVT_DISCONNECTED
 
         case BLE_GAP_EVT_CONNECTED:
-            NRF_LOG_INFO("Connected\r\n");
+            NRF_LOG_INFO("Connected.\r\n");
             err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
             APP_ERROR_CHECK(err_code);
             m_cur_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
+            memset(&m_ble_db_discovery, 0x00, sizeof(m_ble_db_discovery));
             err_code = ble_db_discovery_start(&m_ble_db_discovery, m_cur_conn_handle);
             APP_ERROR_CHECK(err_code);
             err_code = app_timer_start(m_sec_req_timer_id, SECURITY_REQUEST_DELAY, NULL);
@@ -770,7 +824,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             APP_ERROR_CHECK(err_code);
             break; // BLE_GATTS_EVT_TIMEOUT
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
             err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                        NRF_BLE_MAX_MTU_SIZE);
@@ -809,6 +863,7 @@ static void bsp_event_handler(bsp_event_t event)
             break; // BSP_EVENT_DISCONNECT
 
         case BSP_EVENT_KEY_0:
+            NRF_LOG_DEBUG("Button 1 pushed.\r\n");
             if (m_ans_c.conn_handle != BLE_CONN_HANDLE_INVALID)
             {
                 new_alert_state_toggle();
@@ -816,6 +871,7 @@ static void bsp_event_handler(bsp_event_t event)
             break; // BSP_EVENT_KEY_0
 
         case BSP_EVENT_KEY_1:
+            NRF_LOG_DEBUG("Button 2 pushed.\r\n");
             if (m_ans_c.conn_handle != BLE_CONN_HANDLE_INVALID)
             {
                 unread_alert_state_toggle();
@@ -823,6 +879,7 @@ static void bsp_event_handler(bsp_event_t event)
             break; // BSP_EVENT_KEY_1
 
         case BSP_EVENT_KEY_2:
+            NRF_LOG_DEBUG("Button 3 pushed.\r\n");
             if (m_ans_c.conn_handle != BLE_CONN_HANDLE_INVALID)
             {
                 all_alert_notify_request();
@@ -899,7 +956,7 @@ static void ble_stack_init(void)
     CHECK_RAM_START_ADDR(CENTRAL_LINK_COUNT, PERIPHERAL_LINK_COUNT);
 
     // Enable BLE stack.
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_MAX_MTU_SIZE;
 #endif
     err_code = softdevice_enable(&ble_enable_params);
@@ -1054,7 +1111,7 @@ int main(void)
     conn_params_init();
 
     // Start execution.
-    NRF_LOG_INFO("Alert Notification started\r\n");
+    NRF_LOG_INFO("Alert Notification started.\r\n");
     advertising_start();
 
     // Enter main loop.

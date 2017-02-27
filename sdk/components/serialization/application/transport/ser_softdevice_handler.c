@@ -19,7 +19,7 @@
 #include "ser_app_hal.h"
 #include "ser_config.h"
 #include "nrf_soc.h"
-
+#include "ble_serialization.h"
 
 #define SD_BLE_EVT_MAILBOX_QUEUE_SIZE 5 /**< Size of mailbox queue. */
 

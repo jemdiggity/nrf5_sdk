@@ -302,7 +302,6 @@ uint32_t softdevice_handler_init(nrf_clock_lf_cfg_t *           p_clock_lf_cfg,
 
     if (err_code != NRF_SUCCESS)
     {
-
 #if (NRF_MODULE_ENABLED(RNG) && defined(SOFTDEVICE_PRESENT))
         if (rng_isr_enabled)
         {
@@ -320,12 +319,14 @@ uint32_t softdevice_handler_init(nrf_clock_lf_cfg_t *           p_clock_lf_cfg,
 
     m_softdevice_enabled = true;
 #if (NRF_MODULE_ENABLED(CLOCK) && defined(SOFTDEVICE_PRESENT))
-    nrf_drv_clock_on_sd_enable();
+        nrf_drv_clock_on_sd_enable();
 #endif
 
     // Enable BLE event interrupt (interrupt priority has already been set by the stack).
 #ifdef SOFTDEVICE_PRESENT
-    return sd_nvic_EnableIRQ((IRQn_Type)SOFTDEVICE_EVT_IRQ);
+    err_code = sd_nvic_EnableIRQ((IRQn_Type)SOFTDEVICE_EVT_IRQ);
+		return err_code;
+
 #else
     //In case of Serialization NVIC must be accessed directly.
     NVIC_EnableIRQ(SOFTDEVICE_EVT_IRQ);
@@ -349,7 +350,6 @@ uint32_t softdevice_handler_sd_disable(void)
         nrf_drv_rng_on_sd_disable();
 #endif
     }
-
     return err_code;
 }
 
@@ -475,6 +475,7 @@ static inline uint32_t ram_total_size_get(void)
 #endif /* NRF51 */
 }
 
+
 /*lint --e{528} -save suppress 528: symbol not referenced */
 /**@brief   Function for finding the end address of the RAM.
  *
@@ -483,41 +484,15 @@ static inline uint32_t ram_total_size_get(void)
 static inline uint32_t ram_end_address_get(void)
 {
     uint32_t ram_end_address = (uint32_t)RAM_START_ADDRESS;
-    ram_end_address+= ram_total_size_get();
+    ram_end_address += ram_total_size_get();
     return ram_end_address;
 }
 /*lint -restore*/
 
-/*lint --e{10} --e{19} --e{27} --e{40} --e{529} -save suppress Error 27: Illegal character */
-uint32_t sd_check_ram_start(uint32_t sd_req_ram_start)
-{
-#if (defined(S130) || defined(S132) || defined(S332))
-#if defined ( __CC_ARM )
-    extern uint32_t Image$$RW_IRAM1$$Base;
-    const volatile uint32_t ram_start = (uint32_t) &Image$$RW_IRAM1$$Base;
-#elif defined ( __ICCARM__ )
-    extern uint32_t __ICFEDIT_region_RAM_start__;
-    volatile uint32_t ram_start = (uint32_t) &__ICFEDIT_region_RAM_start__;
-#elif defined   ( __GNUC__ )
-    extern uint32_t __data_start__;
-    volatile uint32_t ram_start = (uint32_t) &__data_start__;
-#endif//__CC_ARM
-    if (ram_start != sd_req_ram_start)
-    {
-        NRF_LOG_WARNING("RAM START ADDR 0x%x should be adjusted to 0x%x\r\n",
-                  ram_start,
-                  sd_req_ram_start);
-        NRF_LOG_WARNING("RAM SIZE should be adjusted to 0x%x \r\n",
-                ram_end_address_get() - sd_req_ram_start);
-        return NRF_SUCCESS;
-    }
-#endif//defined(S130) || defined(S132) || defined(S332)
-    return NRF_SUCCESS;
-}
-
+/*lint --e{10} --e{27} --e{40} --e{529} -save */
 uint32_t softdevice_enable(ble_enable_params_t * p_ble_enable_params)
 {
-#if (defined(S130) || defined(S132) || defined(S332))
+#if (defined(S130) || defined(S132) || defined(S332) || defined(S140))
     uint32_t err_code;
     uint32_t app_ram_base;
 
@@ -551,8 +526,7 @@ uint32_t softdevice_enable(ble_enable_params_t * p_ble_enable_params)
     return err_code;
 #else
     return NRF_SUCCESS;
-#endif   //defined(S130) || defined(S132) || defined(S332)
-
+#endif   //defined(S130) || defined(S132) || defined(S332) || defined(S140)
 }
 /*lint -restore*/
 

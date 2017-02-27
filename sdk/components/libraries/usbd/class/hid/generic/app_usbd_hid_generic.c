@@ -22,16 +22,17 @@
 /**
  * @ingroup app_usbd_hid_generic
  *
- * Module with types, definitions and API used by HID generic
+ * Module with types, definitions and API used by HID generic.
  * @{
  */
 
 
 /**
- * @brief Auxiliary function to access HID generic context data
+ * @brief Auxiliary function to access HID generic context data.
  *
- * @param[in] p_inst    Class instance data
- * @return HID generic instance data @ref app_usbd_hid_generic_ctx_t
+ * @param[in] p_inst    Class instance data.
+ *
+ * @return HID generic class instance data context.
  */
 static inline app_usbd_hid_generic_ctx_t *
 hid_generic_ctx_get(app_usbd_hid_generic_t const * p_generic)
@@ -42,10 +43,11 @@ hid_generic_ctx_get(app_usbd_hid_generic_t const * p_generic)
 }
 
 /**
- * @brief Auxiliary function to access HID generic instance data
+ * @brief Auxiliary function to access HID generic instance data.
  *
- * @param[in] p_inst Class instance data
- * @return HID generic instance data @ref app_usbd_hid_generic_t
+ * @param[in] p_inst Class instance data.
+ *
+ * @return HID generic class instance data.
  */
 static inline app_usbd_hid_generic_t const *
 hid_generic_get(app_usbd_class_inst_t const * p_inst)
@@ -56,9 +58,11 @@ hid_generic_get(app_usbd_class_inst_t const * p_inst)
 
 
 /**
- * @brief Returns report ID buffer descriptor
+ * @brief Returns report ID buffer descriptor.
  *
- * @*/
+ * @param[in] p_generic Internal HID generic context.
+ *
+ */
 static inline app_usbd_hid_report_buffer_t const *
 hid_generic_rep_buffer_get(app_usbd_hid_generic_t const * p_generic, uint8_t rep_id)
 {
@@ -68,25 +72,26 @@ hid_generic_rep_buffer_get(app_usbd_hid_generic_t const * p_generic, uint8_t rep
     return app_usbd_hid_rep_buff_in_get(p_hinst, rep_id);
 }
 
-/**@brief Auxiliary function to prepare report transfer buffer to next transfer
+/**
+ * @brief Auxiliary function to prepare report transfer buffer to next transfer.
  *
- * @param[in] p_generic_ctx Internal HID generic context
- * @retval true if next transfer is required
- * @retval false if next transfer is not required
+ * @param[in] p_generic_ctx Internal HID generic context.
+ *
+ * @return Standard error code.
  */
 static inline bool hid_generic_transfer_next(app_usbd_hid_generic_ctx_t * p_generic_ctx,
                                              uint8_t rep_id)
 {
-    ASSERT(rep_id < 32);
+    ASSERT(rep_id < (sizeof(p_generic_ctx->rep_request_mask) * 8));
     return IS_SET(p_generic_ctx->rep_request_mask, rep_id);
 }
 
 
 /**
- * @brief Triggers IN endpoint transfer
+ * @brief Triggers IN endpoint transfer.
  *
- * @param[in] p_generic HID generic instance
- * @return Standard error code
+ * @param[in] p_generic HID generic instance.
+ * @return Standard error code.
  */
 static inline ret_code_t hid_generic_transfer_set(app_usbd_hid_generic_t const * p_generic,
                                                   uint8_t rep_id)

@@ -790,7 +790,7 @@ ret_code_t nrf_drv_twis_tx_prepare(
         void const * const p_buf,
         size_t size)
 {
-    ret_code_t err_code = NRF_SUCCESS;;
+    ret_code_t err_code = NRF_SUCCESS;
     uint8_t instNr = p_instance->instNr;
     NRF_TWIS_Type * const p_reg = m_const_inst[instNr].p_reg;
     nrf_drv_twis_var_inst_t * const p_var_inst = &m_var_inst[instNr];

@@ -66,56 +66,58 @@
 #include "nrf_drv_saadc.h"
 #endif //ADC_PRESENT
 
-#if (NRF_SD_BLE_API_VERSION == 3)
-#define NRF_BLE_MAX_MTU_SIZE              GATT_MTU_SIZE_DEFAULT                        /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#if (NRF_SD_BLE_API_VERSION <= 3)
+    #define NRF_BLE_MAX_MTU_SIZE        GATT_MTU_SIZE_DEFAULT                        /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#else
+    #define NRF_BLE_MAX_MTU_SIZE        BLE_GATT_MTU_SIZE_DEFAULT
 #endif
 
-#define APP_FEATURE_NOT_SUPPORTED         BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2         /**< Reply when unsupported features are requested. */
+#define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2         /**< Reply when unsupported features are requested. */
 
-#define IS_SRVC_CHANGED_CHARACT_PRESENT   0                                            /**< Include or not the service_changed characteristic. if not enabled, the server's database cannot be changed for the lifetime of the device*/
+#define IS_SRVC_CHANGED_CHARACT_PRESENT 0                                            /**< Include or not the service_changed characteristic. if not enabled, the server's database cannot be changed for the lifetime of the device*/
 
-#define CENTRAL_LINK_COUNT                0                                            /**<number of central links used by the application. When changing this number remember to adjust the RAM settings*/
-#define PERIPHERAL_LINK_COUNT             1                                            /**<number of peripheral links used by the application. When changing this number remember to adjust the RAM settings*/
+#define CENTRAL_LINK_COUNT              0                                            /**<number of central links used by the application. When changing this number remember to adjust the RAM settings*/
+#define PERIPHERAL_LINK_COUNT           1                                            /**<number of peripheral links used by the application. When changing this number remember to adjust the RAM settings*/
 
-#define DEVICE_NAME                       "Nordic_Prox"                                /**< Name of device. Will be included in the advertising data. */
-#define APP_ADV_INTERVAL_FAST             0x0028                                       /**< Fast advertising interval (in units of 0.625 ms. This value corresponds to 25 ms.). */
-#define APP_ADV_INTERVAL_SLOW             0x0C80                                       /**< Slow advertising interval (in units of 0.625 ms. This value corresponds to 2 seconds). */
+#define DEVICE_NAME                     "Nordic_Prox"                                /**< Name of device. Will be included in the advertising data. */
+#define APP_ADV_INTERVAL_FAST           0x0028                                       /**< Fast advertising interval (in units of 0.625 ms. This value corresponds to 25 ms.). */
+#define APP_ADV_INTERVAL_SLOW           0x0C80                                       /**< Slow advertising interval (in units of 0.625 ms. This value corresponds to 2 seconds). */
 
-#define APP_TIMER_PRESCALER               0                                            /**< Value of the RTC1 PRESCALER register. */
-#define APP_TIMER_OP_QUEUE_SIZE           6                                            /**< Size of timer operation queues. */
+#define APP_TIMER_PRESCALER             0                                            /**< Value of the RTC1 PRESCALER register. */
+#define APP_TIMER_OP_QUEUE_SIZE         6                                            /**< Size of timer operation queues. */
 
-#define BATTERY_LEVEL_MEAS_INTERVAL       APP_TIMER_TICKS(120000, APP_TIMER_PRESCALER) /**< Battery level measurement interval (ticks). This value corresponds to 120 seconds. */
+#define BATTERY_LEVEL_MEAS_INTERVAL     APP_TIMER_TICKS(120000, APP_TIMER_PRESCALER) /**< Battery level measurement interval (ticks). This value corresponds to 120 seconds. */
 
-#define MIN_CONN_INTERVAL                 MSEC_TO_UNITS(500, UNIT_1_25_MS)             /**< Minimum acceptable connection interval (0.5 seconds).  */
-#define MAX_CONN_INTERVAL                 MSEC_TO_UNITS(1000, UNIT_1_25_MS)            /**< Maximum acceptable connection interval (1 second). */
-#define SLAVE_LATENCY                     0                                            /**< Slave latency. */
-#define CONN_SUP_TIMEOUT                  MSEC_TO_UNITS(4000, UNIT_10_MS)              /**< Connection supervisory timeout (4 seconds). */
+#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(500, UNIT_1_25_MS)             /**< Minimum acceptable connection interval (0.5 seconds).  */
+#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(1000, UNIT_1_25_MS)            /**< Maximum acceptable connection interval (1 second). */
+#define SLAVE_LATENCY                   0                                            /**< Slave latency. */
+#define CONN_SUP_TIMEOUT                MSEC_TO_UNITS(4000, UNIT_10_MS)              /**< Connection supervisory timeout (4 seconds). */
 
-#define FIRST_CONN_PARAMS_UPDATE_DELAY    APP_TIMER_TICKS(5000, APP_TIMER_PRESCALER)   /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (5 seconds). */
-#define NEXT_CONN_PARAMS_UPDATE_DELAY     APP_TIMER_TICKS(30000, APP_TIMER_PRESCALER)  /**< Time between each call to sd_ble_gap_conn_param_update after the first call (30 seconds). */
-#define MAX_CONN_PARAMS_UPDATE_COUNT      3                                            /**< Number of attempts before giving up the connection parameter negotiation. */
+#define FIRST_CONN_PARAMS_UPDATE_DELAY  APP_TIMER_TICKS(5000, APP_TIMER_PRESCALER)   /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (5 seconds). */
+#define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(30000, APP_TIMER_PRESCALER)  /**< Time between each call to sd_ble_gap_conn_param_update after the first call (30 seconds). */
+#define MAX_CONN_PARAMS_UPDATE_COUNT    3                                            /**< Number of attempts before giving up the connection parameter negotiation. */
 
-#define SEC_PARAM_BOND                    1                                            /**< Perform bonding. */
-#define SEC_PARAM_MITM                    0                                            /**< Man In The Middle protection not required. */
-#define SEC_PARAM_LESC                    0                                            /**< LE Secure Connections not enabled. */
-#define SEC_PARAM_KEYPRESS                0                                            /**< Keypress notifications not enabled. */
-#define SEC_PARAM_IO_CAPABILITIES         BLE_GAP_IO_CAPS_NONE                         /**< No I/O capabilities. */
-#define SEC_PARAM_OOB                     0                                            /**< Out Of Band data not available. */
-#define SEC_PARAM_MIN_KEY_SIZE            7                                            /**< Minimum encryption key size. */
-#define SEC_PARAM_MAX_KEY_SIZE            16                                           /**< Maximum encryption key size. */
+#define SEC_PARAM_BOND                  1                                            /**< Perform bonding. */
+#define SEC_PARAM_MITM                  0                                            /**< Man In The Middle protection not required. */
+#define SEC_PARAM_LESC                  0                                            /**< LE Secure Connections not enabled. */
+#define SEC_PARAM_KEYPRESS              0                                            /**< Keypress notifications not enabled. */
+#define SEC_PARAM_IO_CAPABILITIES       BLE_GAP_IO_CAPS_NONE                         /**< No I/O capabilities. */
+#define SEC_PARAM_OOB                   0                                            /**< Out Of Band data not available. */
+#define SEC_PARAM_MIN_KEY_SIZE          7                                            /**< Minimum encryption key size. */
+#define SEC_PARAM_MAX_KEY_SIZE          16                                           /**< Maximum encryption key size. */
 
-#define INITIAL_LLS_ALERT_LEVEL           BLE_CHAR_ALERT_LEVEL_NO_ALERT                /**< Initial value for the Alert Level characteristic in the Link Loss service. */
-#define TX_POWER_LEVEL                    (-8)                                         /**< TX Power Level value. This will be set both in the TX Power service, in the advertising data, and also used to set the radio transmit power. */
+#define INITIAL_LLS_ALERT_LEVEL         BLE_CHAR_ALERT_LEVEL_NO_ALERT                /**< Initial value for the Alert Level characteristic in the Link Loss service. */
+#define TX_POWER_LEVEL                  (-8)                                         /**< TX Power Level value. This will be set both in the TX Power service, in the advertising data, and also used to set the radio transmit power. */
 
-#define ADC_REF_VOLTAGE_IN_MILLIVOLTS     600                                          /**< Reference voltage (in milli volts) used by ADC while doing conversion. */
-#define ADC_PRE_SCALING_COMPENSATION      6                                            /**< The ADC is configured to use VDD with 1/3 prescaling as input. And hence the result of conversion is to be multiplied by 3 to get the actual value of the battery voltage.*/
-#define DIODE_FWD_VOLT_DROP_MILLIVOLTS    270                                          /**< Typical forward voltage drop of the diode (Part no: SD103ATW-7-F) that is connected in series with the voltage supply. This is the voltage drop when the forward current is 1mA. Source: Data sheet of 'SURFACE MOUNT SCHOTTKY BARRIER DIODE ARRAY' available at www.diodes.com. */
+#define ADC_REF_VOLTAGE_IN_MILLIVOLTS   600                                          /**< Reference voltage (in milli volts) used by ADC while doing conversion. */
+#define ADC_PRE_SCALING_COMPENSATION    6                                            /**< The ADC is configured to use VDD with 1/3 prescaling as input. And hence the result of conversion is to be multiplied by 3 to get the actual value of the battery voltage.*/
+#define DIODE_FWD_VOLT_DROP_MILLIVOLTS  270                                          /**< Typical forward voltage drop of the diode . */
 
-#define DEAD_BEEF                         0xDEADBEEF                                   /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
+#define DEAD_BEEF                       0xDEADBEEF                                   /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
-#define ADC_REF_VBG_VOLTAGE_IN_MILLIVOLTS 1200                                         /**< Value in millivolts for voltage used as reference in ADC conversion on NRF51. */
-#define ADC_INPUT_PRESCALER               3                                            /**< Input prescaler for ADC convestion on NRF51. */
-#define ADC_RES_10BIT                     1024                                         /**< Maximum digital value for 10-bit ADC conversion. */
+#define ADC_REF_VBG_VOLTAGE_IN_MILLIVOLTS 1200                                       /**< Value in millivolts for voltage used as reference in ADC conversion on NRF51. */
+#define ADC_INPUT_PRESCALER               3                                          /**< Input prescaler for ADC convestion on NRF51. */
+#define ADC_RES_10BIT                     1024                                       /**< Maximum digital value for 10-bit ADC conversion. */
 
 /**@brief Macro to convert the result of ADC conversion in millivolts.
  *
@@ -569,7 +571,7 @@ static void advertising_init(void)
 
     advdata.name_type               = BLE_ADVDATA_FULL_NAME;
     advdata.include_appearance      = true;
-    advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_LIMITED_DISC_MODE;;
+    advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_LIMITED_DISC_MODE;
     advdata.uuids_complete.uuid_cnt = sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
     advdata.uuids_complete.p_uuids  = m_adv_uuids;
 
@@ -913,6 +915,8 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
             APP_ERROR_CHECK(err_code);
 
+            // Discover peer's services.
+            memset(&m_ble_db_discovery, 0x00, sizeof(m_ble_db_discovery));
             err_code = ble_db_discovery_start(&m_ble_db_discovery,
                                               p_ble_evt->evt.gap_evt.conn_handle);
             APP_ERROR_CHECK(err_code);
@@ -968,7 +972,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             }
         } break; // BLE_GATTS_EVT_RW_AUTHORIZE_REQUEST
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
             err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                        NRF_BLE_MAX_MTU_SIZE);
@@ -1050,7 +1054,7 @@ static void ble_stack_init(void)
     CHECK_RAM_START_ADDR(CENTRAL_LINK_COUNT, PERIPHERAL_LINK_COUNT);
 
     // Enable BLE stack.
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_MAX_MTU_SIZE;
 #endif
     err_code = softdevice_enable(&ble_enable_params);

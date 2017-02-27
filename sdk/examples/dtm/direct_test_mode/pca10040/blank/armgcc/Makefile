@@ -21,12 +21,10 @@ SRC_FILES += \
 
 # Include folders common to all targets
 INC_FOLDERS += \
-  $(SDK_ROOT)/components \
   $(SDK_ROOT)/components/libraries/util \
   $(SDK_ROOT)/components/toolchain/gcc \
   $(SDK_ROOT)/components/toolchain \
   $(PROJ_DIR) \
-  $(SDK_ROOT)/components/libraries/bsp \
   $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd \
   ../config \
   $(SDK_ROOT)/components/device \
@@ -55,7 +53,6 @@ CFLAGS += -DNRF52_PAN_55
 CFLAGS += -DBOARD_PCA10040
 CFLAGS += -DNRF52_PAN_31
 CFLAGS += -DNRF52832
-CFLAGS += -DBSP_DEFINES_ONLY
 CFLAGS += -mcpu=cortex-m4
 CFLAGS += -mthumb -mabi=aapcs
 CFLAGS +=  -Wall -Werror -O3 -g3
@@ -83,7 +80,6 @@ ASMFLAGS += -DNRF52_PAN_55
 ASMFLAGS += -DBOARD_PCA10040
 ASMFLAGS += -DNRF52_PAN_31
 ASMFLAGS += -DNRF52832
-ASMFLAGS += -DBSP_DEFINES_ONLY
 
 # Linker flags
 LDFLAGS += -mthumb -mabi=aapcs -L $(TEMPLATE_PATH) -T$(LINKER_SCRIPT)

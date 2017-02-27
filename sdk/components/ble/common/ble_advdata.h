@@ -60,7 +60,7 @@ extern "C" {
 /**@brief Security Manager TK value. */
 typedef struct
 {
-  uint8_t tk[BLE_GAP_SEC_KEY_LEN];   /**< Array containing TK value. */
+  uint8_t tk[BLE_GAP_SEC_KEY_LEN];      /**< Array containing TK value in little-endian format. */
 } ble_advdata_tk_value_t;
 
 /**@brief Advertising data LE Role types. This enumeration contains the options available for the LE role inside

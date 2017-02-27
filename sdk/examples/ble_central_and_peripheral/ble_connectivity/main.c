@@ -28,6 +28,7 @@
 #include "ser_hal_transport.h"
 #include "ser_conn_handlers.h"
 #include "boards.h"
+#include "nrf_drv_clock.h"
 
 #define NRF_LOG_MODULE_NAME "CONN"
 #include "nrf_log.h"
@@ -40,10 +41,19 @@ int main(void)
 {
     uint32_t err_code = NRF_SUCCESS;
 
+    if (nrf_drv_clock_init() != NRF_SUCCESS)
+    {
+        return NRF_ERROR_INTERNAL;
+    }
+
+    nrf_drv_clock_hfclk_request(NULL);
+    while (!nrf_drv_clock_hfclk_is_running())
+    {}
+
     APP_ERROR_CHECK(NRF_LOG_INIT(NULL));
     NRF_LOG_INFO("BLE connectivity started\r\n");
 
-#if ( defined(SER_PHY_HCI_DEBUG_ENABLE) || defined(SER_PHY_DEBUG_APP_ENABLE))
+#if (defined(SER_PHY_HCI_DEBUG_ENABLE) || defined(SER_PHY_DEBUG_APP_ENABLE))
     debug_init(NULL);
 #endif
 
@@ -88,11 +98,12 @@ int main(void)
         err_code = ser_conn_rx_process();
         APP_ERROR_CHECK(err_code);
 
-        (void)NRF_LOG_PROCESS();
-
-        /* Sleep waiting for an application event. */
-        err_code = sd_app_evt_wait();
-        APP_ERROR_CHECK(err_code);
+        if (!NRF_LOG_PROCESS())
+        {
+            /* Sleep waiting for an application event. */
+            err_code = sd_app_evt_wait();
+            APP_ERROR_CHECK(err_code);
+        }
     }
 }
 /** @} */

@@ -178,19 +178,19 @@
           <name>CCDefines</name>
           <state>BLE_STACK_SUPPORT_REQD</state>
           <state>S132</state>
-          <state>NRF_SD_BLE_API_VERSION=3</state>
+          <state>NRF_SD_BLE_API_VERSION=5</state>
+          <state>NRF52_PAN_58</state>
+          <state>NRF52_PAN_64</state>
           <state>BOARD_PCA10040</state>
           <state>NRF52_PAN_12</state>
           <state>NRF52_PAN_15</state>
           <state>NRF52_PAN_20</state>
           <state>NRF52_PAN_31</state>
-          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_36</state>
           <state>NRF52_PAN_51</state>
           <state>NRF52_PAN_54</state>
+          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_55</state>
-          <state>NRF52_PAN_58</state>
-          <state>NRF52_PAN_64</state>
           <state>SOFTDEVICE_PRESENT</state>
           <state>NRF52832</state>
           <state>NRF52</state>
@@ -359,7 +359,6 @@
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\ble\peer_manager</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\boards</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\device</state>
-          <state>$PROJ_DIR$\..\..\..\..\..\..\components\drivers_nrf\adc</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\drivers_nrf\clock</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\drivers_nrf\common</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\drivers_nrf\comp</state>
@@ -391,6 +390,7 @@
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\crc32</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\csense</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\csense_drv</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\ecc</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\experimental_section_vars</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\fds</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\fstorage</state>
@@ -587,19 +587,19 @@
       <name>ADefines</name>
           <state>BLE_STACK_SUPPORT_REQD</state>
           <state>S132</state>
-          <state>NRF_SD_BLE_API_VERSION=3</state>
+          <state>NRF_SD_BLE_API_VERSION=5</state>
+          <state>NRF52_PAN_58</state>
+          <state>NRF52_PAN_64</state>
           <state>BOARD_PCA10040</state>
           <state>NRF52_PAN_12</state>
           <state>NRF52_PAN_15</state>
           <state>NRF52_PAN_20</state>
           <state>NRF52_PAN_31</state>
-          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_36</state>
           <state>NRF52_PAN_51</state>
           <state>NRF52_PAN_54</state>
+          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_55</state>
-          <state>NRF52_PAN_58</state>
-          <state>NRF52_PAN_64</state>
           <state>SOFTDEVICE_PRESENT</state>
           <state>NRF52832</state>
           <state>NRF52</state>
@@ -735,7 +735,6 @@
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\ble\peer_manager</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\boards</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\device</state>
-          <state>$PROJ_DIR$\..\..\..\..\..\..\components\drivers_nrf\adc</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\drivers_nrf\clock</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\drivers_nrf\common</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\drivers_nrf\comp</state>
@@ -767,6 +766,7 @@
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\crc32</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\csense</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\csense_drv</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\ecc</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\experimental_section_vars</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\fds</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\fstorage</state>

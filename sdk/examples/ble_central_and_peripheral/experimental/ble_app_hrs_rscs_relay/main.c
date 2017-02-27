@@ -70,46 +70,48 @@
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 
-#if (NRF_SD_BLE_API_VERSION == 3)
-#define NRF_BLE_MAX_MTU_SIZE        GATT_MTU_SIZE_DEFAULT                         /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#if (NRF_SD_BLE_API_VERSION <= 3)
+    #define NRF_BLE_MAX_MTU_SIZE        GATT_MTU_SIZE_DEFAULT                   /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#else
+    #define NRF_BLE_MAX_MTU_SIZE        BLE_GATT_MTU_SIZE_DEFAULT               /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
 #endif
 
-#define APP_FEATURE_NOT_SUPPORTED   BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2          /**< Reply when unsupported features are requested. */
+#define APP_FEATURE_NOT_SUPPORTED   BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2        /**< Reply when unsupported features are requested. */
 
-#define CENTRAL_LINK_COUNT          2                                             /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
-#define PERIPHERAL_LINK_COUNT       1                                             /**< Number of peripheral links used by the application. When changing this number remember to adjust the RAM settings*/
+#define CENTRAL_LINK_COUNT          2                                           /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
+#define PERIPHERAL_LINK_COUNT       1                                           /**< Number of peripheral links used by the application. When changing this number remember to adjust the RAM settings*/
 
-#define UART_TX_BUF_SIZE            256                                           /**< Size of the UART TX buffer, in bytes. Must be a power of two. */
-#define UART_RX_BUF_SIZE            1                                             /**< Size of the UART RX buffer, in bytes. Must be a power of two. */
+#define UART_TX_BUF_SIZE            256                                         /**< Size of the UART TX buffer, in bytes. Must be a power of two. */
+#define UART_RX_BUF_SIZE            1                                           /**< Size of the UART RX buffer, in bytes. Must be a power of two. */
 
 /* Central related. */
 
 #define CENTRAL_SCANNING_LED        BSP_BOARD_LED_0
 #define CENTRAL_CONNECTED_LED       BSP_BOARD_LED_1
 
-#define APP_TIMER_PRESCALER         0                                             /**< Value of the RTC1 PRESCALER register. */
-#define APP_TIMER_MAX_TIMERS        (2 + BSP_APP_TIMERS_NUMBER)                   /**< Maximum number of timers used by the application. */
-#define APP_TIMER_OP_QUEUE_SIZE     2                                             /**< Size of timer operation queues. */
+#define APP_TIMER_PRESCALER         0                                           /**< Value of the RTC1 PRESCALER register. */
+#define APP_TIMER_MAX_TIMERS        (2 + BSP_APP_TIMERS_NUMBER)                 /**< Maximum number of timers used by the application. */
+#define APP_TIMER_OP_QUEUE_SIZE     2                                           /**< Size of timer operation queues. */
 
-#define SEC_PARAM_BOND              1                                             /**< Perform bonding. */
-#define SEC_PARAM_MITM              0                                             /**< Man In The Middle protection not required. */
-#define SEC_PARAM_LESC              0                                             /**< LE Secure Connections not enabled. */
-#define SEC_PARAM_KEYPRESS          0                                             /**< Keypress notifications not enabled. */
-#define SEC_PARAM_IO_CAPABILITIES   BLE_GAP_IO_CAPS_NONE                          /**< No I/O capabilities. */
-#define SEC_PARAM_OOB               0                                             /**< Out Of Band data not available. */
-#define SEC_PARAM_MIN_KEY_SIZE      7                                             /**< Minimum encryption key size in octets. */
-#define SEC_PARAM_MAX_KEY_SIZE      16                                            /**< Maximum encryption key size in octets. */
+#define SEC_PARAM_BOND              1                                           /**< Perform bonding. */
+#define SEC_PARAM_MITM              0                                           /**< Man In The Middle protection not required. */
+#define SEC_PARAM_LESC              0                                           /**< LE Secure Connections not enabled. */
+#define SEC_PARAM_KEYPRESS          0                                           /**< Keypress notifications not enabled. */
+#define SEC_PARAM_IO_CAPABILITIES   BLE_GAP_IO_CAPS_NONE                        /**< No I/O capabilities. */
+#define SEC_PARAM_OOB               0                                           /**< Out Of Band data not available. */
+#define SEC_PARAM_MIN_KEY_SIZE      7                                           /**< Minimum encryption key size in octets. */
+#define SEC_PARAM_MAX_KEY_SIZE      16                                          /**< Maximum encryption key size in octets. */
 
-#define SCAN_INTERVAL               0x00A0                                        /**< Determines scan interval in units of 0.625 millisecond. */
-#define SCAN_WINDOW                 0x0050                                        /**< Determines scan window in units of 0.625 millisecond. */
+#define SCAN_INTERVAL               0x00A0                                      /**< Determines scan interval in units of 0.625 millisecond. */
+#define SCAN_WINDOW                 0x0050                                      /**< Determines scan window in units of 0.625 millisecond. */
 #define SCAN_TIMEOUT                0
 
-#define MIN_CONNECTION_INTERVAL     (uint16_t) MSEC_TO_UNITS(7.5, UNIT_1_25_MS)   /**< Determines minimum connection interval in milliseconds. */
-#define MAX_CONNECTION_INTERVAL     (uint16_t) MSEC_TO_UNITS(30, UNIT_1_25_MS)    /**< Determines maximum connection interval in milliseconds. */
-#define SLAVE_LATENCY               0                                             /**< Determines slave latency in terms of connection events. */
-#define SUPERVISION_TIMEOUT         (uint16_t) MSEC_TO_UNITS(4000, UNIT_10_MS)    /**< Determines supervision time-out in units of 10 milliseconds. */
+#define MIN_CONNECTION_INTERVAL     (uint16_t) MSEC_TO_UNITS(7.5, UNIT_1_25_MS) /**< Determines minimum connection interval in milliseconds. */
+#define MAX_CONNECTION_INTERVAL     (uint16_t) MSEC_TO_UNITS(30, UNIT_1_25_MS)  /**< Determines maximum connection interval in milliseconds. */
+#define SLAVE_LATENCY               0                                           /**< Determines slave latency in terms of connection events. */
+#define SUPERVISION_TIMEOUT         (uint16_t) MSEC_TO_UNITS(4000, UNIT_10_MS)  /**< Determines supervision time-out in units of 10 milliseconds. */
 
-#define UUID16_SIZE                 2                                             /**< Size of a UUID, in bytes. */
+#define UUID16_SIZE                 2                                           /**< Size of a UUID, in bytes. */
 
 /**@brief Macro to unpack 16bit unsigned UUID from an octet stream. */
 #define UUID16_EXTRACT(DST, SRC) \
@@ -136,11 +138,11 @@ static const ble_gap_scan_params_t m_scan_params =
     .interval = SCAN_INTERVAL,
     .window   = SCAN_WINDOW,
     .timeout  = SCAN_TIMEOUT,
-    #if (NRF_SD_BLE_API_VERSION == 2)
+    #if (NRF_SD_BLE_API_VERSION <= 2)
         .selective   = 0,
         .p_whitelist = NULL,
     #endif
-    #if (NRF_SD_BLE_API_VERSION == 3)
+    #if (NRF_SD_BLE_API_VERSION >= 3)
         .use_whitelist = 0,
     #endif
 };
@@ -655,6 +657,7 @@ static void on_ble_central_evt(const ble_evt_t * const p_ble_evt)
                 NRF_LOG_INFO("try to find HRS or RSC on conn_handle 0x%x\r\n", p_gap_evt->conn_handle);
 
                 APP_ERROR_CHECK_BOOL(p_gap_evt->conn_handle < CENTRAL_LINK_COUNT + PERIPHERAL_LINK_COUNT);
+                memset(&m_ble_db_discovery[p_gap_evt->conn_handle], 0x00, sizeof(ble_db_discovery_t));
                 err_code = ble_db_discovery_start(&m_ble_db_discovery[p_gap_evt->conn_handle], p_gap_evt->conn_handle);
                 APP_ERROR_CHECK(err_code);
             }
@@ -783,7 +786,7 @@ static void on_ble_central_evt(const ble_evt_t * const p_ble_evt)
             APP_ERROR_CHECK(err_code);
             break; // BLE_GATTS_EVT_TIMEOUT
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
             err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                        NRF_BLE_MAX_MTU_SIZE);
@@ -869,7 +872,7 @@ static void on_ble_peripheral_evt(ble_evt_t * p_ble_evt)
             }
         } break; // BLE_GATTS_EVT_RW_AUTHORIZE_REQUEST
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
             err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                        NRF_BLE_MAX_MTU_SIZE);
@@ -1032,7 +1035,7 @@ static void ble_stack_init(void)
     CHECK_RAM_START_ADDR(CENTRAL_LINK_COUNT,PERIPHERAL_LINK_COUNT);
 
     // Enable BLE stack.
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_MAX_MTU_SIZE;
 #endif
     err_code = softdevice_enable(&ble_enable_params);

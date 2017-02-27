@@ -21,6 +21,7 @@
  *
  */
 
+#include "sdk_config.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -44,6 +45,7 @@
 #include "fstorage.h"
 #include "fds.h"
 #include "nrf_crypto.h"
+#include "nrf_crypto_keys.h"
 #define NRF_LOG_MODULE_NAME "APP"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
@@ -53,12 +55,14 @@
 
 #define APP_FEATURE_NOT_SUPPORTED   BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2          /**< Reply when unsupported features are requested. */
 
-#if (NRF_SD_BLE_API_VERSION == 3)
-#define NRF_BLE_MAX_MTU_SIZE        GATT_MTU_SIZE_DEFAULT                         /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#if (NRF_SD_BLE_API_VERSION <= 3)
+    #define NRF_BLE_MAX_MTU_SIZE        GATT_MTU_SIZE_DEFAULT                   /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#else
+    #define NRF_BLE_MAX_MTU_SIZE        BLE_GATT_MTU_SIZE_DEFAULT               /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
 #endif
 
-#define CENTRAL_LINK_COUNT          1                                             /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
-#define PERIPHERAL_LINK_COUNT       1                                             /**< Number of peripheral links used by the application. When changing this number remember to adjust the RAM settings*/
+/** @brief The maximum number of peripheral and central links combined. */
+#define NRF_BLE_LINK_COUNT (NRF_BLE_PERIPHERAL_LINK_COUNT + NRF_BLE_CENTRAL_LINK_COUNT)
 
 /* Central related. */
 
@@ -83,9 +87,6 @@
 #define SEC_PARAMS_MIN_KEY_SIZE     7                                             /**< Minimum encryption key size in octets. */
 #define SEC_PARAMS_MAX_KEY_SIZE     16                                            /**< Maximum encryption key size in octets. */
 
-#define SCAN_INTERVAL               0x00A0                                        /**< Determines scan interval in units of 0.625 millisecond. */
-#define SCAN_WINDOW                 0x0050                                        /**< Determines scan window in units of 0.625 millisecond. */
-#define SCAN_TIMEOUT                0
 
 #define MIN_CONNECTION_INTERVAL     (uint16_t) MSEC_TO_UNITS(7.5, UNIT_1_25_MS)   /**< Determines minimum connection interval in milliseconds. */
 #define MAX_CONNECTION_INTERVAL     (uint16_t) MSEC_TO_UNITS(30, UNIT_1_25_MS)    /**< Determines maximum connection interval in milliseconds. */
@@ -108,11 +109,11 @@ static const ble_gap_scan_params_t m_scan_params =
     .interval = SCAN_INTERVAL,
     .window   = SCAN_WINDOW,
     .timeout  = SCAN_TIMEOUT,
-    #if (NRF_SD_BLE_API_VERSION == 2)
+    #if (NRF_SD_BLE_API_VERSION <= 2)
         .selective   = 0,
         .p_whitelist = NULL,
     #endif
-    #if (NRF_SD_BLE_API_VERSION == 3)
+    #if (NRF_SD_BLE_API_VERSION >= 3)
         .use_whitelist = 0,
     #endif
 };
@@ -129,17 +130,12 @@ static const ble_gap_conn_params_t m_connection_param =
 static ble_hrs_c_t        m_ble_hrs_c;                                                    /**< Main structure used by the Heart rate client module. */
 static uint16_t           m_conn_handle_hrs_c            = BLE_CONN_HANDLE_INVALID;       /**< Connection handle for the HRS central application */
 
-static ble_db_discovery_t m_ble_db_discovery[CENTRAL_LINK_COUNT + PERIPHERAL_LINK_COUNT]; /**< list of DB structures used by the database discovery module. */
+static ble_db_discovery_t m_ble_db_discovery[NRF_BLE_LINK_COUNT];                         /**< list of DB structures used by the database discovery module. */
 
 /* Peripheral related. */
 
 #define PERIPHERAL_ADVERTISING_LED       BSP_BOARD_LED_2
 #define PERIPHERAL_CONNECTED_LED         BSP_BOARD_LED_3
-
-#define DEVICE_NAME                      "NordicLESCApp"                            /**< Name of device used for advertising. */
-#define MANUFACTURER_NAME                "NordicSemiconductor"                      /**< Manufacturer. Will be passed to Device Information Service. */
-#define APP_ADV_INTERVAL                 300                                        /**< The advertising interval (in units of 0.625 ms). This value corresponds to 187.5 ms. */
-#define APP_ADV_TIMEOUT_IN_SECONDS       180                                        /**< The advertising timeout in units of seconds. */
 
 #define FIRST_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(5000, APP_TIMER_PRESCALER) /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (5 seconds). */
 #define NEXT_CONN_PARAMS_UPDATE_DELAY    APP_TIMER_TICKS(30000, APP_TIMER_PRESCALER)/**< Time between each call to sd_ble_gap_conn_param_update after the first call (30 seconds). */
@@ -155,54 +151,64 @@ typedef struct
 } ble_gap_lesc_p256_sk_t;
 
 static bool     m_numneric_match_requested = false;
-static uint16_t m_num_comp_conn_handle;    
+static uint16_t m_num_comp_conn_handle;
 static char invalid_role_str[] = "INVALID_ROLE";
 static char central_str[] = "CENTRAL";
 static char periph_str[] = "PERIPHERAL";
 static char *roles_str[BLE_GAP_ROLE_CENTRAL+1];
 
+typedef struct
+{
+    bool           is_connected;
+    ble_gap_addr_t address;
+}conn_peer_t;
+
+static conn_peer_t connected_peers[NRF_BLE_LINK_COUNT];
 
 #if LESC_DEBUG_MODE
+
 /**@brief Bluetooth SIG debug mode Private Key */
-__ALIGN(4) static const ble_gap_lesc_p256_sk_t m_debug_lesc_sk = {{0xbd,0x1a,0x3c,0xcd,0xa6,0xb8,0x99,0x58,0x99,0xb7,0x40,0xeb,0x7b,0x60,0xff,0x4a, \
-                                                 0x50,0x3f,0x10,0xd2,0xe3,0xb3,0xc9,0x74,0x38,0x5f,0xc5,0xa3,0xd4,0xf6,0x49,0x3f}};
-#else
-/**@brief Private Key: Replace with your own one, can be a random number or generated using a tool like OpenSSL */
-__ALIGN(4) static const ble_gap_lesc_p256_sk_t m_lesc_sk = {{0x4a,0xa3,0x74,0x4b,0xa9,0xfc,0x2a,0x3a,0x8e,0x5a,0xd5,0x15,0xf8,0xe3,0x3f,0xb0, \
-                                                 0x82,0x6c,0x98,0xf0,0x32,0x2a,0x51,0xee,0xb5,0x35,0x57,0x12,0xac,0x73,0x25,0x04}};
-#endif
-__ALIGN(4) static ble_gap_lesc_p256_pk_t m_lesc_pk;    /**< LESC ECC Public Key */
-__ALIGN(4) static ble_gap_lesc_dhkey_t m_lesc_dhkey;   /**< LESC ECC DH Key*/
+#error Generated private key is not supported.
+__ALIGN(4) static const ble_gap_lesc_p256_sk_t m_lesc_private_key = 
+{{
+    0xbd,0x1a,0x3c,0xcd,0xa6,0xb8,0x99,0x58,0x99,0xb7,0x40,0xeb,0x7b,0x60,0xff,0x4a,
+    0x50,0x3f,0x10,0xd2,0xe3,0xb3,0xc9,0x74,0x38,0x5f,0xc5,0xa3,0xd4,0xf6,0x49,0x3f
+}};
 
-static nrf_crypto_key_t m_crypto_key_sk =
-{
-#if LESC_DEBUG_MODE
-    .p_le_data = (uint8_t *) m_debug_lesc_sk.sk,
 #else
-    .p_le_data = (uint8_t *) m_lesc_sk.sk,
-#endif
-    .len = sizeof(m_lesc_sk.sk)
-};
-static nrf_crypto_key_t m_crypto_key_pk =
-{
-    .p_le_data = (uint8_t *) m_lesc_pk.pk,
-    .len = sizeof(m_lesc_pk.pk)
-};
-static nrf_crypto_key_t m_crypto_key_dhkey =
-{
-    .p_le_data = (uint8_t *) m_lesc_dhkey.key,
-    .len = sizeof(m_lesc_dhkey.key)
-};
 
-/* IAR has no support for the __ALIGN macro */
-#if defined(__ICCARM__)
-#pragma data_alignment = 1
 #endif
+                                                 
+__ALIGN(4) static ble_gap_lesc_p256_pk_t    m_lesc_public_key;      /**< LESC ECC Public Key */
+__ALIGN(4) static ble_gap_lesc_dhkey_t      m_lesc_dh_key;          /**< LESC ECC DH Key*/
+
+
+/**@brief Allocated private key type to use for LESC DH generation
+ */
+NRF_CRYPTO_ECC_PRIVATE_KEY_CREATE(m_private_key, SECP256R1);
+
+/**@brief Allocated public key type to use for LESC DH generation
+ */
+NRF_CRYPTO_ECC_PUBLIC_KEY_CREATE(m_public_key, SECP256R1);
+
+/**@brief Allocated peer public key type to use for LESC DH generation
+ */
+NRF_CRYPTO_ECC_PUBLIC_KEY_CREATE(m_peer_public_key, SECP256R1);
+
+/**@brief Allocated raw public key to use for LESC DH.
+ */
+NRF_CRYPTO_ECC_PUBLIC_KEY_RAW_CREATE_FROM_ARRAY(m_public_key_raw, SECP256R1, m_lesc_public_key.pk);
+
+/**@brief Allocated shared instance to use for LESC DH.
+ */
+NRF_CRYPTO_ECDH_SHARED_SECRET_CREATE_FROM_ARRAY(m_dh_key, SECP256R1, m_lesc_dh_key.key);
+
 
 /**@brief names which the central applications will scan for, and which will be advertised by the peripherals.
  *  if these are set to empty strings, the UUIDs defined below will be used
  */
 static const char m_target_periph_name[] = "";
+
 
 /**@brief UUIDs which the central applications will scan for if the name above is set to an empty string,
  * and which will be advertised by the peripherals.
@@ -210,6 +216,29 @@ static const char m_target_periph_name[] = "";
 static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_HEART_RATE_SERVICE,         BLE_UUID_TYPE_BLE},
                                    {BLE_UUID_RUNNING_SPEED_AND_CADENCE,  BLE_UUID_TYPE_BLE}};
 
+                                   
+/**@brief Function to generate private key */
+uint32_t lesc_generate_key_pair(void)
+{
+    uint32_t ret_val;
+    NRF_LOG_INFO("Generating key-pair\r\n");
+    //Generate a public/private key pair.
+    ret_val = nrf_crypto_ecc_key_pair_generate(NRF_CRYPTO_BLE_ECDH_CURVE_INFO, &m_private_key, &m_public_key);
+    APP_ERROR_CHECK(ret_val);
+    NRF_LOG_INFO("After generating key-pair\r\n");
+    
+    // Convert to a raw type
+    NRF_LOG_INFO("Converting to raw type\r\n");
+    ret_val = nrf_crypto_ecc_public_key_to_raw(NRF_CRYPTO_BLE_ECDH_CURVE_INFO, &m_public_key, &m_public_key_raw);
+    APP_ERROR_CHECK(ret_val);
+    NRF_LOG_INFO("After Converting to raw type\r\n");
+    
+    // Set the public key in the PM.
+    ret_val = pm_lesc_public_key_set(&m_lesc_public_key);
+    APP_ERROR_CHECK(ret_val);
+    return ret_val;
+}
+                                   
 
 /**@brief Function to handle asserts in the SoftDevice.
  *
@@ -301,7 +330,7 @@ static void scan_start(void)
     {
         APP_ERROR_CHECK(err_code);
     }
-    NRF_LOG_INFO("Scanning\r\n");        
+    NRF_LOG_INFO("Scanning\r\n");
 }
 
 
@@ -328,7 +357,7 @@ static void adv_scan_start(void)
         // Start advertising.
         err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
         APP_ERROR_CHECK(err_code);
-        NRF_LOG_INFO("Advertising\r\n");    
+        NRF_LOG_INFO("Advertising\r\n");
     }
 }
 
@@ -368,7 +397,7 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
         case PM_EVT_CONN_SEC_START:
         {
             NRF_LOG_DEBUG("%s : PM_EVT_CONN_SEC_START: peer_id=%d\r\n",
-                           nrf_log_push(roles_str[role]), 
+                           nrf_log_push(roles_str[role]),
                            p_evt->peer_id);
         } break;
 
@@ -382,9 +411,9 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
 
         case PM_EVT_CONN_SEC_FAILED:
         {
-            NRF_LOG_DEBUG("%s: PM_EVT_CONN_SEC_FAILED: peer_id=%d, error=%d\r\n", 
+            NRF_LOG_DEBUG("%s: PM_EVT_CONN_SEC_FAILED: peer_id=%d, error=%d\r\n",
                           nrf_log_push(roles_str[role]),
-                          p_evt->peer_id, 
+                          p_evt->peer_id,
                           p_evt->params.conn_sec_failed.error);
 
         } break;
@@ -409,9 +438,9 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
         case PM_EVT_PEER_DATA_UPDATE_SUCCEEDED:
         {
             NRF_LOG_DEBUG("%s: PM_EVT_PEER_DATA_UPDATE_SUCCEEDED: peer_id=%d data_id=0x%x action=0x%x\r\n",
-                           nrf_log_push(roles_str[role]), 
-                           p_evt->peer_id, 
-                           p_evt->params.peer_data_update_succeeded.data_id, 
+                           nrf_log_push(roles_str[role]),
+                           p_evt->peer_id,
+                           p_evt->params.peer_data_update_succeeded.data_id,
                            p_evt->params.peer_data_update_succeeded.action);
         } break;
 
@@ -480,9 +509,9 @@ static void hrs_c_evt_handler(ble_hrs_c_t * p_hrs_c, ble_hrs_c_evt_t * p_hrs_c_e
                                                     m_conn_handle_hrs_c,
                                                     &p_hrs_c_evt->params.peer_db);
                 APP_ERROR_CHECK(err_code);
-                
+
                 // Initiate bonding.
-                NRF_LOG_INFO("CENTRAL: initiate security");
+                NRF_LOG_INFO("CENTRAL: initiate security\r\n");
                 err_code = pm_conn_secure(m_conn_handle_hrs_c, false);
                 if (err_code != NRF_ERROR_INVALID_STATE)
                 {
@@ -608,6 +637,36 @@ static bool find_adv_uuid(const ble_gap_evt_adv_report_t *p_adv_report, const ui
     return false;
 }
 
+
+/**@brief Function for checking if a link already exists with a new connected peer.
+ *
+ * @details This function checks if a newly connected device is already connected
+ *
+ * @param[in]   p_connected_evt Bluetooth connected event.
+ * @return                      True if the peer's address is found in the list of connected peers,
+ *                              false otherwise.
+ */
+static bool is_already_connected(ble_gap_addr_t const * p_connected_adr)
+{
+    for(uint8_t i = 0; i < NRF_BLE_LINK_COUNT; i++)
+    {
+        if (connected_peers[i].is_connected)
+        {
+            if (connected_peers[i].address.addr_type == p_connected_adr->addr_type)
+            {
+                if (memcmp(connected_peers[i].address.addr,
+                           p_connected_adr->addr,
+                           sizeof(connected_peers[i].address.addr)) == 0)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
 /**@brief Function for handling BLE Stack events common to both the central and peripheral roles.
  * @param[in] conn_handle Connection Handle.
  * @param[in] p_ble_evt  Bluetooth stack event.
@@ -618,21 +677,36 @@ static void on_ble_evt(uint16_t conn_handle, ble_evt_t * p_ble_evt)
     char passkey[BLE_GAP_PASSKEY_LEN + 1];
     uint16_t role = ble_conn_state_role(conn_handle);
 
-    static nrf_crypto_key_t peer_pk;
-
     switch (p_ble_evt->header.evt_id)
     {
+        case BLE_GAP_EVT_CONNECTED:
+            if (is_already_connected(&p_ble_evt->evt.gap_evt.params.connected.peer_addr))
+            {
+                NRF_LOG_INFO("%s: ALREADY connected, disconnecting\r\n", nrf_log_push(roles_str[role]));
+                NRF_LOG_FLUSH();
+                (void)sd_ble_gap_disconnect(conn_handle, BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+            }
+            else
+            {
+                connected_peers[conn_handle].is_connected = true;
+                connected_peers[conn_handle].address = p_ble_evt->evt.gap_evt.params.connected.peer_addr;
+            }
+            break;
+        case BLE_GAP_EVT_DISCONNECTED:
+            connected_peers[conn_handle].is_connected = false;
+            break;
         case BLE_GAP_EVT_SEC_PARAMS_REQUEST:
             NRF_LOG_INFO("%s: BLE_GAP_EVT_SEC_PARAMS_REQUEST\r\n", nrf_log_push(roles_str[role]));
             break;
+        
         case BLE_GAP_EVT_PASSKEY_DISPLAY:
             memcpy(passkey, p_ble_evt->evt.gap_evt.params.passkey_display.passkey, BLE_GAP_PASSKEY_LEN);
             passkey[BLE_GAP_PASSKEY_LEN] = 0x00;
-            NRF_LOG_INFO("%s: BLE_GAP_EVT_PASSKEY_DISPLAY: passkey=%s match_req=%d\r\n", 
+            NRF_LOG_INFO("%s: BLE_GAP_EVT_PASSKEY_DISPLAY: passkey=%s match_req=%d\r\n",
                          nrf_log_push(roles_str[role]),
-                         nrf_log_push(passkey), 
+                         nrf_log_push(passkey),
                          p_ble_evt->evt.gap_evt.params.passkey_display.match_request);
-            
+
             if (p_ble_evt->evt.gap_evt.params.passkey_display.match_request)
             {
                 NRF_LOG_INFO("Press Button 1 to confirm, Button 2 to reject\r\n");
@@ -640,33 +714,49 @@ static void on_ble_evt(uint16_t conn_handle, ble_evt_t * p_ble_evt)
                 m_numneric_match_requested = true;
             }
             break;
+            
         case BLE_GAP_EVT_AUTH_KEY_REQUEST:
             NRF_LOG_INFO("%s: BLE_GAP_EVT_AUTH_KEY_REQUEST\r\n", nrf_log_push(roles_str[role]));
             break;
+        
         case BLE_GAP_EVT_LESC_DHKEY_REQUEST:
             NRF_LOG_INFO("%s: BLE_GAP_EVT_LESC_DHKEY_REQUEST\r\n", nrf_log_push(roles_str[role]));
-            peer_pk.p_le_data = &p_ble_evt->evt.gap_evt.params.lesc_dhkey_request.p_pk_peer->pk[0];
-            peer_pk.len = BLE_GAP_LESC_P256_PK_LEN;
-            err_code = nrf_crypto_shared_secret_compute(NRF_CRYPTO_CURVE_SECP256R1, &m_crypto_key_sk, &peer_pk, &m_crypto_key_dhkey);
+            
+            static nrf_value_length_t peer_public_key_raw = {0};
+        
+            peer_public_key_raw.p_value = &p_ble_evt->evt.gap_evt.params.lesc_dhkey_request.p_pk_peer->pk[0];
+            peer_public_key_raw.length = BLE_GAP_LESC_P256_PK_LEN;
+            
+            err_code = nrf_crypto_ecc_public_key_from_raw(NRF_CRYPTO_BLE_ECDH_CURVE_INFO, 
+                                                          &peer_public_key_raw, 
+                                                          &m_peer_public_key);
             APP_ERROR_CHECK(err_code);
-            err_code = sd_ble_gap_lesc_dhkey_reply(conn_handle, &m_lesc_dhkey);
+        
+            err_code = nrf_crypto_ecdh_shared_secret_compute(NRF_CRYPTO_BLE_ECDH_CURVE_INFO, 
+                                                            &m_private_key, 
+                                                            &m_peer_public_key, 
+                                                            &m_dh_key);
+            APP_ERROR_CHECK(err_code);
+            
+            err_code = sd_ble_gap_lesc_dhkey_reply(conn_handle, &m_lesc_dh_key);
             APP_ERROR_CHECK(err_code);
             break;
+        
          case BLE_GAP_EVT_AUTH_STATUS:
              NRF_LOG_INFO("%s: BLE_GAP_EVT_AUTH_STATUS: status=0x%x bond=0x%x lv4: %d kdist_own:0x%x kdist_peer:0x%x\r\n",
-                          nrf_log_push(roles_str[role]), 
+                          nrf_log_push(roles_str[role]),
                           p_ble_evt->evt.gap_evt.params.auth_status.auth_status,
                           p_ble_evt->evt.gap_evt.params.auth_status.bonded,
                           p_ble_evt->evt.gap_evt.params.auth_status.sm1_levels.lv4,
                           *((uint8_t *)&p_ble_evt->evt.gap_evt.params.auth_status.kdist_own),
                           *((uint8_t *)&p_ble_evt->evt.gap_evt.params.auth_status.kdist_peer));
             break;
+         
         default:
             // No implementation needed.
             break;
     }
 }
-
 
 
 /**@brief Function for handling BLE Stack events concerning central applications.
@@ -698,14 +788,15 @@ static void on_ble_central_evt(const ble_evt_t * const p_ble_evt)
             {
                 NRF_LOG_INFO("CENTRAL: try to find HRS on conn_handle 0x%x\r\n", p_gap_evt->conn_handle);
 
-                APP_ERROR_CHECK_BOOL(p_gap_evt->conn_handle < CENTRAL_LINK_COUNT + PERIPHERAL_LINK_COUNT);
+                APP_ERROR_CHECK_BOOL(p_gap_evt->conn_handle < NRF_BLE_LINK_COUNT);
+                memset(&m_ble_db_discovery[p_gap_evt->conn_handle], 0x00, sizeof(ble_db_discovery_t));
                 err_code = ble_db_discovery_start(&m_ble_db_discovery[p_gap_evt->conn_handle], p_gap_evt->conn_handle);
                 APP_ERROR_CHECK(err_code);
             }
             /** Update LEDs status, and check if we should be looking for more
              *  peripherals to connect to. */
             bsp_board_led_on(CENTRAL_CONNECTED_LED);
-            if (ble_conn_state_n_centrals() == CENTRAL_LINK_COUNT)
+            if (ble_conn_state_n_centrals() == NRF_BLE_CENTRAL_LINK_COUNT)
             {
                 bsp_board_led_off(CENTRAL_SCANNING_LED);
             }
@@ -715,7 +806,7 @@ static void on_ble_central_evt(const ble_evt_t * const p_ble_evt)
                 bsp_board_led_on(CENTRAL_SCANNING_LED);
                 scan_start();
             }
-            
+
         } break; // BLE_GAP_EVT_CONNECTED
 
         /** Upon disconnection, reset the connection handle of the peer which disconnected, update
@@ -723,13 +814,13 @@ static void on_ble_central_evt(const ble_evt_t * const p_ble_evt)
         case BLE_GAP_EVT_DISCONNECTED:
         {
             uint8_t n_centrals;
-            NRF_LOG_INFO("CENTRAL: disconnected (reason: %d)\r\n",
+            NRF_LOG_INFO("CENTRAL: disconnected (reason: 0x%x)\r\n",
                        p_gap_evt->params.disconnected.reason);
             if (p_gap_evt->conn_handle == m_conn_handle_hrs_c)
             {
                 m_conn_handle_hrs_c = BLE_CONN_HANDLE_INVALID;
             }
-            
+
             if (m_conn_handle_hrs_c == BLE_CONN_HANDLE_INVALID)
             {
                 // Start scanning
@@ -748,9 +839,28 @@ static void on_ble_central_evt(const ble_evt_t * const p_ble_evt)
 
         case BLE_GAP_EVT_ADV_REPORT:
         {
+            if (!is_already_connected(&p_gap_evt->params.adv_report.peer_addr))
+            {
+                bool do_connect = false;
             if (strlen(m_target_periph_name) != 0)
             {
                 if (find_adv_name(&p_gap_evt->params.adv_report, m_target_periph_name))
+                {
+                        do_connect = true;
+                    }
+                }
+            else
+            {
+               /** We do not want to connect to two peripherals offering the same service, so when
+                *  a UUID is matched, we check that we are not already connected to a peer which
+                *  offers the same service. */
+                if (find_adv_uuid(&p_gap_evt->params.adv_report, BLE_UUID_HEART_RATE_SERVICE)&&
+                     (m_conn_handle_hrs_c == BLE_CONN_HANDLE_INVALID))
+                {
+                        do_connect = true;
+                    }
+                }
+                if (do_connect)
                 {
                     // Initiate connection.
                     NRF_LOG_INFO("central connecting ...\r\n");
@@ -760,25 +870,6 @@ static void on_ble_central_evt(const ble_evt_t * const p_ble_evt)
                     if (err_code != NRF_SUCCESS)
                     {
                         NRF_LOG_DEBUG("Connection Request Failed, reason %d\r\n", err_code);
-                    }
-                }
-            }
-            else
-            {
-               /** We do not want to connect to two peripherals offering the same service, so when
-                *  a UUID is matched, we check that we are not already connected to a peer which
-                *  offers the same service. */
-                if (find_adv_uuid(&p_gap_evt->params.adv_report, BLE_UUID_HEART_RATE_SERVICE)&&
-                     (m_conn_handle_hrs_c == BLE_CONN_HANDLE_INVALID))
-                {
-                    // Initiate connection.
-                    NRF_LOG_INFO("CENTRAL: connecting ...\r\n");
-                    err_code = sd_ble_gap_connect(&p_gap_evt->params.adv_report.peer_addr,
-                                                  &m_scan_params,
-                                                  &m_connection_param);
-                    if (err_code != NRF_SUCCESS)
-                    {
-                        NRF_LOG_DEBUG("CENTRAL: Connection Request Failed, reason %d\r\n", err_code);
                     }
                 }
             }
@@ -817,7 +908,7 @@ static void on_ble_central_evt(const ble_evt_t * const p_ble_evt)
             APP_ERROR_CHECK(err_code);
             break; // BLE_GATTS_EVT_TIMEOUT
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
             err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                        NRF_BLE_MAX_MTU_SIZE);
@@ -849,7 +940,7 @@ static void on_ble_peripheral_evt(ble_evt_t * p_ble_evt)
             break; // BLE_GAP_EVT_CONNECTED
 
         case BLE_GAP_EVT_DISCONNECTED:
-            NRF_LOG_INFO("PERIPHERAL: disconnected, reason %d\r\n", 
+            NRF_LOG_INFO("PERIPHERAL: disconnected, reason 0x%x\r\n",
                           p_ble_evt->evt.gap_evt.params.disconnected.reason);
             bsp_board_led_off(PERIPHERAL_CONNECTED_LED);
         break; // BLE_GAP_EVT_DISCONNECTED
@@ -904,7 +995,7 @@ static void on_ble_peripheral_evt(ble_evt_t * p_ble_evt)
             }
         } break; // BLE_GATTS_EVT_RW_AUTHORIZE_REQUEST
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
             err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                        NRF_BLE_MAX_MTU_SIZE);
@@ -968,7 +1059,6 @@ static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
     role        = ble_conn_state_role(conn_handle);
 
     on_ble_evt(conn_handle, p_ble_evt);
-
     // Based on the role this device plays in the connection, dispatch to the right applications.
     if (role == BLE_GAP_ROLE_PERIPH)
     {
@@ -990,7 +1080,7 @@ static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
             on_ble_central_evt(p_ble_evt);
         }
 
-        if (conn_handle < CENTRAL_LINK_COUNT + PERIPHERAL_LINK_COUNT)
+        if (conn_handle < NRF_BLE_LINK_COUNT)
         {
             ble_db_discovery_on_ble_evt(&m_ble_db_discovery[conn_handle], p_ble_evt);
         }
@@ -1048,8 +1138,8 @@ static void ble_stack_init(void)
     SOFTDEVICE_HANDLER_INIT(&clock_lf_cfg, NULL);
 
     ble_enable_params_t ble_enable_params;
-    err_code = softdevice_enable_get_default_config(CENTRAL_LINK_COUNT,
-                                                    PERIPHERAL_LINK_COUNT,
+    err_code = softdevice_enable_get_default_config(NRF_BLE_CENTRAL_LINK_COUNT,
+                                                    NRF_BLE_PERIPHERAL_LINK_COUNT,
                                                     &ble_enable_params);
     APP_ERROR_CHECK(err_code);
 
@@ -1057,7 +1147,7 @@ static void ble_stack_init(void)
     CHECK_RAM_START_ADDR(CENTRAL_LINK_COUNT,PERIPHERAL_LINK_COUNT);
 
     // Enable BLE stack.
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_MAX_MTU_SIZE;
 #endif
     err_code = softdevice_enable(&ble_enable_params);
@@ -1116,13 +1206,9 @@ static void peer_manager_init(bool erase_bonds)
     err_code = fds_register(fds_evt_handler);
     APP_ERROR_CHECK(err_code);
 
-    nrf_crypto_init();
-
-    err_code = nrf_crypto_public_key_compute(NRF_CRYPTO_CURVE_SECP256R1, &m_crypto_key_sk, &m_crypto_key_pk);
-    APP_ERROR_CHECK(err_code);
-
-    /* Set the public key */
-    err_code = pm_lesc_public_key_set(&m_lesc_pk);
+    // Private public keypair must be generated at least once for each device. It can be stored
+    // beyond this point. Here it is generated at bootup.
+    err_code = lesc_generate_key_pair();
     APP_ERROR_CHECK(err_code);
 }
 
@@ -1322,8 +1408,8 @@ static void advertising_init(void)
 
     memset(&options, 0, sizeof(options));
     options.ble_adv_fast_enabled  = true;
-    options.ble_adv_fast_interval = APP_ADV_INTERVAL;
-    options.ble_adv_fast_timeout  = APP_ADV_TIMEOUT_IN_SECONDS;
+    options.ble_adv_fast_interval = ADV_INTERVAL;
+    options.ble_adv_fast_timeout  = ADV_TIMEOUT_IN_SECONDS;
 
     err_code = ble_advertising_init(&advdata, NULL, &options, on_adv_evt, NULL);
     APP_ERROR_CHECK(err_code);
@@ -1351,14 +1437,24 @@ int main(void)
     roles_str[BLE_GAP_ROLE_INVALID] = invalid_role_str;
     roles_str[BLE_GAP_ROLE_PERIPH] = periph_str;
     roles_str[BLE_GAP_ROLE_CENTRAL] = central_str;
-    
+
+    memset(connected_peers, 0x00, sizeof(connected_peers));
+
     APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, NULL);
     buttons_leds_init(&erase_bonds);
 
+    NRF_LOG_INFO("Initializing nrf_crypto\r\n");
+    
+    err_code = nrf_crypto_init();
+    APP_ERROR_CHECK(err_code);
+    
+    NRF_LOG_INFO("Initialized nrf_crypto\r\n");
+    
     if (erase_bonds)
     {
         NRF_LOG_INFO("Bonds erased!\r\n");
     }
+    
     ble_stack_init();
 
     peer_manager_init(erase_bonds);
@@ -1367,7 +1463,7 @@ int main(void)
     hrs_c_init();
 
     NRF_LOG_INFO("LE Secure Connections Example\r\n");
-    
+
     gap_params_init();
     conn_params_init();
     services_init();

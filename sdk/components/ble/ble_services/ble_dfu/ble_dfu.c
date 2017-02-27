@@ -88,6 +88,7 @@ static uint32_t rx_char_add(ble_dfu_t * p_dfu, const ble_dfu_init_t * p_dfu_init
     memset(&char_md, 0, sizeof(char_md));
 
     char_md.char_props.notify = 1;
+    char_md.char_props.write  = 1;
     char_md.p_char_user_desc  = NULL;
     char_md.p_char_pf         = NULL;
     char_md.p_user_desc_md    = NULL;
@@ -343,11 +344,11 @@ static void on_write(ble_dfu_t * p_dfu, ble_evt_t const * p_ble_evt)
 
             if (p_dfu->is_ctrlpt_notification_enabled)
             {
-                evt.type = BLE_DFU_EVT_INDICATION_ENABLED;;
+                evt.type = BLE_DFU_EVT_INDICATION_ENABLED;
             }
             else
             {
-                evt.type = BLE_DFU_EVT_INDICATION_DISABLED;;
+                evt.type = BLE_DFU_EVT_INDICATION_DISABLED;
             }
 
             p_dfu->evt_handler(p_dfu, &evt);

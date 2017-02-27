@@ -21,9 +21,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include "boards.h"
 #include "nrf_delay.h"
-#include "app_uart.h"
 #include "app_error.h"
 #include "nrf_drv_rng.h"
 #include "nrf_assert.h"

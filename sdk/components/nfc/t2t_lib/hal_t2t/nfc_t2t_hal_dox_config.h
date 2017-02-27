@@ -130,10 +130,10 @@
 
 
 
-/** @brief TIMER4 period in us (used for workaround)
+/** @brief TIMER4 period in us (used for workaround).
  *
- * This value is used as a timeout for polling NFC field to detect FIELDLOST event
- * This value can affect Tag behavior
+ * This value is used as a timeout for polling NFC field to detect FIELDLOST event.
+ * This value can affect Tag behavior.
  *
  *  Minimum value: 100
  *  Maximum value: 10000

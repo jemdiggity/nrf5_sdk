@@ -178,20 +178,20 @@
           <name>CCDefines</name>
           <state>NRF52832</state>
           <state>NRF52</state>
+          <state>NRF52_PAN_58</state>
+          <state>NRF52_PAN_64</state>
           <state>BOARD_PCA10040</state>
           <state>NRF52_PAN_12</state>
           <state>NRF52_PAN_15</state>
           <state>NRF52_PAN_20</state>
           <state>NRF52_PAN_31</state>
-          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_36</state>
           <state>NRF52_PAN_51</state>
           <state>NRF52_PAN_54</state>
+          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_55</state>
-          <state>NRF52_PAN_58</state>
-          <state>NRF52_PAN_64</state>
           <state>S132</state>
-          <state>NRF_SD_BLE_API_VERSION=3</state>
+          <state>NRF_SD_BLE_API_VERSION=5</state>
           <state>BSP_DEFINES_ONLY</state>
           <state>ARM_MATH_CM4</state>
           <state>SOFTDEVICE_PRESENT</state>
@@ -506,20 +506,20 @@
       <name>ADefines</name>
           <state>NRF52832</state>
           <state>NRF52</state>
+          <state>NRF52_PAN_58</state>
+          <state>NRF52_PAN_64</state>
           <state>BOARD_PCA10040</state>
           <state>NRF52_PAN_12</state>
           <state>NRF52_PAN_15</state>
           <state>NRF52_PAN_20</state>
           <state>NRF52_PAN_31</state>
-          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_36</state>
           <state>NRF52_PAN_51</state>
           <state>NRF52_PAN_54</state>
+          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_55</state>
-          <state>NRF52_PAN_58</state>
-          <state>NRF52_PAN_64</state>
           <state>S132</state>
-          <state>NRF_SD_BLE_API_VERSION=3</state>
+          <state>NRF_SD_BLE_API_VERSION=5</state>
           <state>BSP_DEFINES_ONLY</state>
           <state>ARM_MATH_CM4</state>
           <state>SOFTDEVICE_PRESENT</state>

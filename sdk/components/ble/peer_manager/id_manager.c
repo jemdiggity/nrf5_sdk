@@ -60,7 +60,7 @@ static ble_conn_state_user_flag_id_t    m_conn_state_user_flag_id;
 static uint8_t                          m_wlisted_peer_cnt;
 static pm_peer_id_t                     m_wlisted_peers[BLE_GAP_WHITELIST_ADDR_MAX_COUNT];
 
-#if (NRF_SD_BLE_API_VERSION == 2)
+#if (NRF_SD_BLE_API_VERSION <= 2)
     static ble_gap_addr_t               m_current_id_addr;
 #endif
 
@@ -407,7 +407,7 @@ ret_code_t im_init(void)
         return NRF_ERROR_INTERNAL;
     }
 
-    #if (NRF_SD_BLE_API_VERSION == 2)
+    #if (NRF_SD_BLE_API_VERSION <= 2)
         ret_code_t ret_code = sd_ble_gap_address_get(&m_current_id_addr);
         if (ret_code != NRF_SUCCESS)
         {
@@ -670,7 +670,7 @@ static ret_code_t peers_id_keys_get(pm_peer_id_t   const * p_peers,
 ret_code_t im_device_identities_list_set(pm_peer_id_t const * p_peers,
                                          uint32_t             peer_cnt)
 {
-    #if (NRF_SD_BLE_API_VERSION == 3)
+    #if (NRF_SD_BLE_API_VERSION >= 3)
 
         ret_code_t             ret;
         pm_peer_data_t         peer_data;
@@ -731,7 +731,7 @@ ret_code_t im_device_identities_list_set(pm_peer_id_t const * p_peers,
 }
 
 
-#if (NRF_SD_BLE_API_VERSION == 2)
+#if (NRF_SD_BLE_API_VERSION <= 2)
 
 static ret_code_t address_set_v2(uint8_t cycle_mode, ble_gap_addr_t * p_addr)
 {
@@ -758,7 +758,7 @@ static ret_code_t address_set_v2(uint8_t cycle_mode, ble_gap_addr_t * p_addr)
 
 ret_code_t im_id_addr_set(ble_gap_addr_t const * p_addr)
 {
-    #if (NRF_SD_BLE_API_VERSION == 2)
+    #if (NRF_SD_BLE_API_VERSION <= 2)
 
         ret_code_t     ret;
         ble_gap_addr_t current_addr;
@@ -801,7 +801,7 @@ ret_code_t im_id_addr_get(ble_gap_addr_t * p_addr)
 {
     NRF_PM_DEBUG_CHECK(p_addr != NULL);
 
-    #if (NRF_SD_BLE_API_VERSION == 2)
+    #if (NRF_SD_BLE_API_VERSION <= 2)
         memcpy(p_addr, &m_current_id_addr, sizeof(ble_gap_addr_t));
         return NRF_SUCCESS;
     #else
@@ -812,7 +812,7 @@ ret_code_t im_id_addr_get(ble_gap_addr_t * p_addr)
 
 ret_code_t im_privacy_set(pm_privacy_params_t const * p_privacy_params)
 {
-    #if (NRF_SD_BLE_API_VERSION == 2)
+    #if (NRF_SD_BLE_API_VERSION <= 2)
 
         ret_code_t     ret;
         ble_gap_addr_t privacy_addr;
@@ -861,7 +861,7 @@ ret_code_t im_privacy_set(pm_privacy_params_t const * p_privacy_params)
 
 ret_code_t im_privacy_get(pm_privacy_params_t * p_privacy_params)
 {
-    #if (NRF_SD_BLE_API_VERSION == 2)
+    #if (NRF_SD_BLE_API_VERSION <= 2)
 
         ble_gap_addr_t cur_addr;
         ble_opt_t      cur_privacy_opt;
@@ -943,7 +943,7 @@ ret_code_t im_whitelist_set(pm_peer_id_t const * p_peers,
     {
         // Clear the current whitelist.
         m_wlisted_peer_cnt = 0;
-        #if (NRF_SD_BLE_API_VERSION == 3)
+        #if (NRF_SD_BLE_API_VERSION >= 3)
             // NRF_SUCCESS, or
             // BLE_GAP_ERROR_WHITELIST_IN_USE
             return sd_ble_gap_whitelist_set(NULL, 0);
@@ -959,7 +959,7 @@ ret_code_t im_whitelist_set(pm_peer_id_t const * p_peers,
     m_wlisted_peer_cnt = peer_cnt;
     memcpy(m_wlisted_peers, p_peers, sizeof(pm_peer_id_t) * peer_cnt);
 
-    #if (NRF_SD_BLE_API_VERSION == 3)
+    #if (NRF_SD_BLE_API_VERSION >= 3)
 
         ret_code_t ret;
         uint32_t   wlist_addr_cnt = 0;

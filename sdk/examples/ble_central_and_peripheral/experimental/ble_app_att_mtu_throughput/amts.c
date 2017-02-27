@@ -15,7 +15,7 @@
 #include "app_error.h"
 #include "amt.h"
 
-#define NRF_LOG_MODULE_NAME "AMT_S"
+#define NRF_LOG_MODULE_NAME "AMTS"
 #include "nrf_log.h"
 
 
@@ -167,7 +167,6 @@ void nrf_ble_amts_init(nrf_ble_amts_t * p_ctx, amts_evt_handler_t evt_handler)
 
 void nrf_ble_amts_notif_spam(nrf_ble_amts_t * p_ctx)
 {
-    NRF_LOG_INFO("Spamming notifications.\r\n");
     p_ctx->kbytes_sent = 0;
     p_ctx->bytes_sent  = 0;
     char_notification_send(p_ctx);

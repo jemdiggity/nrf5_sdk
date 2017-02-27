@@ -30,7 +30,7 @@
 #include "app_timer.h"
 #include "app_button.h"
 #include "ble_lbs.h"
-#include "bsp.h"
+#include "boards.h"
 #include "ble_gap.h"
 
 #define NRF_LOG_MODULE_NAME "APP"
@@ -40,8 +40,10 @@
 #define CENTRAL_LINK_COUNT              0                                           /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
 #define PERIPHERAL_LINK_COUNT           1                                           /**< Number of peripheral links used by the application. When changing this number remember to adjust the RAM settings*/
 
-#if (NRF_SD_BLE_API_VERSION == 3)
-#define NRF_BLE_MAX_MTU_SIZE            GATT_MTU_SIZE_DEFAULT                       /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#if (NRF_SD_BLE_API_VERSION <= 3)
+    #define NRF_BLE_MAX_MTU_SIZE        GATT_MTU_SIZE_DEFAULT                   /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#else
+    #define NRF_BLE_MAX_MTU_SIZE        BLE_GATT_MTU_SIZE_DEFAULT               /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
 #endif
 
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2        /**< Reply when unsupported features are requested. */
@@ -384,7 +386,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             }
         } break; // BLE_GATTS_EVT_RW_AUTHORIZE_REQUEST
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
             err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                        NRF_BLE_MAX_MTU_SIZE);
@@ -437,7 +439,7 @@ static void ble_stack_init(void)
     CHECK_RAM_START_ADDR(CENTRAL_LINK_COUNT, PERIPHERAL_LINK_COUNT);
 
     // Enable BLE stack.
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_MAX_MTU_SIZE;
 #endif
     err_code = softdevice_enable(&ble_enable_params);
@@ -461,11 +463,12 @@ static void button_event_handler(uint8_t pin_no, uint8_t button_action)
     switch (pin_no)
     {
         case LEDBUTTON_BUTTON_PIN:
-            NRF_LOG_INFO("Send button state change.\r\n");            
+            NRF_LOG_INFO("Send button state change.\r\n");
             err_code = ble_lbs_on_button_change(&m_lbs, button_action);
             if (err_code != NRF_SUCCESS &&
                 err_code != BLE_ERROR_INVALID_CONN_HANDLE &&
-                err_code != NRF_ERROR_INVALID_STATE)
+                err_code != NRF_ERROR_INVALID_STATE &&
+                err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING)
             {
                 APP_ERROR_CHECK(err_code);
             }
@@ -511,7 +514,7 @@ static void power_manage(void)
 int main(void)
 {
     ret_code_t err_code;
-    
+
     // Initialize.
     leds_init();
     timers_init();

@@ -39,10 +39,10 @@
 
     #error Not a valid compiler/linker for m_dfu_settings placement.
 
-#endif
+#endif // Compiler specific
 
-
-#if defined ( NRF52 )
+#ifndef BL_SETTINGS_ACCESS_ONLY
+#if defined( NRF52_SERIES )
 
 /**@brief   This variable reserves a codepage for mbr parameters, to ensure the compiler doesn't
  *          locate any code or variables at his location.
@@ -63,7 +63,7 @@
 
     #error Not a valid compiler/linker for m_mbr_params_page placement.
 
-#endif
+#endif // Compiler specific
 
 
 /**@brief   This variable makes the linker script write the mbr parameters page address to the
@@ -86,10 +86,12 @@
 
     #error Not a valid compiler/linker for m_mbr_params_page placement.
 
-#endif
+#endif // Compiler specific
 
-#endif // defined ( NRF52 )
+#endif // #if defined( NRF52_SERIES )
 
+#endif // #ifndef BL_SETTINGS_ACCESS_ONLY
+ 
 nrf_dfu_settings_t s_dfu_settings;
 
 //lint -save -esym(551, flash_operation_pending)

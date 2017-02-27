@@ -254,7 +254,7 @@ ret_code_t nrf_queue_write(nrf_queue_t const * p_queue,
 
 
 size_t nrf_queue_in(nrf_queue_t const * p_queue,
-                    void              * p_data,
+                    void const        * p_data,
                     size_t              element_count)
 {
     ASSERT(p_queue != NULL);

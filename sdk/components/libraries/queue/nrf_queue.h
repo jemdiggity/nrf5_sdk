@@ -93,7 +93,7 @@ typedef struct
                              size_t  element_count);        \
     size_t      _name##_out(_type * p_data,                 \
                             size_t  element_count);         \
-    size_t      _name##_in(_type * p_data,                  \
+    size_t      _name##_in(_type const * p_data,            \
                             size_t element_count);          \
     bool        _name##_is_full(void);                      \
     bool        _name##_is_empty(void);                     \
@@ -142,7 +142,7 @@ typedef struct
         ASSERT((_p_queue)->element_size == sizeof(_type));              \
         return nrf_queue_read((_p_queue), p_data, element_count);       \
     }                                                                   \
-    size_t _name##_in(_type * p_data,                                   \
+    size_t _name##_in(_type const * p_data,                             \
                       size_t  element_count)                            \
     {                                                                   \
         ASSERT((_p_queue) != NULL);                                     \
@@ -270,7 +270,7 @@ ret_code_t nrf_queue_write(nrf_queue_t const * p_queue,
  * @return      The number of added elements.
  */
 size_t nrf_queue_in(nrf_queue_t const * p_queue,
-                    void              * p_data,
+                    void const        * p_data,
                     size_t              element_count);
 
 /**@brief Function for reading elements from the queue.

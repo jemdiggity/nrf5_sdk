@@ -417,12 +417,11 @@ ret_code_t hal_nfc_parameter_get(hal_nfc_param_id_t id, void * p_data, size_t * 
 ret_code_t hal_nfc_start(void)
 {
     NRF_NFCT->ERRORSTATUS = NRF_NFCT_ERRORSTATUS_ALL;
+    NRF_NFCT->TASKS_SENSE = 1;
 
     NVIC_ClearPendingIRQ(NFCT_IRQn);
     NVIC_SetPriority(NFCT_IRQn, APP_IRQ_PRIORITY_LOW);
     NVIC_EnableIRQ(NFCT_IRQn);
-
-    NRF_NFCT->TASKS_SENSE = 1;
 
     NRF_LOG_INFO("Start\r\n");
     return NRF_SUCCESS;

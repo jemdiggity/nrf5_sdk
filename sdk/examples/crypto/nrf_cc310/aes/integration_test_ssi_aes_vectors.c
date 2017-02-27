@@ -10,7 +10,7 @@
 #include "integration_test_ssi_data.h"
 #include "ssi_aes.h"
 
-aesDataStuct aesVectors[] = {
+const aesDataStuct aesVectors[] = {
 	{
 		/*symTest_name*/
 		{"CRYS_AES_CBC_mode/NonIntegrated/Inplace/CRYS_AES_Encrypt/CRYS_AES_Key128BitSize/16bytes"},
@@ -147,7 +147,7 @@ aesDataStuct aesVectors[] = {
 };
 
 
-aesCCMDataStuct aesCCMVectors[] = {
+const aesCCMDataStuct aesCCMVectors[] = {
 	{
 		{"CCM/Integrated/4ByteMac/7ByteNonce/16ByteAdata/16ByteTextData/128Key"},
 		/*Key*/

@@ -30,7 +30,7 @@ extern "C" {
 
 
 /**
-* @defgroup gzll_02_api Application Programming Interface (API)
+* @defgroup gzll_02_api Gazell Link Layer
 * @{
 * @ingroup modules_01_gzll
 * @brief Gazell Link Layer Application Programming Interface (API).
