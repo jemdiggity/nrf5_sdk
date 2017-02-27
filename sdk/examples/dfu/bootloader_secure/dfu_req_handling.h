@@ -15,7 +15,7 @@
 
 #include "compiler_abstraction.h"
 
-extern __ALIGN(4) const uint8_t pk[64];
+__ALIGN(4) extern const uint8_t pk[64];
 
 
 #endif // #ifndef DFU_REQ_HANDLING_H__

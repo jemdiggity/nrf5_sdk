@@ -76,6 +76,8 @@ int main(void)
             __WFE();
         }
 
+        NRF_LOG_FLUSH();
+
         LEDS_INVERT(BSP_LED_0_MASK);
     }
 }

@@ -4,22 +4,25 @@
  * @{
  * @ingroup ant_sdm
  */
-/** @brief  *
+/** @brief 
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_SDM_ENABLED
 
-/** @brief Enables general logging in the module. *
+/** @brief Enables general logging in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_SDM_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -31,8 +34,9 @@
 #define ANT_SDM_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red
@@ -49,15 +53,17 @@
 
 
 
-/** @brief Enables logging of SDM page 1 in the module. *
+/** @brief Enables logging of SDM page 1 in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_SDM_PAGE_1_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -69,8 +75,9 @@
 #define ANT_SDM_PAGE_1_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red
@@ -87,15 +94,17 @@
 
 
 
-/** @brief Enables logging of SDM page 2 in the module. *
+/** @brief Enables logging of SDM page 2 in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_SDM_PAGE_2_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -107,8 +116,9 @@
 #define ANT_SDM_PAGE_2_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red
@@ -125,15 +135,17 @@
 
 
 
-/** @brief Enables logging of SDM page 3 in the module. *
+/** @brief Enables logging of SDM page 3 in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_SDM_PAGE_3_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -145,8 +157,9 @@
 #define ANT_SDM_PAGE_3_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red
@@ -163,15 +176,17 @@
 
 
 
-/** @brief Enables logging of SDM page 16 in the module. *
+/** @brief Enables logging of SDM page 16 in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_SDM_PAGE_16_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -183,8 +198,9 @@
 #define ANT_SDM_PAGE_16_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red
@@ -201,15 +217,17 @@
 
 
 
-/** @brief Enables logging of SDM page 22 in the module. *
+/** @brief Enables logging of SDM page 22 in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_SDM_PAGE_22_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -221,8 +239,9 @@
 #define ANT_SDM_PAGE_22_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red

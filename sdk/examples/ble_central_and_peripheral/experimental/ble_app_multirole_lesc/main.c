@@ -161,14 +161,9 @@ static char central_str[] = "CENTRAL";
 static char periph_str[] = "PERIPHERAL";
 static char *roles_str[BLE_GAP_ROLE_CENTRAL+1];
 
-/* IAR has no support for the __ALIGN macro */
-#if defined(__ICCARM__)
-#pragma data_alignment = 4
-#endif
-
-static __ALIGN(4) ble_gap_lesc_p256_sk_t m_lesc_sk;    /**< LESC ECC Private Key */
-static __ALIGN(4) ble_gap_lesc_p256_pk_t m_lesc_pk;    /**< LESC ECC Public Key */
-static __ALIGN(4) ble_gap_lesc_dhkey_t m_lesc_dhkey;   /**< LESC ECC DH Key*/
+__ALIGN(4) static ble_gap_lesc_p256_sk_t m_lesc_sk;    /**< LESC ECC Private Key */
+__ALIGN(4) static ble_gap_lesc_p256_pk_t m_lesc_pk;    /**< LESC ECC Public Key */
+__ALIGN(4) static ble_gap_lesc_dhkey_t m_lesc_dhkey;   /**< LESC ECC DH Key*/
 
 #if LESC_DEBUG_MODE
 /**@brief Debug Mode Private Key */

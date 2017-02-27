@@ -4,7 +4,8 @@
  * @{
  * @ingroup ant_key_manager
  */
-/** @brief Enable ANT key manager. *
+/** @brief Enable ANT key manager.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.

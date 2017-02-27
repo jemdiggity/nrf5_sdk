@@ -4,14 +4,16 @@
  * @{
  * @ingroup ant_search_config
  */
-/** @brief Enable ANT common search configuration. *
+/** @brief Enable ANT common search configuration.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_SEARCH_CONFIG_ENABLED
 
-/** @brief Default low priority search time-out. *
+/** @brief Default low priority search time-out.
+ *
  *  Minimum value: 0
  *  Maximum value: 255
  *
@@ -20,7 +22,8 @@
 #define ANT_DEFAULT_LOW_PRIORITY_TIMEOUT
 
 
-/** @brief Default high priority search time-out. *
+/** @brief Default high priority search time-out.
+ *
  *  Minimum value: 0
  *  Maximum value: 255
  *

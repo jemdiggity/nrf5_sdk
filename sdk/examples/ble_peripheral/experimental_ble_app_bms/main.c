@@ -570,6 +570,8 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             NRF_LOG_INFO("Disconnected\r\n");
             delete_disconnected_bonds();
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
+            err_code = app_timer_stop(m_sec_req_timer_id);
+            APP_ERROR_CHECK(err_code);
             break;
         } // BLE_GAP_EVT_DISCONNECTED
 

@@ -198,7 +198,6 @@
         <cluster>
           <name>INFO</name>
           <description>Device info</description>
-          <headerStructName>FICR_INFO</headerStructName>
           <addressOffset>0x100</addressOffset>
           <register>
             <name>PART</name>
@@ -387,7 +386,6 @@
         <cluster>
           <name>TEMP</name>
           <description>Registers storing factory TEMP module linearization coefficients</description>
-          <headerStructName>FICR_TEMP</headerStructName>
           <addressOffset>0x404</addressOffset>
           <register>
             <name>A0</name>
@@ -648,7 +646,6 @@
         <cluster>
           <name>NFC</name>
           <description>Unspecified</description>
-          <headerStructName>FICR_NFC</headerStructName>
           <addressOffset>0x450</addressOffset>
           <register>
             <name>TAGHEADER0</name>
@@ -4140,7 +4137,6 @@
           <dimIncrement>16</dimIncrement>
           <name>RAM[%s]</name>
           <description>Unspecified</description>
-          <headerStructName>POWER_RAM</headerStructName>
           <addressOffset>0x900</addressOffset>
           <register>
             <name>POWER</name>
@@ -8273,6 +8269,11 @@
                   <value>0x009D0000</value>
                 </enumeratedValue>
                 <enumeratedValue>
+                  <name>Baud56000</name>
+                  <description>56000 baud (actual rate: 55944)</description>
+                  <value>0x00E50000</value>
+                </enumeratedValue>
+                <enumeratedValue>
                   <name>Baud57600</name>
                   <description>57600 baud (actual rate: 57554)</description>
                   <value>0x00EB0000</value>
@@ -9205,6 +9206,11 @@
                   <name>Baud38400</name>
                   <description>38400 baud (actual rate: 38462)</description>
                   <value>0x009D5000</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>Baud56000</name>
+                  <description>56000 baud (actual rate: 55944)</description>
+                  <value>0x00E50000</value>
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>Baud57600</name>
@@ -15191,7 +15197,6 @@
         <cluster>
           <name>FRAMESTATUS</name>
           <description>Unspecified</description>
-          <headerStructName>NFCT_FRAMESTATUS</headerStructName>
           <addressOffset>0x40C</addressOffset>
           <register>
             <name>RX</name>
@@ -15414,7 +15419,6 @@
         <cluster>
           <name>TXD</name>
           <description>Unspecified</description>
-          <headerStructName>NFCT_TXD</headerStructName>
           <addressOffset>0x518</addressOffset>
           <register>
             <name>FRAMECONFIG</name>
@@ -15521,7 +15525,6 @@
         <cluster>
           <name>RXD</name>
           <description>Unspecified</description>
-          <headerStructName>NFCT_RXD</headerStructName>
           <addressOffset>0x520</addressOffset>
           <register>
             <name>FRAMECONFIG</name>
@@ -16556,7 +16559,6 @@
           <dimIncrement>8</dimIncrement>
           <name>EVENTS_CH[%s]</name>
           <description>Unspecified</description>
-          <headerStructName>SAADC_EVENTS_CH</headerStructName>
           <addressOffset>0x118</addressOffset>
           <register>
             <name>LIMITH</name>
@@ -18236,7 +18238,6 @@
           <dimIncrement>16</dimIncrement>
           <name>CH[%s]</name>
           <description>Unspecified</description>
-          <headerStructName>SAADC_CH</headerStructName>
           <addressOffset>0x510</addressOffset>
           <register>
             <name>PSELP</name>
@@ -18732,7 +18733,6 @@
         <cluster>
           <name>RESULT</name>
           <description>RESULT EasyDMA channel</description>
-          <headerStructName>SAADC_RESULT</headerStructName>
           <addressOffset>0x62C</addressOffset>
           <register>
             <name>PTR</name>
@@ -23166,7 +23166,6 @@
         <cluster>
           <name>PSEL</name>
           <description>Unspecified</description>
-          <headerStructName>QDEC_PSEL</headerStructName>
           <addressOffset>0x51C</addressOffset>
           <register>
             <name>LED</name>
@@ -27653,7 +27652,6 @@
         <cluster>
           <name>PSEL</name>
           <description>Unspecified</description>
-          <headerStructName>PDM_PSEL</headerStructName>
           <addressOffset>0x540</addressOffset>
           <register>
             <name>CLK</name>
@@ -27725,7 +27723,6 @@
         <cluster>
           <name>SAMPLE</name>
           <description>Unspecified</description>
-          <headerStructName>PDM_SAMPLE</headerStructName>
           <addressOffset>0x560</addressOffset>
           <register>
             <name>PTR</name>
@@ -28014,7 +28011,6 @@
           <dimIncrement>8</dimIncrement>
           <name>TASKS_CHG[%s]</name>
           <description>Channel group tasks</description>
-          <headerStructName>PPI_TASKS_CHG</headerStructName>
           <addressOffset>0x000</addressOffset>
           <register>
             <name>EN</name>
@@ -30364,7 +30360,6 @@
           <dimIncrement>8</dimIncrement>
           <name>CH[%s]</name>
           <description>PPI Channel</description>
-          <headerStructName>PPI_CH</headerStructName>
           <addressOffset>0x510</addressOffset>
           <register>
             <name>EEP</name>
@@ -30986,7 +30981,6 @@
           <dimIncrement>4</dimIncrement>
           <name>FORK[%s]</name>
           <description>Fork</description>
-          <headerStructName>PPI_FORK</headerStructName>
           <addressOffset>0x910</addressOffset>
           <register>
             <name>TEP</name>
@@ -31026,7 +31020,6 @@
           <dimIncrement>8</dimIncrement>
           <name>EVENTS_REGION[%s]</name>
           <description>Unspecified</description>
-          <headerStructName>MWU_EVENTS_REGION</headerStructName>
           <addressOffset>0x100</addressOffset>
           <register>
             <name>WA</name>
@@ -31046,7 +31039,6 @@
           <dimIncrement>8</dimIncrement>
           <name>EVENTS_PREGION[%s]</name>
           <description>Unspecified</description>
-          <headerStructName>MWU_EVENTS_PREGION</headerStructName>
           <addressOffset>0x160</addressOffset>
           <register>
             <name>WA</name>
@@ -32842,7 +32834,6 @@
           <dimIncrement>8</dimIncrement>
           <name>PERREGION[%s]</name>
           <description>Unspecified</description>
-          <headerStructName>MWU_PERREGION</headerStructName>
           <addressOffset>0x400</addressOffset>
           <register>
             <name>SUBSTATWA</name>
@@ -34908,7 +34899,6 @@
           <dimIncrement>16</dimIncrement>
           <name>REGION[%s]</name>
           <description>Unspecified</description>
-          <headerStructName>MWU_REGION</headerStructName>
           <addressOffset>0x600</addressOffset>
           <register>
             <name>START</name>
@@ -34945,7 +34935,6 @@
           <dimIncrement>16</dimIncrement>
           <name>PREGION[%s]</name>
           <description>Unspecified</description>
-          <headerStructName>MWU_PREGION</headerStructName>
           <addressOffset>0x6C0</addressOffset>
           <register>
             <name>START</name>
@@ -35947,7 +35936,6 @@
         <cluster>
           <name>CONFIG</name>
           <description>Unspecified</description>
-          <headerStructName>I2S_CONFIG</headerStructName>
           <addressOffset>0x504</addressOffset>
           <register>
             <name>MODE</name>
@@ -36348,7 +36336,6 @@
         <cluster>
           <name>RXD</name>
           <description>Unspecified</description>
-          <headerStructName>I2S_RXD</headerStructName>
           <addressOffset>0x538</addressOffset>
           <register>
             <name>PTR</name>
@@ -36369,7 +36356,6 @@
         <cluster>
           <name>TXD</name>
           <description>Unspecified</description>
-          <headerStructName>I2S_TXD</headerStructName>
           <addressOffset>0x540</addressOffset>
           <register>
             <name>PTR</name>
@@ -36390,7 +36376,6 @@
         <cluster>
           <name>RXTXD</name>
           <description>Unspecified</description>
-          <headerStructName>I2S_RXTXD</headerStructName>
           <addressOffset>0x550</addressOffset>
           <register>
             <name>MAXCNT</name>
@@ -36411,7 +36396,6 @@
         <cluster>
           <name>PSEL</name>
           <description>Unspecified</description>
-          <headerStructName>I2S_PSEL</headerStructName>
           <addressOffset>0x560</addressOffset>
           <register>
             <name>MCK</name>
