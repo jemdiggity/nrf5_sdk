@@ -4,7 +4,8 @@
  * @{
  * @ingroup ant_encrypt_negotiation_slave
  */
-/** @brief Enable encryption negotiation for encrypted ANT slave channels *
+/** @brief Enable encryption negotiation for encrypted ANT slave channels
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.

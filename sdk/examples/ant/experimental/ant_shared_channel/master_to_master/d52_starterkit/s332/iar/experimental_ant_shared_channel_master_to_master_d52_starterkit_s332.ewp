@@ -175,7 +175,17 @@
           <state>0</state>
         </option>
         <option>
-          <name>CCDefines</name>          <state>BLE_STACK_SUPPORT_REQD</state>          <state>ANT_STACK_SUPPORT_REQD</state>          <state>NRF52832</state>          <state>S332</state>          <state>NRF_SD_BLE_API_VERSION=3</state>          <state>BOARD_D52DK1</state>          <state>NRF52</state>          <state>SOFTDEVICE_PRESENT</state>          <state>SWI_DISABLE0</state>        </option>
+          <name>CCDefines</name>
+          <state>BLE_STACK_SUPPORT_REQD</state>
+          <state>ANT_STACK_SUPPORT_REQD</state>
+          <state>NRF52832</state>
+          <state>S332</state>
+          <state>NRF_SD_BLE_API_VERSION=3</state>
+          <state>BOARD_D52DK1</state>
+          <state>NRF52</state>
+          <state>SOFTDEVICE_PRESENT</state>
+          <state>SWI_DISABLE0</state>
+        </option>
         <option>
           <name>CCPreprocFile</name>
           <state>0</state>
@@ -302,7 +312,33 @@
           <state>0</state>
         </option>
         <option>
-          <name>CCIncludePath2</name>          <state>$PROJ_DIR$\..\..\..\config\experimental_ant_shared_channel_master_to_master_d52_starterkit_s332</state>          <state>$PROJ_DIR$\..\..\..\config</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\ant\ant_stack_config</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\ble\common</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\device</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\clock</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\common</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\delay</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\gpiote</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\hal</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\button</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\hardfault</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\hardfault\nrf52</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\log</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\log\src</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\timer</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\util</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\common\softdevice_handler</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\s332\headers</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\s332\headers\nrf52</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\toolchain</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\toolchain\cmsis\include</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\bsp</state>          <state>$PROJ_DIR$\..\config</state>        </option>
+          <name>CCIncludePath2</name>
+          <state>$PROJ_DIR$\..\..\..\config\experimental_ant_shared_channel_master_to_master_d52_starterkit_s332</state>
+          <state>$PROJ_DIR$\..\..\..\config</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\ant\ant_stack_config</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\ble\common</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\device</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\clock</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\common</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\delay</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\gpiote</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\hal</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\button</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\hardfault</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\hardfault\nrf52</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\log</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\log\src</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\timer</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\util</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\common\softdevice_handler</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\s332\headers</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\s332\headers\nrf52</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\toolchain</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\toolchain\cmsis\include</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\bsp</state>
+          <state>$PROJ_DIR$\..\config</state>
+        </option>
         <option>
           <name>CCStdIncCheck</name>
           <state>0</state>
@@ -458,7 +494,17 @@
           <state>0</state>
         </option>
         <option>
-      <name>ADefines</name>          <state>BLE_STACK_SUPPORT_REQD</state>          <state>ANT_STACK_SUPPORT_REQD</state>          <state>NRF52832</state>          <state>S332</state>          <state>NRF_SD_BLE_API_VERSION=3</state>          <state>BOARD_D52DK1</state>          <state>NRF52</state>          <state>SOFTDEVICE_PRESENT</state>          <state>SWI_DISABLE0</state>        </option>
+      <name>ADefines</name>
+          <state>BLE_STACK_SUPPORT_REQD</state>
+          <state>ANT_STACK_SUPPORT_REQD</state>
+          <state>NRF52832</state>
+          <state>S332</state>
+          <state>NRF_SD_BLE_API_VERSION=3</state>
+          <state>BOARD_D52DK1</state>
+          <state>NRF52</state>
+          <state>SOFTDEVICE_PRESENT</state>
+          <state>SWI_DISABLE0</state>
+        </option>
         <option>
           <name>AList</name>
           <state>0</state>
@@ -552,7 +598,33 @@
           <state>0</state>
         </option>
         <option>
-          <name>AUserIncludes</name>          <state>$PROJ_DIR$\..\..\..\config\experimental_ant_shared_channel_master_to_master_d52_starterkit_s332</state>          <state>$PROJ_DIR$\..\..\..\config</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\ant\ant_stack_config</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\ble\common</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\device</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\clock</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\common</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\delay</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\gpiote</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\hal</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\button</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\hardfault</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\hardfault\nrf52</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\log</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\log\src</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\timer</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\util</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\common\softdevice_handler</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\s332\headers</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\s332\headers\nrf52</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\toolchain</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\toolchain\cmsis\include</state>          <state>$PROJ_DIR$\..\..\..\..\..\..\..\bsp</state>          <state>$PROJ_DIR$\..\config</state>        </option>
+          <name>AUserIncludes</name>
+          <state>$PROJ_DIR$\..\..\..\config\experimental_ant_shared_channel_master_to_master_d52_starterkit_s332</state>
+          <state>$PROJ_DIR$\..\..\..\config</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\ant\ant_stack_config</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\ble\common</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\device</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\clock</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\common</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\delay</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\gpiote</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\drivers_nrf\hal</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\button</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\hardfault</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\hardfault\nrf52</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\log</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\log\src</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\timer</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\libraries\util</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\common\softdevice_handler</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\s332\headers</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\softdevice\s332\headers\nrf52</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\toolchain</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\..\components\toolchain\cmsis\include</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\..\bsp</state>
+          <state>$PROJ_DIR$\..\config</state>
+        </option>
         <option>
           <name>AExtraOptionsCheckV2</name>
           <state>0</state>

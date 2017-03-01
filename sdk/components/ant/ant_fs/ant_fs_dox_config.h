@@ -4,57 +4,65 @@
  * @{
  * @ingroup ant_fs
  */
-/** @brief  *
+/** @brief 
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANTFS_ENABLED
 
-/** @brief ANT-FS network number. *
+/** @brief ANT-FS network number.
+ *
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANTFS_CONFIG_NETWORK_NUMBER
 
 
-/** @brief ANT-FS channel number. *
+/** @brief ANT-FS channel number.
+ *
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANTFS_CONFIG_CHANNEL_NUMBER
 
 
-/** @brief Pairing timeout - how long the UI will wait for a response to a pairing request before switching to the link layer, in seconds. *
+/** @brief Pairing timeout - how long the UI will wait for a response to a pairing request before switching to the link layer, in seconds.
+ *
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANTFS_CONFIG_PAIRING_TIMEOUT
 
 
-/** @brief Command timeout - how long the client will wait without receiving any commands before switching to the link layer, in seconds. *
+/** @brief Command timeout - how long the client will wait without receiving any commands before switching to the link layer, in seconds.
+ *
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANTFS_CONFIG_LINK_COMMAND_TIMEOUT
 
 
-/** @brief ANT-FS Transmission Type. *
+/** @brief ANT-FS Transmission Type.
+ *
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANTFS_CONFIG_TRANS_TYPE
 
 
-/** @brief ANT device type for channel configuration. *
+/** @brief ANT device type for channel configuration.
+ *
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANTFS_CONFIG_DEVICE_TYPE
 
 
-/** @brief ANT-FS Beacon Message Period. *
- *  Following options are avaiable:
+/** @brief ANT-FS Beacon Message Period.
+ *
+ *  Following options are available:
  * - 0 - 0.5 Hz
  * - 1 - 1 Hz
  * - 2 - 2 Hz
@@ -66,8 +74,9 @@
 #define ANTFS_CONFIG_BEACON_STATUS_PERIOD
 
 
-/** @brief ANT Transmit Power. *
- *  Following options are avaiable:
+/** @brief ANT Transmit Power.
+ *
+ *  Following options are available:
  * - 0 - Lowest ANT Tx power level setting. (-20dBm)
  * - 1 - ANT Tx power > Lvl 0. (-12dBm)
  * - 2 - ANT Tx power > Lvl 1. (-4dBm)
@@ -80,14 +89,16 @@
 #define ANTFS_CONFIG_TRANSMIT_POWER
 
 
-/** @brief ANT Custom Transmit Power. *
+/** @brief ANT Custom Transmit Power.
+ *
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANTFS_CONFIG_CUSTOM_TRANSMIT_POWER
 
 
-/** @brief Use pairing and key exchange authentication. *
+/** @brief Use pairing and key exchange authentication.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
@@ -95,7 +106,8 @@
 #define ANTFS_CONFIG_AUTH_TYPE_PAIRING_ENABLED
 
 
-/** @brief Use passkey authentication. *
+/** @brief Use passkey authentication.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
@@ -103,7 +115,8 @@
 #define ANTFS_CONFIG_AUTH_TYPE_PASSKEY_ENABLED
 
 
-/** @brief Allow host to bypass authentication. *
+/** @brief Allow host to bypass authentication.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
@@ -111,7 +124,8 @@
 #define ANTFS_CONFIG_AUTH_TYPE_PASSTHROUGH_ENABLED
 
 
-/** @brief Support upload operation. *
+/** @brief Support upload operation.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
@@ -119,7 +133,8 @@
 #define ANTFS_CONFIG_UPLOAD_ENABLED
 
 
-/** @brief Enables LED debug in the module. *
+/** @brief Enables LED debug in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.

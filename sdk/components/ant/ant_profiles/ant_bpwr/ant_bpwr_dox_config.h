@@ -4,22 +4,25 @@
  * @{
  * @ingroup ant_bpwr
  */
-/** @brief  *
+/** @brief 
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_BPWR_ENABLED
 
-/** @brief Enables general logging in the module. *
+/** @brief Enables general logging in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_BPWR_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -31,8 +34,9 @@
 #define ANT_BPWR_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red
@@ -49,15 +53,17 @@
 
 
 
-/** @brief Enables logging of BPWR tracing common data. *
+/** @brief Enables logging of BPWR tracing common data.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_BPWR_COMMON_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -69,8 +75,9 @@
 #define ANT_BPWR_COMMON_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red
@@ -87,15 +94,17 @@
 
 
 
-/** @brief Enables logging of BPWR torque page in the module. *
+/** @brief Enables logging of BPWR torque page in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_BPWR_PAGE_TORQUE_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -107,8 +116,9 @@
 #define ANT_BPWR_PAGE_TORQUE_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red
@@ -125,15 +135,17 @@
 
 
 
-/** @brief Enables logging of BPWR page 1 in the module. *
+/** @brief Enables logging of BPWR page 1 in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_BPWR_PAGE_1_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -145,8 +157,9 @@
 #define ANT_BPWR_PAGE_1_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red
@@ -163,15 +176,17 @@
 
 
 
-/** @brief Enables logging of BPWR page 16 in the module. *
+/** @brief Enables logging of BPWR page 16 in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_BPWR_PAGE_16_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -183,8 +198,9 @@
 #define ANT_BPWR_PAGE_16_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red
@@ -201,15 +217,17 @@
 
 
 
-/** @brief Enables logging of BPWR page 17 in the module. *
+/** @brief Enables logging of BPWR page 17 in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_BPWR_PAGE_17_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -221,8 +239,9 @@
 #define ANT_BPWR_PAGE_17_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red
@@ -239,15 +258,17 @@
 
 
 
-/** @brief Enables logging of BPWR page 18 in the module. *
+/** @brief Enables logging of BPWR page 18 in the module.
+ *
  *  Set to 1 to activate.
  *
  * @note This is an NRF_CONFIG macro.
  */
 #define ANT_BPWR_PAGE_18_LOG_ENABLED
 
-/** @brief Default Severity level *
- *  Following options are avaiable:
+/** @brief Default Severity level
+ *
+ *  Following options are available:
  * - 0 - Off
  * - 1 - Error
  * - 2 - Warning
@@ -259,8 +280,9 @@
 #define ANT_BPWR_PAGE_18_LOG_LEVEL
 
 
-/** @brief ANSI escape code prefix. *
- *  Following options are avaiable:
+/** @brief ANSI escape code prefix.
+ *
+ *  Following options are available:
  * - 0 - Default
  * - 1 - Black
  * - 2 - Red

@@ -5834,6 +5834,11 @@
                   <value>0x009D5000</value>
                 </enumeratedValue>
                 <enumeratedValue>
+                  <name>Baud56000</name>
+                  <description>56000 baud.</description>
+                  <value>0x00E50000</value>
+                </enumeratedValue>
+                <enumeratedValue>
                   <name>Baud57600</name>
                   <description>57600 baud.</description>
                   <value>0x00EBF000</value>
@@ -12965,7 +12970,6 @@
           <dimIncrement>0x08</dimIncrement>
           <name>TASKS_CHG[%s]</name>
           <description>Channel group tasks.</description>
-          <headerStructName>PPI_TASKS_CHG</headerStructName>
           <addressOffset>0x000</addressOffset>
           <register>
             <name>EN</name>
@@ -14940,7 +14944,6 @@
           <dimIncrement>0x08</dimIncrement>
           <name>CH[%s]</name>
           <description>PPI Channel.</description>
-          <headerStructName>PPI_CH</headerStructName>
           <addressOffset>0x510</addressOffset>
           <register>
             <name>EEP</name>

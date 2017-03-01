@@ -107,8 +107,11 @@ static uint16_t           m_cur_conn_handle = BLE_CONN_HANDLE_INVALID;          
 APP_TIMER_DEF(m_sec_req_timer_id);                          /**< Security request timer. */
 
 #define SCHED_MAX_EVENT_DATA_SIZE sizeof(app_timer_event_t) /**< Maximum size of scheduler events. Note that scheduler BLE stack events do not contain any data, as the events are being pulled from the stack in the event handler. */
-#define SCHED_QUEUE_SIZE          10                        /**< Maximum number of events in the scheduler queue. */
-
+#ifdef SVCALL_AS_NORMAL_FUNCTION
+#define SCHED_QUEUE_SIZE                 20                                         /**< Maximum number of events in the scheduler queue. More is needed in case of Serialization. */
+#else
+#define SCHED_QUEUE_SIZE                 10                                         /**< Maximum number of events in the scheduler queue. */
+#endif
 static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_CURRENT_TIME_SERVICE, BLE_UUID_TYPE_BLE}};
 
 static const char * day_of_week[8] = {"Unknown",
