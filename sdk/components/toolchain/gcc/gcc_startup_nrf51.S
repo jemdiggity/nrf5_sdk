@@ -11,7 +11,7 @@
    - Neither the name of ARM nor the names of its contributors may be used
      to endorse or promote products derived from this software without
      specific prior written permission.
-   
+
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,9 +28,15 @@
     .syntax unified
     .arch armv6-m
 
+#ifdef __STARTUP_CONFIG
+#include "startup_config.h"
+#endif
+
     .section .stack
     .align 3
-#ifdef __STACK_SIZE
+#if defined(__STARTUP_CONFIG)
+    .equ    Stack_Size, __STARTUP_CONFIG_STACK_SIZE
+#elif defined(__STACK_SIZE)
     .equ    Stack_Size, __STACK_SIZE
 #else
     .equ    Stack_Size, 2048
@@ -45,7 +51,9 @@ __StackTop:
 
     .section .heap
     .align 3
-#ifdef __HEAP_SIZE
+#if defined(__STARTUP_CONFIG)
+    .equ Heap_Size, __STARTUP_CONFIG_HEAP_SIZE
+#elif defined(__HEAP_SIZE)
     .equ Heap_Size, __HEAP_SIZE
 #else
     .equ    Heap_Size, 2048
@@ -59,7 +67,7 @@ __HeapBase:
     .size __HeapBase, . - __HeapBase
 __HeapLimit:
     .size __HeapLimit, . - __HeapLimit
-    
+
     .section .isr_vector
     .align 2
     .globl __isr_vector
@@ -143,12 +151,12 @@ Reset_Handler:
     ORRS    R2, R1
     STR     R2, [R0]
 
-/* Loop to copy data from read only memory to RAM. 
+/* Loop to copy data from read only memory to RAM.
  * The ranges of copy from/to are specified by following symbols:
  *      __etext: LMA of start of the section to copy from. Usually end of text
  *      __data_start__: VMA of start of the section to copy to.
- *      __bss_start__: VMA of end of the section to copy to. Normally __data_end__ is used, but by using __bss_start__ 
- *                    the user can add their own initialized data section before BSS section with the INTERT AFTER command. 
+ *      __bss_start__: VMA of end of the section to copy to. Normally __data_end__ is used, but by using __bss_start__
+ *                    the user can add their own initialized data section before BSS section with the INTERT AFTER command.
  *
  * All addresses must be aligned to 4 bytes boundary.
  */
@@ -168,7 +176,7 @@ Reset_Handler:
 .L_loop1_done:
 
 /* This part of work usually is done in C library startup code. Otherwise,
- * define __STARTUP_CLEAR_BSS to enable it in this startup. This section 
+ * define __STARTUP_CLEAR_BSS to enable it in this startup. This section
  * clears the RAM where BSS data is located.
  *
  * The BSS section is specified by following symbols
@@ -190,21 +198,21 @@ Reset_Handler:
     subs r2, #4
     str r0, [r1, r2]
     bgt .L_loop3
-    
+
 .L_loop3_done:
 #endif /* __STARTUP_CLEAR_BSS */
- 
+
 /* Execute SystemInit function. */
     bl SystemInit
 
-/* Call _start function provided by libraries. 
- * If those libraries are not accessible, define __START as your entry point. 
+/* Call _start function provided by libraries.
+ * If those libraries are not accessible, define __START as your entry point.
  */
 #ifndef __START
 #define __START _start
 #endif
-    bl __START    
-    
+    bl __START
+
     .pool
     .size   Reset_Handler,.-Reset_Handler
 
