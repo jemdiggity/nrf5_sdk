@@ -70,14 +70,13 @@
 
 #define BORDER          2
 
-static const char * test_text = "This is nRF52.";
+static const char * test_text = "nRF52 family";
 
-extern const nrf_gfx_font_desc_t microsoftSansSerif_8ptFontInfo;
-extern const nrf_gfx_font_desc_t microsoftSansSerif_16ptFontInfo;
+extern const nrf_gfx_font_desc_t orkney_24ptFontInfo;
 extern const nrf_lcd_t nrf_lcd_ili9341;
 extern const nrf_lcd_t nrf_lcd_st7735;
 
-static const nrf_gfx_font_desc_t * p_font = &microsoftSansSerif_16ptFontInfo;
+static const nrf_gfx_font_desc_t * p_font = &orkney_24ptFontInfo;
 static const nrf_lcd_t * p_lcd = &nrf_lcd_ili9341;
 
 static void gfx_initialization(void)
@@ -94,7 +93,7 @@ static void brackground_set(void)
 
 static void text_print(void)
 {
-    nrf_gfx_point_t text_start = NRF_GFX_POINT(10, nrf_gfx_height_get(p_lcd) - 30);
+    nrf_gfx_point_t text_start = NRF_GFX_POINT(5, nrf_gfx_height_get(p_lcd) - 50);
     APP_ERROR_CHECK(nrf_gfx_print(p_lcd, &text_start, 0, test_text, p_font, true));
 }
 
@@ -206,21 +205,20 @@ int main(void)
 
     gfx_initialization();
 
-    brackground_set();
-    text_print();
-    nrf_delay_ms(1000);
-    screen_clear();
-    line_draw();
-    nrf_delay_ms(1000);
-    screen_clear();
-    circle_draw();
-    nrf_delay_ms(1000);
-    screen_clear();
-    rect_draw();
-
     while (1)
     {
-        __WFI();
+       brackground_set();
+       text_print();
+       nrf_delay_ms(1000);
+       screen_clear();
+       line_draw();
+       nrf_delay_ms(1000);
+       screen_clear();
+       circle_draw();
+       nrf_delay_ms(1000);
+       screen_clear();
+       rect_draw();
+       nrf_delay_ms(1000);
     }
 }
 

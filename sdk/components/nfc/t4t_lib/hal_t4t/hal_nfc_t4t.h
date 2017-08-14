@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 - 2017, Telit Communications Cyprus Ltd
+ * Copyright (c) 2016 - 2017, Nordic Semiconductor ASA
  * 
  * All rights reserved.
  * 
