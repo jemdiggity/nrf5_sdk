@@ -1040,8 +1040,8 @@
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\drivers_nrf\nrf_soc_nosd\nrf_nvic.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\drivers_nrf\nrf_soc_nosd\nrf_soc.c</name>    </file>  </group>  <group>
   <name>nRF_External</name>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\external\thedotfactory_fonts\serif16pts.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\external\thedotfactory_fonts\serif8pts.c</name>    </file>  </group>  <group>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\external\thedotfactory_fonts\orkney24pts.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\external\thedotfactory_fonts\orkney8pts.c</name>    </file>  </group>  <group>
   <name>Application</name>    <file>
     <name>$PROJ_DIR$\..\..\..\main.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\config\sdk_config.h</name>    </file>  </group>  <group>

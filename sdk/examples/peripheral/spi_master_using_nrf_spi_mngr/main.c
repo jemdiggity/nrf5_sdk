@@ -70,7 +70,7 @@
     __ASM(".global _printf_float");
 #endif
 
-extern const nrf_gfx_font_desc_t microsoftSansSerif_8ptFontInfo;
+extern const nrf_gfx_font_desc_t orkney_8ptFontInfo;
 
 #define FACE_LEFT   0
 #define FACE_CENTER 1
@@ -280,7 +280,7 @@ static void text_display(void)
         .y = 1
     };
     APP_ERROR_CHECK(nrf_gfx_print(&m_nrf_lcd, &text_point, 1,
-                    "  NORDICSEMI", &microsoftSansSerif_8ptFontInfo, false));
+                    "  NORDICSEMI", &orkney_8ptFontInfo, false));
 }
 
 

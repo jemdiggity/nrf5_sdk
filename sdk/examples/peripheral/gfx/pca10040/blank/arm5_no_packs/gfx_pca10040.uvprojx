@@ -451,12 +451,12 @@
         </Group>        <Group>
           <GroupName>nRF_External</GroupName>
           <Files>            <File>
-              <FileName>serif16pts.c</FileName>
+              <FileName>orkney24pts.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\external\thedotfactory_fonts\serif16pts.c</FilePath>            </File>            <File>
-              <FileName>serif8pts.c</FileName>
+              <FilePath>..\..\..\..\..\..\external\thedotfactory_fonts\orkney24pts.c</FilePath>            </File>            <File>
+              <FileName>orkney8pts.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\external\thedotfactory_fonts\serif8pts.c</FilePath>            </File>          </Files>
+              <FilePath>..\..\..\..\..\..\external\thedotfactory_fonts\orkney8pts.c</FilePath>            </File>          </Files>
         </Group>        <Group>
           <GroupName>nRF_Libraries</GroupName>
           <Files>            <File>

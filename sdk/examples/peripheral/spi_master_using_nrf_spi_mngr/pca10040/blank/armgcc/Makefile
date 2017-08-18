@@ -35,8 +35,8 @@ SRC_FILES += \
   $(SDK_ROOT)/components/drivers_nrf/uart/nrf_drv_uart.c \
   $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd/nrf_nvic.c \
   $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd/nrf_soc.c \
-  $(SDK_ROOT)/external/thedotfactory_fonts/serif16pts.c \
-  $(SDK_ROOT)/external/thedotfactory_fonts/serif8pts.c \
+  $(SDK_ROOT)/external/thedotfactory_fonts/orkney24pts.c \
+  $(SDK_ROOT)/external/thedotfactory_fonts/orkney8pts.c \
   $(PROJ_DIR)/main.c \
   $(PROJ_DIR)/st7565LCD.c \
   $(SDK_ROOT)/external/segger_rtt/RTT_Syscalls_GCC.c \
