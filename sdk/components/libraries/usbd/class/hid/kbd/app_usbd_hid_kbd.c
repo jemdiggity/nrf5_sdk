@@ -22,16 +22,17 @@
  * @defgroup app_usbd_hid_kbd_internals USB HID keyboard internals
  * @{
  * @ingroup app_usbd_hid_kbd
- * @internals
+ * @internal
  */
 
 STATIC_ASSERT(sizeof(app_usbd_hid_descriptor_t) == 6);
 
 /**
- * @brief Auxiliary function to access HID keyboard context data
+ * @brief Auxiliary function to access HID keyboard context data.
  *
- * @param[in] p_inst class instance data
- * @return HID keyboard instance data @ref app_usbd_hid_kbd_ctx_t
+ * @param[in] p_inst class instance data.
+ *
+ * @return HID keyboard instance data context.
  */
 static inline app_usbd_hid_kbd_ctx_t * hid_kbd_ctx_get(app_usbd_hid_kbd_t const * p_kbd)
 {
@@ -41,10 +42,11 @@ static inline app_usbd_hid_kbd_ctx_t * hid_kbd_ctx_get(app_usbd_hid_kbd_t const 
 }
 
 /**
- * @brief Auxiliary function to access HID keyboard instance data
+ * @brief Auxiliary function to access HID keyboard instance data.
  *
- * @param[in] p_inst class instance data
- * @return HID keyboard instance data @ref app_usbd_hid_kbd_t
+ * @param[in] p_inst class instance data.
+ *
+ * @return HID keyboard instance data.
  */
 static inline app_usbd_hid_kbd_t const * hid_kbd_get(app_usbd_class_inst_t const * p_inst)
 {
@@ -53,11 +55,12 @@ static inline app_usbd_hid_kbd_t const * hid_kbd_get(app_usbd_class_inst_t const
 }
 
 /**
- * @brief Returns keyboard report buffer handle
+ * @brief Returns keyboard report buffer handle.
  *
- * @param[in] p_kbd HID keyboard instance
- * @return HID report buffer @ref app_usbd_hid_report_buffer_t
- * */
+ * @param[in] p_kbd HID keyboard instance.
+ *
+ * @return HID report buffer.
+ */
 static inline
 app_usbd_hid_report_buffer_t const * hid_kbd_rep_buffer_get(app_usbd_hid_kbd_t const * p_kbd)
 {
@@ -74,12 +77,13 @@ app_usbd_hid_report_buffer_t const * hid_kbd_rep_buffer_get(app_usbd_hid_kbd_t c
 }
 
 
-/**@brief Auxiliary function to prepare report transfer buffer to next transfer
+/**
+ * @brief Auxiliary function to prepare report transfer buffer to next transfer.
  *
- * @param[in] p_kbd HID keyboard instance
+ * @param[in] p_kbd HID keyboard instance.
  *
- * @retval true if next transfer is required
- * @retval false if next transfer is not required
+ * @retval true     Next transfer is required.
+ * @retval false    Next transfer is not required.
  */
 static inline bool hid_kbd_transfer_next(app_usbd_hid_kbd_t const * p_kbd)
 {
@@ -98,10 +102,11 @@ static inline bool hid_kbd_transfer_next(app_usbd_hid_kbd_t const * p_kbd)
 
 
 /**
- * @brief Triggers IN endpoint transfer
+ * @brief Triggers IN endpoint transfer.
  *
- * @param[in] p_kbd HID keyboard instance
- * @return standard error code
+ * @param[in] p_kbd HID keyboard instance.
+ *
+ * @return Standard error code.
  */
 static inline ret_code_t hid_kbd_transfer_set(app_usbd_hid_kbd_t const * p_kbd)
 {
@@ -291,7 +296,7 @@ static ret_code_t hid_kbd_on_set_report(app_usbd_class_inst_t const * p_inst,
     {
         app_usbd_core_setup_data_handler_desc_t desc = {
                 .handler = hid_kbd_on_set_report_data_cb,
-                .p_context = (void*)p_kbd
+                .p_context = (app_usbd_hid_kbd_t *)p_kbd
         };
 
         ret = app_usbd_core_setup_data_handler_set(NRF_DRV_USBD_EPOUT0, &desc);
@@ -323,21 +328,6 @@ static ret_code_t hid_kbd_event_handler(app_usbd_class_inst_t const *  p_inst,
 
     app_usbd_hid_kbd_ctx_t * p_kbd_ctx = hid_kbd_ctx_get(p_kbd);
     app_usbd_hid_ctx_t *     p_hid_ctx = &p_kbd_ctx->hid_ctx;
-
-    ret_code_t ret = NRF_SUCCESS;
-
-    switch (p_event->app_evt.type)
-    {
-        default:
-            ret = NRF_ERROR_NOT_SUPPORTED;
-            break;
-    }
-
-    if (ret != NRF_ERROR_NOT_SUPPORTED)
-    {
-        /* Event was processed by specific handler */
-        return ret;
-    }
 
     /*Try handle event by generic HID event handler*/
     return app_usbd_hid_event_handler(p_inst, p_hinst, p_hid_ctx, p_event);

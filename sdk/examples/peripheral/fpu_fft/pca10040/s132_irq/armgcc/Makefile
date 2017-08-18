@@ -64,7 +64,6 @@ LIB_FILES += \
 
 # C flags common to all targets
 CFLAGS += -DNRF52
-CFLAGS += -DNRF52_PAN_64
 CFLAGS += -DSOFTDEVICE_PRESENT
 CFLAGS += -DBOARD_PCA10040
 CFLAGS += -DNRF52832
@@ -76,11 +75,12 @@ CFLAGS += -DNRF52_PAN_51
 CFLAGS += -DNRF52_PAN_36
 CFLAGS += -DFPU_INTERRUPT_MODE
 CFLAGS += -DCONFIG_GPIO_AS_PINRESET
+CFLAGS += -DNRF_SD_BLE_API_VERSION=5
 CFLAGS += -DNRF52_PAN_15
-CFLAGS += -DNRF_SD_BLE_API_VERSION=3
 CFLAGS += -DBSP_DEFINES_ONLY
 CFLAGS += -DSWI_DISABLE0
 CFLAGS += -DNRF52_PAN_20
+CFLAGS += -DNRF52_PAN_64
 CFLAGS += -DNRF52_PAN_55
 CFLAGS += -DS132
 CFLAGS += -DARM_MATH_CM4
@@ -98,7 +98,6 @@ CXXFLAGS += \
 # Assembler flags common to all targets
 ASMFLAGS += -x assembler-with-cpp
 ASMFLAGS += -DNRF52
-ASMFLAGS += -DNRF52_PAN_64
 ASMFLAGS += -DSOFTDEVICE_PRESENT
 ASMFLAGS += -DBOARD_PCA10040
 ASMFLAGS += -DNRF52832
@@ -110,11 +109,12 @@ ASMFLAGS += -DNRF52_PAN_51
 ASMFLAGS += -DNRF52_PAN_36
 ASMFLAGS += -DFPU_INTERRUPT_MODE
 ASMFLAGS += -DCONFIG_GPIO_AS_PINRESET
+ASMFLAGS += -DNRF_SD_BLE_API_VERSION=5
 ASMFLAGS += -DNRF52_PAN_15
-ASMFLAGS += -DNRF_SD_BLE_API_VERSION=3
 ASMFLAGS += -DBSP_DEFINES_ONLY
 ASMFLAGS += -DSWI_DISABLE0
 ASMFLAGS += -DNRF52_PAN_20
+ASMFLAGS += -DNRF52_PAN_64
 ASMFLAGS += -DNRF52_PAN_55
 ASMFLAGS += -DS132
 ASMFLAGS += -DARM_MATH_CM4
@@ -153,8 +153,8 @@ flash: $(OUTPUT_DIRECTORY)/nrf52832_xxaa_s132.hex
 
 # Flash softdevice
 flash_softdevice:
-	@echo Flashing: s132_nrf52_3.0.0_softdevice.hex
-	nrfjprog --program $(SDK_ROOT)/components/softdevice/s132/hex/s132_nrf52_3.0.0_softdevice.hex -f nrf52 --sectorerase 
+	@echo Flashing: s132_nrf52_5.0.0-1.alpha_softdevice.hex
+	nrfjprog --program $(SDK_ROOT)/components/softdevice/s132/hex/s132_nrf52_5.0.0-1.alpha_softdevice.hex -f nrf52 --sectorerase 
 	nrfjprog --reset -f nrf52
 
 erase:

@@ -152,7 +152,7 @@ void nrf_bootloader_app_start(uint32_t start_addr)
     err_code = nrf_dfu_mbr_init_sd();
     if(err_code != NRF_SUCCESS)
     {
-        NRF_LOG_INFO("Failed running nrf_dfu_mbr_init_sd\r\n");
+        NRF_LOG_ERROR("Failed running nrf_dfu_mbr_init_sd\r\n");
         return;
     }
 
@@ -172,7 +172,7 @@ void nrf_bootloader_app_start(uint32_t start_addr)
     err_code = sd_softdevice_vector_table_base_set(start_addr);
     if(err_code != NRF_SUCCESS)
     {
-        NRF_LOG_INFO("Failed running sd_softdevice_vector_table_base_set\r\n");
+        NRF_LOG_ERROR("Failed running sd_softdevice_vector_table_base_set\r\n");
         return;
     }
 #endif

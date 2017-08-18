@@ -13,9 +13,9 @@ SRC_FILES += \
   $(SDK_ROOT)/components/toolchain/gcc/gcc_startup_nrf52840.S \
   $(SDK_ROOT)/components/toolchain/system_nrf52840.c \
   $(PROJ_DIR)/main.c \
+  $(SDK_ROOT)/components/boards/boards.c \
   $(SDK_ROOT)/components/libraries/util/app_error.c \
   $(SDK_ROOT)/components/libraries/util/app_error_weak.c \
-  $(SDK_ROOT)/components/boards/boards.c \
 
 # Include folders common to all targets
 INC_FOLDERS += \

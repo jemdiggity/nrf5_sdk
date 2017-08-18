@@ -52,7 +52,7 @@ static void new_address_set(void)
 
     (void)sd_rand_application_vector_get(new_address.addr, BLE_GAP_ADDR_LEN);
 
-#if NRF_SD_BLE_API_VERSION == 3
+#if NRF_SD_BLE_API_VERSION >= 3
     err_code = sd_ble_gap_addr_set(&new_address);
 #else
     err_code = sd_ble_gap_address_set(BLE_GAP_ADDR_CYCLE_MODE_NONE, &new_address);

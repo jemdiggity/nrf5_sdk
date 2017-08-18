@@ -16,11 +16,10 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/timer/app_timer_appsh.c \
   $(SDK_ROOT)/components/libraries/util/app_util_platform.c \
   $(SDK_ROOT)/components/libraries/crc32/crc32.c \
-  $(SDK_ROOT)/components/libraries/ecc/ecc.c \
   $(SDK_ROOT)/components/libraries/fstorage/fstorage.c \
   $(SDK_ROOT)/components/libraries/hci/hci_mem_pool.c \
+  $(SDK_ROOT)/components/libraries/mem_manager/mem_manager.c \
   $(SDK_ROOT)/components/libraries/util/nrf_assert.c \
-  $(SDK_ROOT)/components/libraries/crypto/nrf_crypto.c \
   $(SDK_ROOT)/components/libraries/queue/nrf_queue.c \
   $(SDK_ROOT)/components/libraries/util/sdk_errors.c \
   $(SDK_ROOT)/components/libraries/sha256/sha256.c \
@@ -31,6 +30,13 @@ SRC_FILES += \
   $(SDK_ROOT)/components/drivers_nrf/rng/nrf_drv_rng.c \
   $(SDK_ROOT)/components/drivers_nrf/hal/nrf_nvmc.c \
   $(SDK_ROOT)/components/libraries/bootloader/ble_dfu/nrf_ble_dfu.c \
+  $(SDK_ROOT)/components/libraries/crypto/nrf_crypto_ecdh.c \
+  $(SDK_ROOT)/components/libraries/crypto/nrf_crypto_ecdsa.c \
+  $(SDK_ROOT)/components/libraries/crypto/nrf_crypto_hash.c \
+  $(SDK_ROOT)/components/libraries/crypto/nrf_crypto_init.c \
+  $(SDK_ROOT)/components/libraries/crypto/nrf_crypto_keys.c \
+  $(SDK_ROOT)/components/libraries/crypto/nrf_crypto_mem.c \
+  $(SDK_ROOT)/components/libraries/crypto/nrf_crypto_rng.c \
   $(PROJ_DIR)/dfu-cc.pb.c \
   $(PROJ_DIR)/dfu_public_key.c \
   $(PROJ_DIR)/dfu_req_handling.c \
@@ -40,6 +46,13 @@ SRC_FILES += \
   $(SDK_ROOT)/components/ble/common/ble_srv_common.c \
   $(SDK_ROOT)/components/toolchain/gcc/gcc_startup_nrf52.S \
   $(SDK_ROOT)/components/toolchain/system_nrf52.c \
+  $(SDK_ROOT)/components/libraries/crypto/backend/micro_ecc/micro_ecc_lib_ecdh.c \
+  $(SDK_ROOT)/components/libraries/crypto/backend/micro_ecc/micro_ecc_lib_ecdsa.c \
+  $(SDK_ROOT)/components/libraries/crypto/backend/micro_ecc/micro_ecc_lib_init.c \
+  $(SDK_ROOT)/components/libraries/crypto/backend/micro_ecc/micro_ecc_lib_keys.c \
+  $(SDK_ROOT)/components/libraries/crypto/backend/micro_ecc/micro_ecc_lib_shared.c \
+  $(SDK_ROOT)/components/libraries/crypto/backend/nrf_crypto_sw/nrf_crypto_sw_hash.c \
+  $(SDK_ROOT)/components/libraries/crypto/backend/nrf_crypto_sw/nrf_crypto_sw_rng.c \
   $(SDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler.c \
   $(SDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler_appsh.c \
   $(SDK_ROOT)/components/libraries/bootloader/nrf_bootloader.c \
@@ -54,6 +67,7 @@ SRC_FILES += \
 
 # Include folders common to all targets
 INC_FOLDERS += \
+  $(SDK_ROOT)/components/libraries/crypto/backend/micro_ecc \
   $(SDK_ROOT)/components/drivers_nrf/rng \
   $(SDK_ROOT)/components/toolchain \
   $(SDK_ROOT)/components/device \
@@ -61,7 +75,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/sha256 \
   $(SDK_ROOT)/components/libraries/crc32 \
   $(SDK_ROOT)/components/libraries/experimental_section_vars \
-  $(PROJ_DIR) \
+  $(SDK_ROOT)/components/libraries/mem_manager \
   $(SDK_ROOT)/components/libraries/fstorage \
   $(SDK_ROOT)/components/libraries/util \
   $(SDK_ROOT)/components \
@@ -74,7 +88,6 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/bootloader/dfu \
   $(SDK_ROOT)/components/drivers_nrf/delay \
   $(SDK_ROOT)/components/ble/common \
-  $(SDK_ROOT)/components/drivers_nrf/common \
   $(SDK_ROOT)/components/libraries/svc \
   $(SDK_ROOT)/components/libraries/scheduler \
   $(SDK_ROOT)/components/libraries/log \
@@ -85,9 +98,11 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/softdevice/s132/headers \
   $(SDK_ROOT)/components/toolchain/cmsis/include \
   $(SDK_ROOT)/external/micro-ecc/micro-ecc \
+  $(PROJ_DIR) \
+  $(SDK_ROOT)/components/libraries/crypto/backend/nrf_crypto_sw \
   $(SDK_ROOT)/components/libraries/bootloader/ble_dfu \
   $(SDK_ROOT)/external/nano-pb \
-  $(SDK_ROOT)/components/libraries/ecc \
+  $(SDK_ROOT)/components/drivers_nrf/common \
   $(SDK_ROOT)/components/libraries/queue \
   $(SDK_ROOT)/components/toolchain/gcc \
 
@@ -112,7 +127,7 @@ CFLAGS += -DNRF_DFU_SETTINGS_VERSION=1
 CFLAGS += -D__HEAP_SIZE=0
 CFLAGS += -DCONFIG_GPIO_AS_PINRESET
 CFLAGS += -DBLE_STACK_SUPPORT_REQD
-CFLAGS += -DNRF_SD_BLE_API_VERSION=3
+CFLAGS += -DNRF_SD_BLE_API_VERSION=5
 CFLAGS += -DSWI_DISABLE0
 CFLAGS += -DNRF52_PAN_20
 CFLAGS += -DNRF52_PAN_64
@@ -147,7 +162,7 @@ ASMFLAGS += -DNRF_DFU_SETTINGS_VERSION=1
 ASMFLAGS += -D__HEAP_SIZE=0
 ASMFLAGS += -DCONFIG_GPIO_AS_PINRESET
 ASMFLAGS += -DBLE_STACK_SUPPORT_REQD
-ASMFLAGS += -DNRF_SD_BLE_API_VERSION=3
+ASMFLAGS += -DNRF_SD_BLE_API_VERSION=5
 ASMFLAGS += -DSWI_DISABLE0
 ASMFLAGS += -DNRF52_PAN_20
 ASMFLAGS += -DNRF52_PAN_64

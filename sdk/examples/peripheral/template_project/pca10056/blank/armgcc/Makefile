@@ -12,6 +12,7 @@ $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
 SRC_FILES += \
   $(SDK_ROOT)/components/libraries/log/src/nrf_log_backend_serial.c \
   $(SDK_ROOT)/components/libraries/log/src/nrf_log_frontend.c \
+  $(SDK_ROOT)/components/boards/boards.c \
   $(SDK_ROOT)/components/libraries/button/app_button.c \
   $(SDK_ROOT)/components/libraries/util/app_error.c \
   $(SDK_ROOT)/components/libraries/util/app_error_weak.c \
@@ -46,12 +47,9 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/queue/nrf_queue.c \
   $(SDK_ROOT)/components/libraries/util/sdk_errors.c \
   $(SDK_ROOT)/components/libraries/slip/slip.c \
-  $(SDK_ROOT)/components/boards/boards.c \
   $(SDK_ROOT)/components/libraries/usbd/app_usbd.c \
   $(SDK_ROOT)/components/libraries/usbd/app_usbd_core.c \
   $(SDK_ROOT)/components/libraries/usbd/app_usbd_string_desc.c \
-  $(SDK_ROOT)/components/drivers_nrf/hal/nrf_adc.c \
-  $(SDK_ROOT)/components/drivers_nrf/adc/nrf_drv_adc.c \
   $(SDK_ROOT)/components/drivers_nrf/clock/nrf_drv_clock.c \
   $(SDK_ROOT)/components/drivers_nrf/common/nrf_drv_common.c \
   $(SDK_ROOT)/components/drivers_nrf/comp/nrf_drv_comp.c \
@@ -115,7 +113,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/csense_drv \
   $(SDK_ROOT)/components/libraries/csense \
   $(SDK_ROOT)/components/libraries/usbd/class/msc \
-  $(SDK_ROOT)/components/libraries/low_power_pwm \
+  $(SDK_ROOT)/components/libraries/ecc \
   $(SDK_ROOT)/components/drivers_nrf/swi \
   $(SDK_ROOT)/components/libraries/usbd/class/hid \
   $(SDK_ROOT)/components/libraries/hardfault/nrf52 \
@@ -152,9 +150,9 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/drivers_nrf/rtc \
   $(SDK_ROOT)/components/drivers_nrf/common \
   $(SDK_ROOT)/components/libraries/twi \
-  $(SDK_ROOT)/components/drivers_nrf/adc \
   $(SDK_ROOT)/components/drivers_nrf/clock \
   $(PROJ_DIR) \
+  $(SDK_ROOT)/components/libraries/low_power_pwm \
   $(SDK_ROOT)/components/libraries/usbd/class/hid/mouse \
   $(SDK_ROOT)/components/libraries/led_softblink \
   $(SDK_ROOT)/components/drivers_nrf/wdt \

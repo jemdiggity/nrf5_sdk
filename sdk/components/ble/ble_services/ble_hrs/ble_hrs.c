@@ -11,7 +11,7 @@
  */
 
 /* Attention!
-*  To maintain compliance with Nordic Semiconductor ASA’s Bluetooth profile
+*  To maintain compliance with Nordic Semiconductor ASA's Bluetooth profile
 *  qualification listings, this section of source code must not be modified.
 */
 #include "sdk_common.h"
@@ -24,17 +24,16 @@
 
 #define OPCODE_LENGTH 1                                                              /**< Length of opcode inside Heart Rate Measurement packet. */
 #define HANDLE_LENGTH 2                                                              /**< Length of handle inside Heart Rate Measurement packet. */
-#define INIT_MAX_HRM_LEN (GATT_MTU_SIZE_DEFAULT - OPCODE_LENGTH - HANDLE_LENGTH)     /**< Maximum size of a transmitted Heart Rate Measurement. */
 #define MAX_HRM_LEN      (NRF_BLE_GATT_MAX_MTU_SIZE - OPCODE_LENGTH - HANDLE_LENGTH) /**< Maximum size of a transmitted Heart Rate Measurement. */
 
 #define INITIAL_VALUE_HRM                       0                                    /**< Initial Heart Rate Measurement value. */
 
 // Heart Rate Measurement flag bits
-#define HRM_FLAG_MASK_HR_VALUE_16BIT           (0x01 << 0)                           /**< Heart Rate Value Format bit. */
-#define HRM_FLAG_MASK_SENSOR_CONTACT_DETECTED  (0x01 << 1)                           /**< Sensor Contact Detected bit. */
-#define HRM_FLAG_MASK_SENSOR_CONTACT_SUPPORTED (0x01 << 2)                           /**< Sensor Contact Supported bit. */
-#define HRM_FLAG_MASK_EXPENDED_ENERGY_INCLUDED (0x01 << 3)                           /**< Energy Expended Status bit. Feature Not Supported */
-#define HRM_FLAG_MASK_RR_INTERVAL_INCLUDED     (0x01 << 4)                           /**< RR-Interval bit. */
+#define HRM_FLAG_MASK_HR_VALUE_16BIT            (0x01 << 0)                           /**< Heart Rate Value Format bit. */
+#define HRM_FLAG_MASK_SENSOR_CONTACT_DETECTED   (0x01 << 1)                           /**< Sensor Contact Detected bit. */
+#define HRM_FLAG_MASK_SENSOR_CONTACT_SUPPORTED  (0x01 << 2)                           /**< Sensor Contact Supported bit. */
+#define HRM_FLAG_MASK_EXPENDED_ENERGY_INCLUDED  (0x01 << 3)                           /**< Energy Expended Status bit. Feature Not Supported */
+#define HRM_FLAG_MASK_RR_INTERVAL_INCLUDED      (0x01 << 4)                           /**< RR-Interval bit. */
 
 
 /**@brief Function for handling the Connect event.
@@ -310,7 +309,7 @@ uint32_t ble_hrs_init(ble_hrs_t * p_hrs, const ble_hrs_init_t * p_hrs_init)
     p_hrs->conn_handle                 = BLE_CONN_HANDLE_INVALID;
     p_hrs->is_sensor_contact_detected  = false;
     p_hrs->rr_interval_count           = 0;
-    p_hrs->max_hrm_len                 = INIT_MAX_HRM_LEN;
+    p_hrs->max_hrm_len                 = MAX_HRM_LEN;
 
     // Add service
     BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_HEART_RATE_SERVICE);

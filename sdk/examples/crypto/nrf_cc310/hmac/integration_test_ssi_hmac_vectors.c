@@ -18,7 +18,7 @@
 #include "integration_test_ssi_data.h"
 #include "crys_hash.h"
 
-hmacDataStuct hmacVectors[] = {
+const hmacDataStuct hmacVectors[] = {
 	{
 		/*Test parameters*/
 		{"HMAC-SHA1/Input_data_32/Key_32/"},

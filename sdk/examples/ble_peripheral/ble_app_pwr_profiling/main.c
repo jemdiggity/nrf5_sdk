@@ -30,19 +30,20 @@
 #include "nordic_common.h"
 #include "nrf.h"
 #include "app_error.h"
-#include "nrf_gpio.h"
 #include "ble.h"
 #include "ble_hci.h"
 #include "ble_srv_common.h"
 #include "ble_advdata.h"
 #include "softdevice_handler.h"
 #include "app_timer.h"
-#include "bsp.h"
+#include "boards.h"
 
 #define IS_SRVC_CHANGED_CHARACT_PRESENT     0                                       /**< Include or not the service_changed characteristic. if not enabled, the server's database cannot be changed for the lifetime of the device*/
 
-#if (NRF_SD_BLE_API_VERSION == 3)
-#define NRF_BLE_MAX_MTU_SIZE                GATT_MTU_SIZE_DEFAULT                   /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#if (NRF_SD_BLE_API_VERSION <= 3)
+    #define NRF_BLE_MAX_MTU_SIZE        GATT_MTU_SIZE_DEFAULT                   /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#else
+    #define NRF_BLE_MAX_MTU_SIZE        BLE_GATT_MTU_SIZE_DEFAULT               /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
 #endif
 
 #define CENTRAL_LINK_COUNT                  0                                       /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
@@ -614,7 +615,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             }
         } break; // BLE_GATTS_EVT_RW_AUTHORIZE_REQUEST
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
             err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                        NRF_BLE_MAX_MTU_SIZE);
@@ -678,7 +679,7 @@ static void ble_stack_init(void)
     CHECK_RAM_START_ADDR(CENTRAL_LINK_COUNT,PERIPHERAL_LINK_COUNT);
 
     // Enable BLE stack.
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_MAX_MTU_SIZE;
 #endif
     err_code = softdevice_enable(&ble_enable_params);
@@ -713,18 +714,16 @@ int main(void)
 
     timers_init();
 
-    err_code = bsp_init(BSP_INIT_LED | BSP_INIT_BUTTONS, APP_TIMER_TICKS(100, APP_TIMER_PRESCALER), NULL);
-    APP_ERROR_CHECK(err_code);
 #if BUTTONS_NUMBER > 2
 
     // Check button states.
     // Notification Start button.
-    is_notification_mode = bsp_button_is_pressed(NOTIF_BUTTON_ID);
+    is_notification_mode = bsp_board_button_state_get(NOTIF_BUTTON_ID);
 
     // Non-connectable advertisement start button.
     if (!is_notification_mode)
     {
-        is_non_connectable_mode = bsp_button_is_pressed(NON_CONN_ADV_BUTTON_ID);
+        is_non_connectable_mode = bsp_board_button_state_get(NON_CONN_ADV_BUTTON_ID);
     }
     // Un-configured button.
     else

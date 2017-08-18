@@ -12,6 +12,7 @@ $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
 SRC_FILES += \
   $(SDK_ROOT)/components/libraries/log/src/nrf_log_backend_serial.c \
   $(SDK_ROOT)/components/libraries/log/src/nrf_log_frontend.c \
+  $(SDK_ROOT)/components/boards/boards.c \
   $(SDK_ROOT)/components/libraries/util/app_error.c \
   $(SDK_ROOT)/components/libraries/util/app_error_weak.c \
   $(SDK_ROOT)/components/libraries/fifo/app_fifo.c \
@@ -20,7 +21,6 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/util/nrf_assert.c \
   $(SDK_ROOT)/components/libraries/uart/retarget.c \
   $(SDK_ROOT)/components/libraries/util/sdk_errors.c \
-  $(SDK_ROOT)/components/boards/boards.c \
   $(SDK_ROOT)/components/drivers_nrf/common/nrf_drv_common.c \
   $(SDK_ROOT)/components/drivers_nrf/uart/nrf_drv_uart.c \
   $(PROJ_DIR)/main.c \

@@ -42,6 +42,12 @@
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 
+#if (NRF_SD_BLE_API_VERSION <= 3)
+    #define NRF_BLE_MAX_MTU_SIZE        GATT_MTU_SIZE_DEFAULT                   /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#else
+    #define NRF_BLE_MAX_MTU_SIZE        BLE_GATT_MTU_SIZE_DEFAULT               /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#endif
+
 #define DEAD_BEEF                   0xDEADBEEF       //!< Value used as error code on stack dump, can be used to identify stack location on stack unwind.
 #define NON_CONNECTABLE_ADV_LED_PIN BSP_BOARD_LED_0  //!< Toggles when non-connectable advertisement is sent.
 #define CONNECTED_LED_PIN           BSP_BOARD_LED_1  //!< Is on when device has connected.
@@ -76,9 +82,9 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
     {
         case BLE_GAP_EVT_SEC_PARAMS_REQUEST:
             // Pairing not supported
-            err_code = sd_ble_gap_sec_params_reply(p_ble_evt->evt.common_evt.conn_handle, 
-                                                   BLE_GAP_SEC_STATUS_PAIRING_NOT_SUPP, 
-                                                   NULL, 
+            err_code = sd_ble_gap_sec_params_reply(p_ble_evt->evt.common_evt.conn_handle,
+                                                   BLE_GAP_SEC_STATUS_PAIRING_NOT_SUPP,
+                                                   NULL,
                                                    NULL);
             APP_ERROR_CHECK(err_code);
             break;
@@ -93,19 +99,19 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             bsp_board_led_on(CONNECTED_LED_PIN);
             bsp_board_led_off(CONNECTABLE_ADV_LED_PIN);
             break;
-        
+
         case BLE_GAP_EVT_DISCONNECTED:
             bsp_board_led_off(CONNECTED_LED_PIN);
             break;
-        
-#if (NRF_SD_BLE_API_VERSION == 3)
+
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
-            err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle, 
-                                                       GATT_MTU_SIZE_DEFAULT);
+            err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
+                                                       NRF_BLE_MAX_MTU_SIZE);
             APP_ERROR_CHECK(err_code);
             break;
 #endif
-        
+
         default:
             // No implementation needed.
             break;
@@ -180,7 +186,7 @@ static void ble_stack_init(void)
 {
     uint32_t            err_code;
     nrf_clock_lf_cfg_t  lf_clock_config;
-    
+
     lf_clock_config.source          = NRF_CLOCK_LF_SRC_XTAL;
     lf_clock_config.rc_ctiv         = 0;
     lf_clock_config.rc_temp_ctiv    = 0;
@@ -202,7 +208,7 @@ static void ble_stack_init(void)
     // Subscribe for BLE events.
     err_code = softdevice_ble_evt_handler_set(ble_evt_dispatch);
     APP_ERROR_CHECK(err_code);
-    
+
     // Subscribe for system events.
     err_code = softdevice_sys_evt_handler_set(sys_evt_dispatch);
     APP_ERROR_CHECK(err_code);
@@ -251,7 +257,7 @@ static void on_es_evt(nrf_ble_es_evt_t evt)
         case NRF_BLE_ES_EVT_ADVERTISEMENT_SENT:
             bsp_board_led_invert(NON_CONNECTABLE_ADV_LED_PIN);
             break;
-        
+
         case NRF_BLE_ES_EVT_CONNECTABLE_ADV_STARTED:
             bsp_board_led_on(CONNECTABLE_ADV_LED_PIN);
             break;
@@ -296,7 +302,7 @@ static void button_init(void)
 
     err_code = app_button_init(&buttons_cfgs, buttons_cnt, APP_TIMER_TICKS(100, APP_TIMER_PRESCALER));
     APP_ERROR_CHECK(err_code);
-    
+
     err_code = app_button_enable();
     APP_ERROR_CHECK(err_code);
 }
@@ -312,7 +318,7 @@ int main(void)
     // Initialize.
     err_code = NRF_LOG_INIT(NULL);
     APP_ERROR_CHECK(err_code);
-    
+
     APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
     APP_TIMER_APPSH_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, true);
     err_code = bsp_init(BSP_INIT_LED, APP_TIMER_TICKS(100, APP_TIMER_PRESCALER), NULL);
@@ -322,7 +328,7 @@ int main(void)
     conn_params_init();
     button_init();
     nrf_ble_es_init(on_es_evt);
-    
+
     NRF_LOG_INFO("Start!\r\n");
     // Enter main loop.
     for (;; )

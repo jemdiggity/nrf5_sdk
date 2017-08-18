@@ -29,10 +29,10 @@ extern "C" {
 
 
 /**
-* @defgroup gzp_02_api Application Programming Interface (API)
+* @defgroup gzp_02_api Gazell Pairing
 * @{
 * @ingroup modules_02_gzp
-* @brief Gazell Pairing API.
+* @brief Gazell Pairing Application Programming Interface (API).
 */
 
 

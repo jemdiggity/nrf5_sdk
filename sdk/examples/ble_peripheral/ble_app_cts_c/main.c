@@ -54,8 +54,10 @@
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 
-#if (NRF_SD_BLE_API_VERSION == 3)
-#define NRF_BLE_MAX_MTU_SIZE            GATT_MTU_SIZE_DEFAULT                       /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#if (NRF_SD_BLE_API_VERSION <= 3)
+    #define NRF_BLE_MAX_MTU_SIZE        GATT_MTU_SIZE_DEFAULT                   /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
+#else
+    #define NRF_BLE_MAX_MTU_SIZE        BLE_GATT_MTU_SIZE_DEFAULT               /**< MTU size used in the softdevice enabling and to reply to a BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST event. */
 #endif
 
 #define CENTRAL_LINK_COUNT              0                                           /**< Number of central links used by the application. When changing this number remember to adjust the RAM settings*/
@@ -235,6 +237,9 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
                          p_evt->params.conn_sec_succeeded.procedure);
 
             m_peer_id = p_evt->peer_id;
+            
+            // Discover peer's services.
+            memset(&m_ble_db_discovery, 0x00, sizeof(m_ble_db_discovery));
             err_code  = ble_db_discovery_start(&m_ble_db_discovery, p_evt->conn_handle);
             APP_ERROR_CHECK(err_code);
 
@@ -788,7 +793,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             APP_ERROR_CHECK(err_code);
             break; // BLE_GATTS_EVT_TIMEOUT
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
         case BLE_GATTS_EVT_EXCHANGE_MTU_REQUEST:
             err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                        NRF_BLE_MAX_MTU_SIZE);
@@ -900,7 +905,7 @@ static void ble_stack_init(void)
     CHECK_RAM_START_ADDR(CENTRAL_LINK_COUNT, PERIPHERAL_LINK_COUNT);
 
     // Enable BLE stack.
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_MAX_MTU_SIZE;
 #endif
     err_code = softdevice_enable(&ble_enable_params);
@@ -1049,7 +1054,7 @@ int main(void)
 {
     bool       erase_bonds;
     ret_code_t err_code;
-    
+
     // Initialize
     timers_init();
     err_code = NRF_LOG_INIT(NULL);
@@ -1076,7 +1081,7 @@ int main(void)
     // Enter main loop
     for (;;)
     {
-        app_sched_execute();  
+        app_sched_execute();
         if (NRF_LOG_PROCESS() == false)
         {
             power_manage();

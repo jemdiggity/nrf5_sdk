@@ -68,8 +68,13 @@ bool app_shutdown_handler(nrf_pwr_mgmt_evt_t event)
             break;
 
         case NRF_PWR_MGMT_EVT_PREPARE_WAKEUP:
+            err_code = bsp_buttons_disable();
+            // Suppress NRF_ERROR_NOT_SUPPORTED return code.
+            UNUSED_VARIABLE(err_code);
+
             err_code = bsp_wakeup_button_enable(BTN_ID_WAKEUP);
-            APP_ERROR_CHECK(err_code);
+            // Suppress NRF_ERROR_NOT_SUPPORTED return code.
+            UNUSED_VARIABLE(err_code);
 
             err_code = bsp_nfc_sleep_mode_prepare();
             // Suppress NRF_ERROR_NOT_SUPPORTED return code.

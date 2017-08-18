@@ -153,7 +153,7 @@ static ret_code_t twi_process_error(uint32_t errorsrc)
 
     if (errorsrc & NRF_TWI_ERROR_OVERRUN)
     {
-        ret = NRF_ERROR_DRV_TWI_ERR_OVERRUN;;
+        ret = NRF_ERROR_DRV_TWI_ERR_OVERRUN;
     }
 
     if (errorsrc & NRF_TWI_ERROR_ADDRESS_NACK)
@@ -214,7 +214,7 @@ ret_code_t nrf_drv_twi_init(nrf_drv_twi_t const *        p_instance,
     ASSERT(p_config->scl != p_config->sda);
     twi_control_block_t * p_cb  = &m_cb[p_instance->drv_inst_idx];
     ret_code_t err_code;
-    
+
     if (p_cb->state != NRF_DRV_STATE_UNINITIALIZED)
     {
         err_code = NRF_ERROR_INVALID_STATE;
@@ -457,7 +457,7 @@ static bool twi_transfer(NRF_TWI_Type  * p_twi,
             if (nrf_twi_event_check(p_twi, NRF_TWI_EVENT_ERROR))
             {
                 nrf_twi_event_clear(p_twi, NRF_TWI_EVENT_ERROR);
-                NRF_LOG_DEBUG("TWI: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWI(NRF_TWI_EVENT_ERROR));                
+                NRF_LOG_DEBUG("TWI: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWI(NRF_TWI_EVENT_ERROR));
                 nrf_twi_task_trigger(p_twi, NRF_TWI_TASK_STOP);
                 *p_error = true;
             }
@@ -472,10 +472,10 @@ static bool twi_transfer(NRF_TWI_Type  * p_twi,
         else if (nrf_twi_event_check(p_twi, NRF_TWI_EVENT_RXDREADY))
         {
             nrf_twi_event_clear(p_twi, NRF_TWI_EVENT_RXDREADY);
-            NRF_LOG_DEBUG("TWI: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWI(NRF_TWI_EVENT_RXDREADY)); 
+            NRF_LOG_DEBUG("TWI: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWI(NRF_TWI_EVENT_RXDREADY));
             if (nrf_twi_event_check(p_twi, NRF_TWI_EVENT_ERROR))
             {
-                NRF_LOG_DEBUG("TWI: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWI(NRF_TWI_EVENT_ERROR)); 
+                NRF_LOG_DEBUG("TWI: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWI(NRF_TWI_EVENT_ERROR));
                 nrf_twi_event_clear(p_twi, NRF_TWI_EVENT_ERROR);
                 nrf_twi_task_trigger(p_twi, NRF_TWI_TASK_STOP);
                 *p_error = true;
@@ -490,7 +490,7 @@ static bool twi_transfer(NRF_TWI_Type  * p_twi,
     if (do_stop_check && nrf_twi_event_check(p_twi, NRF_TWI_EVENT_STOPPED))
     {
         nrf_twi_event_clear(p_twi, NRF_TWI_EVENT_STOPPED);
-        NRF_LOG_DEBUG("TWI: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWI(NRF_TWI_EVENT_STOPPED)); 
+        NRF_LOG_DEBUG("TWI: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWI(NRF_TWI_EVENT_STOPPED));
         return false;
     }
 
@@ -737,7 +737,7 @@ __STATIC_INLINE ret_code_t twim_xfer(twi_control_block_t           * p_cb,
         nrf_twim_task_trigger(p_twim, NRF_TWIM_TASK_STARTTX);
         while (!nrf_twim_event_check(p_twim, NRF_TWIM_EVENT_TXSTARTED))
         {}
-        NRF_LOG_DEBUG("TWIM: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWIM(NRF_TWIM_EVENT_TXSTARTED));     
+        NRF_LOG_DEBUG("TWIM: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWIM(NRF_TWIM_EVENT_TXSTARTED));
         nrf_twim_event_clear(p_twim, NRF_TWIM_EVENT_TXSTARTED);
         nrf_twim_tx_buffer_set(p_twim, p_xfer_desc->p_secondary_buf, p_xfer_desc->secondary_length);
         p_cb->int_mask = NRF_TWIM_INT_SUSPENDED_MASK | NRF_TWIM_INT_ERROR_MASK;
@@ -802,7 +802,7 @@ __STATIC_INLINE ret_code_t twim_xfer(twi_control_block_t           * p_cb,
         {
             if (nrf_twim_event_check(p_twim, NRF_TWIM_EVENT_ERROR))
             {
-                NRF_LOG_DEBUG("TWIM: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWIM(NRF_TWIM_EVENT_ERROR)); 
+                NRF_LOG_DEBUG("TWIM: Event: %s.\r\n", (uint32_t)EVT_TO_STR_TWIM(NRF_TWIM_EVENT_ERROR));
                 nrf_twim_event_clear(p_twim, NRF_TWIM_EVENT_ERROR);
                 nrf_twim_task_trigger(p_twim, NRF_TWIM_TASK_RESUME);
                 nrf_twim_task_trigger(p_twim, NRF_TWIM_TASK_STOP);
@@ -834,7 +834,7 @@ ret_code_t nrf_drv_twi_xfer(nrf_drv_twi_t           const * p_instance,
     // TXRX and TXTX transfers are support only in non-blocking mode.
     ASSERT( !((p_cb->handler == NULL) && (p_xfer_desc->type == NRF_DRV_TWI_XFER_TXRX)));
     ASSERT( !((p_cb->handler == NULL) && (p_xfer_desc->type == NRF_DRV_TWI_XFER_TXTX)));
-    
+
     NRF_LOG_INFO("Transfer type: %s.\r\n", (uint32_t)TRANSFER_TO_STR(p_xfer_desc->type));
     NRF_LOG_INFO("Transfer buffers length: primary: %d, secondary: %d.\r\n", p_xfer_desc->primary_length, p_xfer_desc->secondary_length);
     NRF_LOG_DEBUG("Primary buffer data:\r\n");

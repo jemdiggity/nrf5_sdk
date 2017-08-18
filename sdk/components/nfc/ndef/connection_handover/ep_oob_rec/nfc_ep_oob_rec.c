@@ -84,7 +84,7 @@ static ret_code_t nfc_ep_oob_bluetooth_device_address_encode(uint8_t  * const p_
     }
 
     /* Get BLE address */
-    #if (NRF_SD_BLE_API_VERSION == 2)
+    #if (NRF_SD_BLE_API_VERSION <= 2)
         err_code = sd_ble_gap_address_get(&device_address);
         if (err_code != NRF_SUCCESS)
         {
@@ -92,7 +92,7 @@ static ret_code_t nfc_ep_oob_bluetooth_device_address_encode(uint8_t  * const p_
         }
     #endif
 
-    #if (NRF_SD_BLE_API_VERSION == 3)
+    #if (NRF_SD_BLE_API_VERSION >= 3)
         err_code = sd_ble_gap_addr_get(&device_address);
         if (err_code != NRF_SUCCESS)
         {

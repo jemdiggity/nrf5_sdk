@@ -50,6 +50,10 @@
 #include <string.h>
 #include "sdk_errors.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define NFC_T4T_MAX_PAYLOAD_SIZE  0xFFF0U
 
 /**< @brief Emulation mode. */
@@ -275,6 +279,10 @@ ret_code_t nfc_t4t_emulation_stop(void);
  * @retval NRF_SUCCESS  Always succeeds.
  */
 ret_code_t nfc_t4t_done(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 /**
   @}

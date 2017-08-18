@@ -18,8 +18,10 @@
 #define ECC_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "nordic_common.h"
 #include "nrf_error.h"
+#include "sdk_errors.h"
 
 #ifdef __cplusplus
 extern "C" {

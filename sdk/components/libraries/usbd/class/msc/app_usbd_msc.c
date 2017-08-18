@@ -1486,7 +1486,7 @@ static ret_code_t state_data_out_handle(app_usbd_class_inst_t const * p_inst)
         nrf_block_dev_t const * p_blkd =
                                 p_msc->specific.inst.pp_block_devs[p_msc_ctx->current.lun];
 
-        size_t pos = p_msc_ctx->current.workbuff_pos;;
+        size_t pos = p_msc_ctx->current.workbuff_pos;
         if (p_msc_ctx->current.req_busy_mask != APP_USBD_MSC_REQ_BUSY_FULL_MASK)
         {
             pos ^= p_msc->specific.inst.block_buff_size;
@@ -1929,7 +1929,7 @@ static void msc_blockdev_write_done_handler(nrf_block_dev_t const * p_blk_dev,
 
     if (p_msc_ctx->current.blk_datasize <= p_msc_ctx->current.blk_count * blk_size)
     {
-        size_t pos = p_msc_ctx->current.workbuff_pos;;
+        size_t pos = p_msc_ctx->current.workbuff_pos;
         if (p_msc_ctx->current.req_busy_mask != APP_USBD_MSC_REQ_BUSY_FULL_MASK)
         {
             pos ^= p_msc->specific.inst.block_buff_size;

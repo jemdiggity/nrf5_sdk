@@ -34,12 +34,12 @@
     #define GZLL_SWI_USED             0uL /**< Software interrupts used by Gazell */
 #endif
 
-#ifdef ESB_PRESENT
-    #include "nrf_esb_resources.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+#ifdef ESB_PRESENT
+    #include "nrf_esb_resources.h"
 #else
     #define ESB_PPI_CHANNELS_USED    0uL /**< PPI channels utilized by ESB (not available to th spplication). */
     #define ESB_TIMERS_USED          0uL /**< Timers used by ESB. */

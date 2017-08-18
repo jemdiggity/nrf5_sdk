@@ -426,8 +426,8 @@ ret_code_t pm_device_identities_list_set(pm_peer_id_t const * p_peers,
  * ability to reconnect using the old address will be lost.
  *
  *
- * @note The SoftDevice functions @ref sd_ble_gap_address_set (S13x v2.x), @ref sd_ble_gap_addr_set
- *       (S13x v3.x), and @ref sd_ble_gap_privacy_set (S13x v3.x) must not be called when using the Peer Manager.
+ * @note The SoftDevice functions @ref sd_ble_gap_addr_set
+ *       and @ref sd_ble_gap_privacy_set must not be called when using the Peer Manager.
  *       Use this function instead.
  *
  * @param[in] p_addr The GAP address to be set.
@@ -464,8 +464,8 @@ ret_code_t pm_id_addr_get(ble_gap_addr_t * p_addr);
  *
  * The privacy settings cannot be configured while advertising, scanning, or while in a connection.
  *
- * @note The SoftDevice functions @ref sd_ble_gap_address_set (S13x v2.x), @ref sd_ble_gap_addr_set
- *       (S13x v3.x), and @ref sd_ble_gap_privacy_set (S13x v3.x) must not be called when using the Peer Manager.
+ * @note The SoftDevice functions @ref sd_ble_gap_addr_set
+ *       and @ref sd_ble_gap_privacy_set must not be called when using the Peer Manager.
  *       Use this function instead.
  *
  * @param[in] p_privacy_params Privacy settings.

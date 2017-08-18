@@ -818,7 +818,7 @@ static void ble_stack_init(void)
     CHECK_RAM_START_ADDR(NRF_BLE_CENTRAL_LINK_COUNT, NRF_BLE_PERIPHERAL_LINK_COUNT);
 
     // Enable BLE stack.
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     ble_enable_params.gatt_enable_params.att_mtu = NRF_BLE_GATT_MAX_MTU_SIZE;
 #endif
     err_code = softdevice_enable(&ble_enable_params);

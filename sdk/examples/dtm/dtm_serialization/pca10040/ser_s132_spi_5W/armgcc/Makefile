@@ -24,36 +24,36 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/queue/nrf_queue.c \
   $(SDK_ROOT)/components/libraries/util/sdk_errors.c \
   $(SDK_ROOT)/components/boards/boards.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/app_ble_gap_sec_keys.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/app_ble_user_mem.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/middleware/app_mw_ble.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/middleware/app_mw_ble_gap.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/middleware/app_mw_ble_gattc.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/middleware/app_mw_ble_gatts.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/middleware/app_mw_ble_l2cap.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/middleware/app_mw_nrf_soc.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/ble_app.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/app_ble_gap_sec_keys.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/app_ble_user_mem.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/middleware/app_mw_ble.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/middleware/app_mw_ble_gap.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/middleware/app_mw_ble_gattc.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/middleware/app_mw_ble_gatts.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/middleware/app_mw_ble_l2cap.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/middleware/app_mw_nrf_soc.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/ble_app.c \
   $(SDK_ROOT)/components/serialization/application/codecs/common/ble_dtm_app.c \
   $(SDK_ROOT)/components/serialization/application/codecs/common/ble_dtm_init.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/ble_event.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/ble_evt_app.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/ble_gap_app.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/ble_gap_evt_app.c \
-  $(SDK_ROOT)/components/serialization/common/struct_ser/s132/ble_gap_struct_serialization.c \
-  $(SDK_ROOT)/components/serialization/common/struct_ser/s132/ble_gatt_struct_serialization.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/ble_gattc_app.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/ble_gattc_evt_app.c \
-  $(SDK_ROOT)/components/serialization/common/struct_ser/s132/ble_gattc_struct_serialization.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/ble_gatts_app.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/ble_gatts_evt_app.c \
-  $(SDK_ROOT)/components/serialization/common/struct_ser/s132/ble_gatts_struct_serialization.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/ble_l2cap_app.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/ble_l2cap_evt_app.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/ble_event.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/ble_evt_app.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/ble_gap_app.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/ble_gap_evt_app.c \
+  $(SDK_ROOT)/components/serialization/common/struct_ser/s132_s140/ble_gap_struct_serialization.c \
+  $(SDK_ROOT)/components/serialization/common/struct_ser/s132_s140/ble_gatt_struct_serialization.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/ble_gattc_app.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/ble_gattc_evt_app.c \
+  $(SDK_ROOT)/components/serialization/common/struct_ser/s132_s140/ble_gattc_struct_serialization.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/ble_gatts_app.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/ble_gatts_evt_app.c \
+  $(SDK_ROOT)/components/serialization/common/struct_ser/s132_s140/ble_gatts_struct_serialization.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/ble_l2cap_app.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/ble_l2cap_evt_app.c \
   $(SDK_ROOT)/components/serialization/common/ble_serialization.c \
-  $(SDK_ROOT)/components/serialization/common/struct_ser/s132/ble_struct_serialization.c \
+  $(SDK_ROOT)/components/serialization/common/struct_ser/s132_s140/ble_struct_serialization.c \
   $(SDK_ROOT)/components/serialization/common/cond_field_serialization.c \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers/nrf_soc_app.c \
-  $(SDK_ROOT)/components/serialization/common/struct_ser/s132/nrf_soc_struct_serialization.c \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers/nrf_soc_app.c \
+  $(SDK_ROOT)/components/serialization/common/struct_ser/s132_s140/nrf_soc_struct_serialization.c \
   $(SDK_ROOT)/components/serialization/application/hal/ser_app_hal_nrf5x.c \
   $(SDK_ROOT)/components/serialization/application/hal/ser_app_power_system_off.c \
   $(SDK_ROOT)/components/serialization/common/ser_dbg_sd_str.c \
@@ -84,7 +84,6 @@ SRC_FILES += \
 # Include folders common to all targets
 INC_FOLDERS += \
   $(SDK_ROOT)/components \
-  ../config \
   $(SDK_ROOT)/components/libraries/scheduler \
   $(SDK_ROOT)/components/drivers_nrf/spi_master \
   $(SDK_ROOT)/components/libraries/queue \
@@ -95,8 +94,8 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/util \
   $(SDK_ROOT)/components/drivers_nrf/uart \
   $(SDK_ROOT)/components/ble/common \
+  $(SDK_ROOT)/components/serialization/application/codecs/s132_s140/serializers \
   $(SDK_ROOT)/components/libraries/bsp \
-  $(SDK_ROOT)/components/softdevice/common/softdevice_handler \
   $(SDK_ROOT)/components/libraries/uart \
   $(SDK_ROOT)/components/device \
   $(SDK_ROOT)/components/libraries/log \
@@ -107,8 +106,8 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/toolchain/cmsis/include \
   $(SDK_ROOT)/components/drivers_nrf/gpiote \
   $(SDK_ROOT)/external/segger_rtt \
-  $(SDK_ROOT)/components/serialization/application/codecs/s132/serializers \
-  $(SDK_ROOT)/components/serialization/common/struct_ser/s132 \
+  ../config \
+  $(SDK_ROOT)/components/softdevice/common/softdevice_handler \
   $(SDK_ROOT)/components/boards \
   $(SDK_ROOT)/components/drivers_nrf/hal \
   $(SDK_ROOT)/components/serialization/application/codecs/common \
@@ -119,6 +118,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/drivers_nrf/clock \
   $(SDK_ROOT)/components/serialization/common/transport/ser_phy/config \
   $(SDK_ROOT)/components/serialization/application/hal \
+  $(SDK_ROOT)/components/serialization/common/struct_ser/s132_s140 \
   $(SDK_ROOT)/components/serialization/application/transport \
   $(SDK_ROOT)/components/libraries/log/src \
 
@@ -136,16 +136,16 @@ CFLAGS += -DNRF52_PAN_31
 CFLAGS += -DS132
 CFLAGS += -DNRF52_PAN_51
 CFLAGS += -DNRF52_PAN_36
-CFLAGS += -DNRF52832
 CFLAGS += -DCONFIG_GPIO_AS_PINRESET
 CFLAGS += -DNRF52_PAN_64
 CFLAGS += -DNRF52_PAN_55
 CFLAGS += -DNRF52
-CFLAGS += -DSVCALL_AS_NORMAL_FUNCTION
+CFLAGS += -DNRF52832
 CFLAGS += -DBLE_STACK_SUPPORT_REQD
+CFLAGS += -DNRF_SD_BLE_API_VERSION=5
 CFLAGS += -DBOARD_PCA10040
 CFLAGS += -DNRF52_PAN_58
-CFLAGS += -DNRF_SD_BLE_API_VERSION=3
+CFLAGS += -DSVCALL_AS_NORMAL_FUNCTION
 CFLAGS += -DSPI_MASTER_0_ENABLE
 CFLAGS += -mcpu=cortex-m4
 CFLAGS += -mthumb -mabi=aapcs
@@ -170,16 +170,16 @@ ASMFLAGS += -DNRF52_PAN_31
 ASMFLAGS += -DS132
 ASMFLAGS += -DNRF52_PAN_51
 ASMFLAGS += -DNRF52_PAN_36
-ASMFLAGS += -DNRF52832
 ASMFLAGS += -DCONFIG_GPIO_AS_PINRESET
 ASMFLAGS += -DNRF52_PAN_64
 ASMFLAGS += -DNRF52_PAN_55
 ASMFLAGS += -DNRF52
-ASMFLAGS += -DSVCALL_AS_NORMAL_FUNCTION
+ASMFLAGS += -DNRF52832
 ASMFLAGS += -DBLE_STACK_SUPPORT_REQD
+ASMFLAGS += -DNRF_SD_BLE_API_VERSION=5
 ASMFLAGS += -DBOARD_PCA10040
 ASMFLAGS += -DNRF52_PAN_58
-ASMFLAGS += -DNRF_SD_BLE_API_VERSION=3
+ASMFLAGS += -DSVCALL_AS_NORMAL_FUNCTION
 ASMFLAGS += -DSPI_MASTER_0_ENABLE
 
 # Linker flags

@@ -12,17 +12,24 @@
 
 
 #include "sdk_config.h"
+
 #if NRF_BLE_GATT_ENABLED
 #include "nrf_ble_gatt.h"
 #include "ble_srv_common.h"
 #include "sdk_common.h"
 #include "app_error.h"
 #include "sdk_macros.h"
+
 #define NRF_LOG_MODULE_NAME "BLE_GATT"
 #include "nrf_log.h"
 
+#if (NRF_SD_BLE_API_VERSION <= 3)
+    #define NRF_BLE_GATT_MTU_SIZE_DEFAULT   GATT_MTU_SIZE_DEFAULT
+#else
+    #define NRF_BLE_GATT_MTU_SIZE_DEFAULT   BLE_GATT_MTU_SIZE_DEFAULT
+#endif
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
 /**@brief Handle a connected event.
  *
  * @param[in]   p_gatt       GATT structure.
@@ -41,7 +48,7 @@ void on_connected_evt(nrf_ble_gatt_t * p_gatt, ble_evt_t * p_ble_evt)
     {
         p_gatt->links[conn_handle].att_mtu_desired = p_gatt->att_mtu_desired_central;
     }
-    if (p_gatt->links[conn_handle].att_mtu_desired > GATT_MTU_SIZE_DEFAULT)
+    if (p_gatt->links[conn_handle].att_mtu_desired > NRF_BLE_GATT_MTU_SIZE_DEFAULT)
     {
         err_code = sd_ble_gattc_exchange_mtu_request(conn_handle,
                                                      p_gatt->links[conn_handle].att_mtu_desired);
@@ -53,15 +60,15 @@ void on_connected_evt(nrf_ble_gatt_t * p_gatt, ble_evt_t * p_ble_evt)
         }
         if (err_code == NRF_SUCCESS)
         {
-            NRF_LOG_INFO("request ATT MTU %d for conn_handle %d \r\n",
+            NRF_LOG_DEBUG("request ATT MTU %d for conn_handle %d \r\n",
                         p_gatt->links[conn_handle].att_mtu_desired, conn_handle);
         }
     }
 }
-#endif //(NRF_SD_BLE_API_VERSION == 3)
+#endif //(NRF_SD_BLE_API_VERSION >= 3)
 
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
 /**@brief Handle a EXCHANGE_MTU_RSP event.
  *
  * @param[in]   p_gatt      GATT structure.
@@ -74,12 +81,12 @@ void on_exchange_mtu_rsp_evt(nrf_ble_gatt_t * p_gatt, ble_evt_t * p_ble_evt)
 
     p_gatt->links[conn_handle].att_mtu_effective = MIN(server_rx_mtu,
                                                 p_gatt->links[conn_handle].att_mtu_desired);
-    if (p_gatt->links[conn_handle].att_mtu_effective < GATT_MTU_SIZE_DEFAULT)
+    if (p_gatt->links[conn_handle].att_mtu_effective < NRF_BLE_GATT_MTU_SIZE_DEFAULT)
     {
-        p_gatt->links[conn_handle].att_mtu_effective = GATT_MTU_SIZE_DEFAULT;
+        p_gatt->links[conn_handle].att_mtu_effective = NRF_BLE_GATT_MTU_SIZE_DEFAULT;
     }
-    NRF_LOG_INFO("EXCHANGE_MTU_RSP effective ATT MTU is %d for conn_handle %d \r\n",
-                 p_gatt->links[conn_handle].att_mtu_effective, conn_handle);
+    NRF_LOG_DEBUG("Effective ATT MTU for connection 0x%x set to %d bytes (response).\r\n",
+                 conn_handle, p_gatt->links[conn_handle].att_mtu_effective);
     /*trigger an event indicating that the ATT MTU size has changed to m_effective_att_mtu*/
     if(p_gatt->evt_handler != NULL)
     {
@@ -90,10 +97,10 @@ void on_exchange_mtu_rsp_evt(nrf_ble_gatt_t * p_gatt, ble_evt_t * p_ble_evt)
     }
     p_gatt->links[conn_handle].is_request_pending = false;
 }
-#endif //(NRF_SD_BLE_API_VERSION == 3)
+#endif //(NRF_SD_BLE_API_VERSION >= 3)
 
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
 /**@brief Handle a EXCHANGE_MTU_REQUEST event.
  *
  * @param[in]   p_gatt       GATT structure.
@@ -105,16 +112,16 @@ void on_exchange_mtu_request_evt(nrf_ble_gatt_t * p_gatt, ble_evt_t * p_ble_evt)
     uint16_t   conn_handle = p_ble_evt->evt.common_evt.conn_handle;
     uint16_t   clt_mtu     = p_ble_evt->evt.gatts_evt.params.exchange_mtu_request.client_rx_mtu;
 
-    if (clt_mtu < GATT_MTU_SIZE_DEFAULT)
+    if (clt_mtu < NRF_BLE_GATT_MTU_SIZE_DEFAULT)
     {
-        clt_mtu = GATT_MTU_SIZE_DEFAULT;
+        clt_mtu = NRF_BLE_GATT_MTU_SIZE_DEFAULT;
     }
     err_code = sd_ble_gatts_exchange_mtu_reply(p_ble_evt->evt.gatts_evt.conn_handle,
                                                p_gatt->links[conn_handle].att_mtu_desired);
     APP_ERROR_CHECK(err_code);
     p_gatt->links[conn_handle].att_mtu_effective = MIN(clt_mtu,
                                                 p_gatt->links[conn_handle].att_mtu_desired);
-    NRF_LOG_INFO("EXCHANGE_MTU_REQUEST effective ATT MTU is %d for conn_handle %d \r\n",
+    NRF_LOG_DEBUG("EXCHANGE_MTU_REQUEST effective ATT MTU is %d for conn_handle %d \r\n",
                   p_gatt->links[conn_handle].att_mtu_desired, conn_handle);
     /*trigger an event indicating that the ATT MTU size has changed to m_effective_att_mtu*/
     if(p_gatt->evt_handler != NULL)
@@ -126,10 +133,10 @@ void on_exchange_mtu_request_evt(nrf_ble_gatt_t * p_gatt, ble_evt_t * p_ble_evt)
     }
     p_gatt->links[conn_handle].is_request_pending = false;
 }
-#endif //(NRF_SD_BLE_API_VERSION == 3)
+#endif //(NRF_SD_BLE_API_VERSION >= 3)
 
 
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
 /**@brief Handle a DATA_LENGTH_CHANGED event.
  *
  * @param[in]   p_gatt       GATT structure.
@@ -139,7 +146,7 @@ void on_data_length_changed_evt(nrf_ble_gatt_t * p_gatt, ble_evt_t * p_ble_evt)
 {
     uint16_t conn_handle = p_ble_evt->evt.common_evt.conn_handle;
 
-    NRF_LOG_INFO("Data Length Extended (DLE) for conn_handle %d \r\n", conn_handle);
+    NRF_LOG_DEBUG("Data Length Extension (DLE) for conn_handle 0x%0x \r\n", conn_handle);
     NRF_LOG_DEBUG("max_rx_octets %d \r\n",
                   p_ble_evt->evt.common_evt.params.data_length_changed.max_rx_octets);
     NRF_LOG_DEBUG("max_rx_time %d \r\n",
@@ -149,19 +156,19 @@ void on_data_length_changed_evt(nrf_ble_gatt_t * p_gatt, ble_evt_t * p_ble_evt)
     NRF_LOG_DEBUG("max_tx_time %d \r\n",
                   p_ble_evt->evt.common_evt.params.data_length_changed.max_tx_time);
 }
-#endif //(NRF_SD_BLE_API_VERSION == 3)
+#endif //(NRF_SD_BLE_API_VERSION >= 3)
 
 
 ret_code_t nrf_ble_gatt_init(nrf_ble_gatt_t * p_gatt, nrf_ble_gatt_evt_handler_t evt_handler)
 {
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     VERIFY_PARAM_NOT_NULL(p_gatt);
     p_gatt->att_mtu_desired_periph  = NRF_BLE_GATT_MAX_MTU_SIZE;
     p_gatt->att_mtu_desired_central = NRF_BLE_GATT_MAX_MTU_SIZE;
     for (uint8_t i = 0; i < NRF_BLE_GATT_LINK_COUNT; i++)
     {
         p_gatt->links[i].att_mtu_desired    = NRF_BLE_GATT_MAX_MTU_SIZE;
-        p_gatt->links[i].att_mtu_effective  = GATT_MTU_SIZE_DEFAULT;
+        p_gatt->links[i].att_mtu_effective  = NRF_BLE_GATT_MTU_SIZE_DEFAULT;
         p_gatt->links[i].is_request_pending = false;
     }
     p_gatt->evt_handler = evt_handler;
@@ -172,18 +179,17 @@ ret_code_t nrf_ble_gatt_init(nrf_ble_gatt_t * p_gatt, nrf_ble_gatt_evt_handler_t
 
 ret_code_t nrf_ble_gatt_att_mtu_periph_set(nrf_ble_gatt_t * p_gatt, uint16_t desired_mtu)
 {
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     VERIFY_PARAM_NOT_NULL(p_gatt);
 
-    if ((desired_mtu < GATT_MTU_SIZE_DEFAULT)
+    if ((desired_mtu < NRF_BLE_GATT_MTU_SIZE_DEFAULT)
         ||(desired_mtu > NRF_BLE_GATT_MAX_MTU_SIZE))
     {
         return NRF_ERROR_INVALID_PARAM;
     }
     p_gatt->att_mtu_desired_periph = desired_mtu;
     return NRF_SUCCESS;
-#endif
-#if (NRF_SD_BLE_API_VERSION == 2)
+#else
     return NRF_ERROR_NOT_SUPPORTED;
 #endif
 }
@@ -191,10 +197,10 @@ ret_code_t nrf_ble_gatt_att_mtu_periph_set(nrf_ble_gatt_t * p_gatt, uint16_t des
 
 ret_code_t nrf_ble_gatt_att_mtu_central_set(nrf_ble_gatt_t * p_gatt, uint16_t desired_mtu)
 {
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     VERIFY_PARAM_NOT_NULL(p_gatt);
 
-    if ((desired_mtu < GATT_MTU_SIZE_DEFAULT)
+    if ((desired_mtu < NRF_BLE_GATT_MTU_SIZE_DEFAULT)
         ||(desired_mtu > NRF_BLE_GATT_MAX_MTU_SIZE))
     {
         return NRF_ERROR_INVALID_PARAM;
@@ -202,8 +208,7 @@ ret_code_t nrf_ble_gatt_att_mtu_central_set(nrf_ble_gatt_t * p_gatt, uint16_t de
 
     p_gatt->att_mtu_desired_central = desired_mtu;
     return NRF_SUCCESS;
-#endif
-#if (NRF_SD_BLE_API_VERSION == 2)
+#else
     return NRF_ERROR_NOT_SUPPORTED;
 #endif
 }
@@ -211,14 +216,13 @@ ret_code_t nrf_ble_gatt_att_mtu_central_set(nrf_ble_gatt_t * p_gatt, uint16_t de
 
 uint16_t nrf_ble_gatt_eff_mtu_get(nrf_ble_gatt_t * p_gatt, uint16_t conn_handle)
 {
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     if ((p_gatt == NULL)||(conn_handle >= NRF_BLE_GATT_LINK_COUNT))
     {
         return 0;
     }
     return p_gatt->links[conn_handle].att_mtu_effective;
-#endif
-#if (NRF_SD_BLE_API_VERSION == 2)
+#else
     return GATT_MTU_SIZE_DEFAULT;
 #endif
 }
@@ -226,7 +230,7 @@ uint16_t nrf_ble_gatt_eff_mtu_get(nrf_ble_gatt_t * p_gatt, uint16_t conn_handle)
 
 void nrf_ble_gatt_on_ble_evt(nrf_ble_gatt_t * p_gatt, ble_evt_t * p_ble_evt)
 {
-#if (NRF_SD_BLE_API_VERSION == 3)
+#if (NRF_SD_BLE_API_VERSION >= 3)
     uint16_t conn_handle = p_ble_evt->evt.common_evt.conn_handle;
     if (conn_handle >= NRF_BLE_GATT_LINK_COUNT)
     {
@@ -265,11 +269,11 @@ void nrf_ble_gatt_on_ble_evt(nrf_ble_gatt_t * p_gatt, ble_evt_t * p_ble_evt)
         }
         if (err_code == NRF_SUCCESS)
         {
-            NRF_LOG_INFO("sent pending request ATT MTU %d for conn_handle %d \r\n",
+            NRF_LOG_DEBUG("Requested %d ATT MTU for connection 0x%x.\r\n",
                          p_gatt->links[conn_handle].att_mtu_desired, conn_handle);
         }
     }
-#endif //(NRF_SD_BLE_API_VERSION == 3)
+#endif //(NRF_SD_BLE_API_VERSION >= 3)
 }
 
 #endif //NRF_BLE_GATT_ENABLED

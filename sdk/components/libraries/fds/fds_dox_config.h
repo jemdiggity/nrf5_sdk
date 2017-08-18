@@ -4,7 +4,7 @@
  * @{
  * @ingroup fds
  */
-/** @brief Enabling FDS module.
+/** @brief Enable FDS module.
  *
  *  Set to 1 to activate.
  *
@@ -57,10 +57,9 @@
  *
  *  Following options are available:
  * - 256 - 256 (nRF51 family only)
- * - 256 - 256 (Software Component only)
  * - 512 - 512 (nRF51 family only)
  * - 1024 - 1024
- * - 2048 - 2048 (nRF52 family only)
+ * - 2048 - 2048
  *
  * @note This is an NRF_CONFIG macro.
  */

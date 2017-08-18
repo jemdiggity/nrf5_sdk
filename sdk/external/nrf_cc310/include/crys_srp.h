@@ -34,6 +34,7 @@ extern "C"
 {
 #endif
 
+
 /************************ Defines ******************************/
 /*! The SRP modulus sizes. */
 #define CRYS_SRP_MODULUS_SIZE_1024_BITS   1024

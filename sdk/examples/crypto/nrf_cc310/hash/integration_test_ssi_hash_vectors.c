@@ -18,7 +18,7 @@
 #include "integration_test_ssi_data.h"
 #include "crys_hash.h"
 
-hashDataStuct hashVectors[] = {
+const hashDataStuct hashVectors[] = {
 	{
 		/*Test parameters*/
 		{"HASH-SHA1/Input_data_16"},

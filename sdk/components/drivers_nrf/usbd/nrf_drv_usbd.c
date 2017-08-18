@@ -521,50 +521,15 @@ static bool usbd_next_transfer_safe_call(usbd_drv_ep_state_t * p_state)
 }
 
 /**
- * @name Auxiliary functions for global interrupt state
+ * @brief Force the USBD interrupt into pending state
  *
- * This functions are manipulating interrupt state on NVIC level.
- * In the target USBD API there would be only one interrupt.
- * So for RawIP we can only enable all interrupts or disable them.
- * @{
+ * This function is used to force USBD interrupt to be processed right now.
+ * It makes it possible to process all EasyDMA access on one thread priority level.
  */
-
-    /**
-     * Enable USBD interrupt
-     */
-    static inline void usbd_int_enable(void)
-    {
-        NVIC_EnableIRQ(USBD_IRQn);
-    }
-
-    /**
-     * Disable USBD interrupt
-     */
-    static inline void usbd_int_disable(void)
-    {
-        NVIC_DisableIRQ(USBD_IRQn);
-    }
-
-    /**
-     * Get current USBD interrupt state
-     */
-    static inline bool usbd_int_state(void)
-    {
-        return nrf_drv_common_irq_enable_check(USBD_IRQn);
-    }
-
-    /**
-     * @brief Force the USBD interrupt into pending state
-     *
-     * This function is used to force USBD interrupt to be processed right now.
-     * It makes it possible to process all EasyDMA access on one thread priority level.
-     */
-    static inline void usbd_int_rise(void)
-    {
-        NVIC_SetPendingIRQ(USBD_IRQn);
-    }
-
-/** @} */
+static inline void usbd_int_rise(void)
+{
+    NVIC_SetPendingIRQ(USBD_IRQn);
+}
 
 /**
  * @name USBD interrupt runtimes
@@ -1267,7 +1232,7 @@ void USBD_IRQHandler(void)
             uint8_t rb;
             if(usbi & 0x01)
             {
-                active |= USBD_INTEN_EP0SETUP_Msk;;
+                active |= USBD_INTEN_EP0SETUP_Msk;
             }
             if(usbi & 0x10)
             {
@@ -1445,7 +1410,7 @@ void nrf_drv_usbd_start(bool enable_sof)
    nrf_usbd_int_enable(ints_to_enable);
 
    /* Enable interrupt globally */
-   usbd_int_enable();
+   nrf_drv_common_irq_enable(USBD_IRQn, USBD_CONFIG_IRQ_PRIORITY);
 
    /* Enable pullups */
    nrf_usbd_pullup_enable();
@@ -1462,7 +1427,7 @@ void nrf_drv_usbd_stop(void)
     nrf_usbd_pullup_disable();
 
     /* Disable interrupt globally */
-    usbd_int_disable();
+    nrf_drv_common_irq_disable(USBD_IRQn);
 }
 
 bool nrf_drv_usbd_is_initialized(void)
@@ -1477,7 +1442,7 @@ bool nrf_drv_usbd_is_enabled(void)
 
 bool nrf_drv_usbd_is_started(void)
 {
-    return (nrf_drv_usbd_is_enabled() && usbd_int_state());
+    return (nrf_drv_usbd_is_enabled() && nrf_drv_common_irq_enable_check(USBD_IRQn));
 }
 
 void nrf_drv_usbd_ep_max_packet_size_set(nrf_drv_usbd_ep_t ep, uint16_t size)

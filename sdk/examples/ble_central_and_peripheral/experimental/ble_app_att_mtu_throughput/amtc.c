@@ -18,7 +18,7 @@
 #include "sdk_common.h"
 #include "amt.h"
 
-#define NRF_LOG_MODULE_NAME "AMT_C"
+#define NRF_LOG_MODULE_NAME "AMTC"
 #include "nrf_log.h"
 
 #define TX_BUFFER_MASK         0x07                  /**< TX Buffer mask, must be a mask of continuous zeroes, followed by continuous sequence of ones: 000...111. */

@@ -358,7 +358,7 @@ static void on_req_name_of_route(ble_lncp_t * p_lncp, ble_gatts_evt_write_t cons
     err_code = ble_ln_db_record_name_get(route_num, &p_name);
     if (err_code != NRF_SUCCESS)
     {
-        p_lncp->pending_rsp.rsp_code = LNCP_RSP_OPERATION_FAILED;;
+        p_lncp->pending_rsp.rsp_code = LNCP_RSP_OPERATION_FAILED;
         return;
     }
     memcpy(&p_lncp->pending_rsp.rsp_param[0], p_name, BLE_LNS_MAX_ROUTE_NAME_LEN);

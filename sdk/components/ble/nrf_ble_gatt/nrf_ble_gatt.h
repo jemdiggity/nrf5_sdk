@@ -35,11 +35,15 @@ extern "C" {
 
 /** @brief  Default maximum ATT_MTU size.
  *
- * This define specifies a fallback value for the case where 
+ * This define specifies a fallback value for the case where
  * NRF_BLE_GATT_MAX_MTU_SIZE is not set in the @ref nrf_ble_gatt_config.
  */
 #ifndef NRF_BLE_GATT_MAX_MTU_SIZE
-    #define NRF_BLE_GATT_MAX_MTU_SIZE GATT_MTU_SIZE_DEFAULT
+    #if (NRF_SD_BLE_API_VERSION <= 3)
+        #define NRF_BLE_GATT_MAX_MTU_SIZE GATT_MTU_SIZE_DEFAULT
+    #else
+        #define NRF_BLE_GATT_MAX_MTU_SIZE BLE_GATT_MTU_SIZE_DEFAULT
+    #endif
 #endif
 
 

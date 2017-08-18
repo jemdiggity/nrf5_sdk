@@ -94,7 +94,6 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/boards \
   $(SDK_ROOT)/components/drivers_nrf/common \
   $(SDK_ROOT)/components/ble/ble_advertising \
-  $(SDK_ROOT)/components/drivers_nrf/adc \
   $(SDK_ROOT)/components/ble/ble_services/ble_bas_c \
   $(SDK_ROOT)/external/cifra_AES128-EAX \
   $(SDK_ROOT)/components/ble/ble_services/ble_hrs_c \
@@ -121,6 +120,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/drivers_nrf/rtc \
   $(SDK_ROOT)/components/ble/ble_services/ble_ias \
   $(SDK_ROOT)/components/libraries/usbd/class/hid/mouse \
+  $(SDK_ROOT)/components/libraries/ecc \
   $(SDK_ROOT)/components/drivers_nrf/ppi \
   $(SDK_ROOT)/components/ble/ble_services/ble_dfu \
   $(SDK_ROOT)/components/drivers_nrf/twis_slave \
@@ -189,7 +189,6 @@ LIB_FILES += \
 
 # C flags common to all targets
 CFLAGS += -DNRF52
-CFLAGS += -DNRF52_PAN_64
 CFLAGS += -DSOFTDEVICE_PRESENT
 CFLAGS += -DBOARD_PCA10040
 CFLAGS += -DNRF52832
@@ -203,10 +202,11 @@ CFLAGS += -DUART_DEBUG
 CFLAGS += -DCONFIG_GPIO_AS_PINRESET
 CFLAGS += -DNRF52_PAN_12
 CFLAGS += -DBLE_STACK_SUPPORT_REQD
+CFLAGS += -DNRF_SD_BLE_API_VERSION=5
 CFLAGS += -DNRF52_PAN_15
-CFLAGS += -DNRF_SD_BLE_API_VERSION=3
 CFLAGS += -DSWI_DISABLE0
 CFLAGS += -DNRF52_PAN_20
+CFLAGS += -DNRF52_PAN_64
 CFLAGS += -DNRF52_PAN_55
 CFLAGS += -DS132
 CFLAGS += -mcpu=cortex-m4
@@ -223,7 +223,6 @@ CXXFLAGS += \
 # Assembler flags common to all targets
 ASMFLAGS += -x assembler-with-cpp
 ASMFLAGS += -DNRF52
-ASMFLAGS += -DNRF52_PAN_64
 ASMFLAGS += -DSOFTDEVICE_PRESENT
 ASMFLAGS += -DBOARD_PCA10040
 ASMFLAGS += -DNRF52832
@@ -237,10 +236,11 @@ ASMFLAGS += -DUART_DEBUG
 ASMFLAGS += -DCONFIG_GPIO_AS_PINRESET
 ASMFLAGS += -DNRF52_PAN_12
 ASMFLAGS += -DBLE_STACK_SUPPORT_REQD
+ASMFLAGS += -DNRF_SD_BLE_API_VERSION=5
 ASMFLAGS += -DNRF52_PAN_15
-ASMFLAGS += -DNRF_SD_BLE_API_VERSION=3
 ASMFLAGS += -DSWI_DISABLE0
 ASMFLAGS += -DNRF52_PAN_20
+ASMFLAGS += -DNRF52_PAN_64
 ASMFLAGS += -DNRF52_PAN_55
 ASMFLAGS += -DS132
 
@@ -278,8 +278,8 @@ flash: $(OUTPUT_DIRECTORY)/nrf52832_xxaa.hex
 
 # Flash softdevice
 flash_softdevice:
-	@echo Flashing: s132_nrf52_3.0.0_softdevice.hex
-	nrfjprog --program $(SDK_ROOT)/components/softdevice/s132/hex/s132_nrf52_3.0.0_softdevice.hex -f nrf52 --sectorerase 
+	@echo Flashing: s132_nrf52_5.0.0-1.alpha_softdevice.hex
+	nrfjprog --program $(SDK_ROOT)/components/softdevice/s132/hex/s132_nrf52_5.0.0-1.alpha_softdevice.hex -f nrf52 --sectorerase 
 	nrfjprog --reset -f nrf52
 
 erase:

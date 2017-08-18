@@ -50,7 +50,9 @@ extern "C" {
 #define SOFTDEVICE_SCHED_EVT_SIZE       0                                                 /**< Size of button events being passed through the scheduler (is to be used for computing the maximum size of scheduler events). For SoftDevice events, this size is 0, since the events are being pulled in the event handler. */
 #define SYS_EVT_MSG_BUF_SIZE            sizeof(uint32_t)                                  /**< Size of System (SOC) event message buffer. */
 
-
+#if  defined(BLE_GATT_MTU_SIZE_DEFAULT) && !defined(GATT_MTU_SIZE_DEFAULT)
+#define GATT_MTU_SIZE_DEFAULT BLE_GATT_MTU_SIZE_DEFAULT
+#endif
 
 /** @brief Macro for checking the RAM requirement of the SoftDevice.  */
 #define CHECK_RAM_START_ADDR(C_LINK_CNT, P_LINK_CNT)

@@ -28,6 +28,9 @@
 #include <string.h>
 #include <sdk_errors.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** @brief Events passed to the upper-layer callback function. */
 typedef enum {
@@ -159,6 +162,9 @@ ret_code_t hal_nfc_stop(void);
   */
 ret_code_t hal_nfc_done(void);
 
+#ifdef __cplusplus
+}
+#endif
 
 /** @} */
 #endif /* HAL_NFC_H__ */

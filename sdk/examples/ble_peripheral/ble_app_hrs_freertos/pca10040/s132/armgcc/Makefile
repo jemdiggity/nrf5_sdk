@@ -75,7 +75,7 @@ SRC_FILES += \
 
 # Include folders common to all targets
 INC_FOLDERS += \
-  $(PROJ_DIR)/config/ble_app_hrs_freertos_pca10040_s132 \
+  $(PROJ_DIR)/config \
   $(SDK_ROOT)/components/drivers_nrf/comp \
   $(SDK_ROOT)/components/drivers_nrf/twi_master \
   $(SDK_ROOT)/components/ble/ble_services/ble_ancs_c \
@@ -95,7 +95,6 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/boards \
   $(SDK_ROOT)/components/drivers_nrf/common \
   $(SDK_ROOT)/components/ble/ble_advertising \
-  $(SDK_ROOT)/components/drivers_nrf/adc \
   $(SDK_ROOT)/components/ble/ble_services/ble_bas_c \
   $(SDK_ROOT)/components/ble/ble_services/ble_hrs_c \
   $(SDK_ROOT)/components/libraries/queue \
@@ -123,6 +122,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/drivers_nrf/rtc \
   $(SDK_ROOT)/components/ble/ble_services/ble_ias \
   $(SDK_ROOT)/components/libraries/usbd/class/hid/mouse \
+  $(SDK_ROOT)/components/libraries/ecc \
   $(SDK_ROOT)/components/drivers_nrf/ppi \
   $(SDK_ROOT)/components/ble/ble_services/ble_dfu \
   $(SDK_ROOT)/components/drivers_nrf/twis_slave \
@@ -191,11 +191,11 @@ LIB_FILES += \
 # C flags common to all targets
 CFLAGS += -D__STACK_SIZE=2048
 CFLAGS += -DNRF52
-CFLAGS += -DNRF52_PAN_64
 CFLAGS += -DSOFTDEVICE_PRESENT
 CFLAGS += -DBOARD_PCA10040
 CFLAGS += -DNRF52832
 CFLAGS += -D__HEAP_SIZE=1024
+CFLAGS += -DNRF52_PAN_64
 CFLAGS += -DNRF52_PAN_12
 CFLAGS += -DNRF52_PAN_58
 CFLAGS += -DNRF52_PAN_54
@@ -205,8 +205,8 @@ CFLAGS += -DNRF52_PAN_36
 CFLAGS += -DFREERTOS
 CFLAGS += -DCONFIG_GPIO_AS_PINRESET
 CFLAGS += -DBLE_STACK_SUPPORT_REQD
+CFLAGS += -DNRF_SD_BLE_API_VERSION=5
 CFLAGS += -DNRF52_PAN_15
-CFLAGS += -DNRF_SD_BLE_API_VERSION=3
 CFLAGS += -DNRF52_PAN_55
 CFLAGS += -DNRF52_PAN_20
 CFLAGS += -DS132
@@ -225,11 +225,11 @@ CXXFLAGS += \
 ASMFLAGS += -x assembler-with-cpp
 ASMFLAGS += -D__STACK_SIZE=2048
 ASMFLAGS += -DNRF52
-ASMFLAGS += -DNRF52_PAN_64
 ASMFLAGS += -DSOFTDEVICE_PRESENT
 ASMFLAGS += -DBOARD_PCA10040
 ASMFLAGS += -DNRF52832
 ASMFLAGS += -D__HEAP_SIZE=1024
+ASMFLAGS += -DNRF52_PAN_64
 ASMFLAGS += -DNRF52_PAN_12
 ASMFLAGS += -DNRF52_PAN_58
 ASMFLAGS += -DNRF52_PAN_54
@@ -239,8 +239,8 @@ ASMFLAGS += -DNRF52_PAN_36
 ASMFLAGS += -DFREERTOS
 ASMFLAGS += -DCONFIG_GPIO_AS_PINRESET
 ASMFLAGS += -DBLE_STACK_SUPPORT_REQD
+ASMFLAGS += -DNRF_SD_BLE_API_VERSION=5
 ASMFLAGS += -DNRF52_PAN_15
-ASMFLAGS += -DNRF_SD_BLE_API_VERSION=3
 ASMFLAGS += -DNRF52_PAN_55
 ASMFLAGS += -DNRF52_PAN_20
 ASMFLAGS += -DS132
@@ -279,8 +279,8 @@ flash: $(OUTPUT_DIRECTORY)/nrf52832_xxaa.hex
 
 # Flash softdevice
 flash_softdevice:
-	@echo Flashing: s132_nrf52_3.0.0_softdevice.hex
-	nrfjprog --program $(SDK_ROOT)/components/softdevice/s132/hex/s132_nrf52_3.0.0_softdevice.hex -f nrf52 --sectorerase 
+	@echo Flashing: s132_nrf52_5.0.0-1.alpha_softdevice.hex
+	nrfjprog --program $(SDK_ROOT)/components/softdevice/s132/hex/s132_nrf52_5.0.0-1.alpha_softdevice.hex -f nrf52 --sectorerase 
 	nrfjprog --reset -f nrf52
 
 erase:

@@ -179,20 +179,20 @@
           <state>BLE_STACK_SUPPORT_REQD</state>
           <state>__STACK_SIZE=2048</state>
           <state>__HEAP_SIZE=1024</state>
+          <state>NRF52_PAN_58</state>
+          <state>NRF52_PAN_64</state>
           <state>BOARD_PCA10040</state>
           <state>NRF52_PAN_12</state>
           <state>NRF52_PAN_15</state>
           <state>NRF52_PAN_20</state>
           <state>NRF52_PAN_31</state>
-          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_36</state>
           <state>NRF52_PAN_51</state>
           <state>NRF52_PAN_54</state>
+          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_55</state>
-          <state>NRF52_PAN_58</state>
-          <state>NRF52_PAN_64</state>
           <state>S132</state>
-          <state>NRF_SD_BLE_API_VERSION=3</state>
+          <state>NRF_SD_BLE_API_VERSION=5</state>
           <state>SER_CONNECTIVITY</state>
           <state>BSP_DEFINES_ONLY</state>
           <state>NRF52832</state>
@@ -327,6 +327,7 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
+          <state>$PROJ_DIR$\..\..\..\config\ble_connectivity_s132_uart_pca10040</state>
           <state>$PROJ_DIR$\..\..\..\config</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\ble\ble_dtm</state>
@@ -343,17 +344,16 @@
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\log\src</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\scheduler</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\timer</state>
-          <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\uart</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\util</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common</state>
-          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132_s140</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\transport</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\transport\ser_phy</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\transport\ser_phy\config</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\common</state>
-          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\middleware</state>
-          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\middleware</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\hal</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\softdevice\common\softdevice_handler</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\softdevice\s132\headers</state>
@@ -522,20 +522,20 @@
           <state>BLE_STACK_SUPPORT_REQD</state>
           <state>__STACK_SIZE=2048</state>
           <state>__HEAP_SIZE=1024</state>
+          <state>NRF52_PAN_58</state>
+          <state>NRF52_PAN_64</state>
           <state>BOARD_PCA10040</state>
           <state>NRF52_PAN_12</state>
           <state>NRF52_PAN_15</state>
           <state>NRF52_PAN_20</state>
           <state>NRF52_PAN_31</state>
-          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_36</state>
           <state>NRF52_PAN_51</state>
           <state>NRF52_PAN_54</state>
+          <state>CONFIG_GPIO_AS_PINRESET</state>
           <state>NRF52_PAN_55</state>
-          <state>NRF52_PAN_58</state>
-          <state>NRF52_PAN_64</state>
           <state>S132</state>
-          <state>NRF_SD_BLE_API_VERSION=3</state>
+          <state>NRF_SD_BLE_API_VERSION=5</state>
           <state>SER_CONNECTIVITY</state>
           <state>BSP_DEFINES_ONLY</state>
           <state>NRF52832</state>
@@ -637,6 +637,7 @@
         </option>
         <option>
           <name>AUserIncludes</name>
+          <state>$PROJ_DIR$\..\..\..\config\ble_connectivity_s132_uart_pca10040</state>
           <state>$PROJ_DIR$\..\..\..\config</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\ble\ble_dtm</state>
@@ -653,17 +654,16 @@
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\log\src</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\scheduler</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\timer</state>
-          <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\uart</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\util</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common</state>
-          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132_s140</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\transport</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\transport\ser_phy</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\transport\ser_phy\config</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\common</state>
-          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\middleware</state>
-          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\middleware</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\hal</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\softdevice\common\softdevice_handler</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\components\softdevice\s132\headers</state>
@@ -1063,7 +1063,6 @@
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\util\app_error_weak.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\scheduler\app_scheduler.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\timer\app_timer.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\uart\app_uart.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\util\app_util_platform.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\util\nrf_assert.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\libraries\util\sdk_errors.c</name>    </file>  </group>  <group>
@@ -1072,37 +1071,37 @@
   <name>Board Definition</name>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\boards\boards.c</name>    </file>  </group>  <group>
   <name>nRF_Serialization</name>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\ble_conn.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\ble_conn.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\common\ble_dtm_init.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\ble_event_enc.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\ble_evt_conn.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\ble_gap_conn.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\ble_gap_evt_conn.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132\ble_gap_struct_serialization.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132\ble_gatt_struct_serialization.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\ble_gattc_conn.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\ble_gattc_evt_conn.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132\ble_gattc_struct_serialization.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\ble_gatts_conn.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\ble_gatts_evt_conn.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132\ble_gatts_struct_serialization.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\ble_l2cap_conn.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\ble_l2cap_evt_conn.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\ble_event_enc.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\ble_evt_conn.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\ble_gap_conn.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\ble_gap_evt_conn.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132_s140\ble_gap_struct_serialization.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132_s140\ble_gatt_struct_serialization.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\ble_gattc_conn.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\ble_gattc_evt_conn.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132_s140\ble_gattc_struct_serialization.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\ble_gatts_conn.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\ble_gatts_evt_conn.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132_s140\ble_gatts_struct_serialization.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\ble_l2cap_conn.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\ble_l2cap_evt_conn.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\ble_serialization.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132\ble_struct_serialization.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132_s140\ble_struct_serialization.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\cond_field_serialization.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\conn_ble_gap_sec_keys.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\conn_ble_user_mem.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\conn_ble_gap_sec_keys.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\conn_ble_user_mem.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\common\conn_mw.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\middleware\conn_mw_ble.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\middleware\conn_mw_ble_gap.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\middleware\conn_mw_ble_gattc.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\middleware\conn_mw_ble_gatts.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\middleware\conn_mw_ble_l2cap.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\middleware\conn_mw_nrf_soc.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\middleware\conn_mw_ble.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\middleware\conn_mw_ble_gap.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\middleware\conn_mw_ble_gattc.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\middleware\conn_mw_ble_gatts.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\middleware\conn_mw_ble_l2cap.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\middleware\conn_mw_nrf_soc.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\hal\dtm_uart.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132\serializers\nrf_soc_conn.c</name>    </file>    <file>
-    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132\nrf_soc_struct_serialization.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\codecs\s132_s140\serializers\nrf_soc_conn.c</name>    </file>    <file>
+    <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\common\struct_ser\s132_s140\nrf_soc_struct_serialization.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\ser_conn_cmd_decoder.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\ser_conn_dtm_cmd_decoder.c</name>    </file>    <file>
     <name>$PROJ_DIR$\..\..\..\..\..\..\components\serialization\connectivity\ser_conn_error_handling.c</name>    </file>    <file>

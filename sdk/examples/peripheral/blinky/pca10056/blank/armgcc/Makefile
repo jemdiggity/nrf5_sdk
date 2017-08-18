@@ -54,7 +54,6 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/boards \
   $(SDK_ROOT)/components/drivers_nrf/common \
   $(SDK_ROOT)/components/ble/ble_advertising \
-  $(SDK_ROOT)/components/drivers_nrf/adc \
   $(SDK_ROOT)/components/ble/ble_services/ble_bas_c \
   $(SDK_ROOT)/components/ble/ble_services/ble_hrs_c \
   $(SDK_ROOT)/components/libraries/queue \
@@ -77,6 +76,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/drivers_nrf/rtc \
   $(SDK_ROOT)/components/ble/ble_services/ble_ias \
   $(SDK_ROOT)/components/libraries/usbd/class/hid/mouse \
+  $(SDK_ROOT)/components/libraries/ecc \
   $(SDK_ROOT)/components/drivers_nrf/ppi \
   $(SDK_ROOT)/components/ble/ble_services/ble_dfu \
   $(SDK_ROOT)/components/drivers_nrf/twis_slave \

@@ -805,6 +805,23 @@
 #define USBD_ENABLED 1
 #endif
 #if  USBD_ENABLED
+// <o> USBD_CONFIG_IRQ_PRIORITY  - Interrupt priority
+ 
+
+// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+// <0=> 0 (highest) 
+// <1=> 1 
+// <2=> 2 
+// <3=> 3 
+// <4=> 4 
+// <5=> 5 
+// <6=> 6 
+// <7=> 7 
+
+#ifndef USBD_CONFIG_IRQ_PRIORITY
+#define USBD_CONFIG_IRQ_PRIORITY 7
+#endif
+
 // <o> NRF_DRV_USBD_DMASCHEDULER_MODE  - USBD SMA scheduler working scheme
  
 // <0=> Prioritized access 
@@ -1189,6 +1206,9 @@
 
 //==========================================================
 // <o> SEGGER_RTT_CONFIG_BUFFER_SIZE_UP - Size of upstream buffer. 
+// <i> Note that either @ref NRF_LOG_BACKEND_RTT_OUTPUT_BUFFER_SIZE
+// <i> or this value is actually used. It depends on which one is bigger.
+
 #ifndef SEGGER_RTT_CONFIG_BUFFER_SIZE_UP
 #define SEGGER_RTT_CONFIG_BUFFER_SIZE_UP 64
 #endif
@@ -1206,6 +1226,21 @@
 // <o> SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS - Size of upstream buffer. 
 #ifndef SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS
 #define SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS 2
+#endif
+
+// <o> SEGGER_RTT_CONFIG_DEFAULT_MODE  - RTT behavior if the buffer is full.
+ 
+
+// <i> The following modes are supported:
+// <i> - SKIP  - Do not block, output nothing.
+// <i> - TRIM  - Do not block, output as much as fits.
+// <i> - BLOCK - Wait until there is space in the buffer.
+// <0=> SKIP 
+// <1=> TRIM 
+// <2=> BLOCK_IF_FIFO_FULL 
+
+#ifndef SEGGER_RTT_CONFIG_DEFAULT_MODE
+#define SEGGER_RTT_CONFIG_DEFAULT_MODE 0
 #endif
 
 // </h> 
